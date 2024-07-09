@@ -1,30 +1,19 @@
-# React + TypeScript + Vite
+# Nusaventure
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Nusaventure: Travel around Nusantara** is an exciting travel companion app built with React.js, designed to be your gateway to the wonders of Nusantara. Dive into a treasure trove of natural beauty, mouth-watering cuisine, and vibrant cultural gems from every corner of the archipelago. Discover hidden gems, read captivating stories about each locale, and craft your perfect adventure itinerary. Integrated with a robust backend API, Nusaventure ensures smooth sailing as you explore, review, and share your unforgettable journeys. Ready to embark on your next great adventure? Let Nusaventure be your guide!
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Place Recommendations**: Add favorite places to your personalized list, creating a custom route from one location to another. Get recommendations for culinary spots, tourist attractions, natural sites, historical locations, and more based on your selected destinations.
+- **Custom Trip Planning and Tracking**: Organize your journey by summarizing information about each place you plan to visit. Set up your travel plan, hit start, and the app will track and update your progress, providing real-time updates and insights as you explore.
 
-## Expanding the ESLint configuration
+## Website Deployment:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Link: [Nusaventure](https://nusaventure-com.vercel.app/)
 
-- Configure the top-level `parserOptions` property like this:
+## Tech Stacks and Dependencies
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- [Bun]()
+- [Vite]()
+- [Typescript]()
+- []
