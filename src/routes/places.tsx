@@ -1,3 +1,7 @@
+export function loader() {
+  return { places: [] };
+}
+
 export function PlacesRoute() {
   return (
     <div>
