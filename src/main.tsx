@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 
 import { RootRoute } from "./routes/root";
-import { PlacesRoute } from "./routes/places";
+import * as places from "./routes/places";
 
 const router = createBrowserRouter([
   {
@@ -13,7 +13,8 @@ const router = createBrowserRouter([
   },
   {
     path: "/places",
-    element: <PlacesRoute />,
+    element: <places.PlacesRoute />,
+    loader: places.loader,
   },
 ]);
 
