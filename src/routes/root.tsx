@@ -2,24 +2,18 @@ import { Outlet, Link } from "react-router-dom";
 
 export function RootRoute() {
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <header>
         <h1>
           <Link to="/">🏝️NUSAVENTURE</Link>
         </h1>
       </header>
 
-      <Outlet />
+      <main className="flex-[1]">
+        <Outlet />
+      </main>
 
-      <h1>
-        <Link to="/places">Country</Link>
-      </h1>
-
-      <h1>
-        <Link to="/map-example">Map</Link>
-      </h1>
-
-      <footer>
+      <footer className="p-4 bg-amber-200">
         <p>COPYRIGHT</p>
       </footer>
     </div>
