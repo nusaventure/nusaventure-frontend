@@ -1,6 +1,6 @@
 import api from "@/libs/api";
 import { Category } from "@/types/category";
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 
 export async function loader() {
   const responseHeroCategories = await api<{
@@ -20,6 +20,12 @@ export function HomeRoute() {
 
   return (
     <div>
+      <header>
+        <h1>
+          <Link to="/">🏝️NUSAVENTURE</Link>
+        </h1>
+      </header>
+
       <section id="hero" className="bg-stone-800 p-10">
         <h1>Home</h1>
 
@@ -40,16 +46,19 @@ export function HomeRoute() {
         </div>
       </section>
 
-      <pre>
-        {JSON.stringify(
-          {
-            topDestinations,
-            favoritePlaces,
-          },
-          null,
-          2
-        )}
-      </pre>
+      <section id="top-destinations">
+        <p>TOP DESTINATIONS</p>
+        <pre>{JSON.stringify(topDestinations, null, 2)}</pre>
+      </section>
+
+      <section id="favorite-places">
+        <p>FAVORITE PLACES</p>
+        <pre>{JSON.stringify(favoritePlaces, null, 2)}</pre>
+      </section>
+
+      <section id="features">
+        <p>FEATURES</p>
+      </section>
     </div>
   );
 }
