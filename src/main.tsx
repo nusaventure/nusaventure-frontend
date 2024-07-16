@@ -6,7 +6,7 @@ import "./index.css";
 import { RootRoute } from "./routes/root";
 import * as places from "./routes/places";
 import { MapExampleRoute } from "./routes/map-example";
-import { HomeRoute } from "./routes/home";
+import { HomeRoute, loader as homeLoader } from "./routes/home";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +16,7 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <HomeRoute />,
+        loader: homeLoader,
       },
       {
         path: "/about",

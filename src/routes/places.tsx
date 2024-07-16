@@ -1,14 +1,7 @@
-import api from "@/libs/api";
 import { useLoaderData } from "react-router-dom";
 
-type Country = {
-  id: string;
-  name: string;
-  imageUrl: string;
-  latitude: number;
-  longitude: number;
-  zoom: number;
-};
+import api from "@/libs/api";
+import { Country } from "@/types/country";
 
 export async function loader() {
   const res = await api<{

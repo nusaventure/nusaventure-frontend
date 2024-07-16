@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 type ApiOptions = Omit<RequestInit, "body"> & {
   body?: Record<string, unknown> | BodyInit;
 };
