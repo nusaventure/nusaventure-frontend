@@ -56,7 +56,7 @@ To set up the project locally, follow these steps:
 3. **Start the development server**:
 
    ```bash
-   npm dev
+   bun dev
    ```
 
 4. **Build for production**:

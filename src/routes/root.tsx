@@ -1,15 +1,14 @@
 import { Outlet } from "react-router-dom";
+import { Footer } from "./footer";
 
 export function RootRoute() {
   return (
     <div className="flex flex-col min-h-screen">
-      <main className="flex-[1]">
+      <header>{/* Your header content */}</header>
+      <main className="flex-grow">
         <Outlet />
       </main>
-
-      <footer className="p-4 bg-amber-200">
-        <p>COPYRIGHT</p>
-      </footer>
+      <Footer />
     </div>
   );
 }

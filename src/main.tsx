@@ -7,6 +7,7 @@ import { RootRoute } from "./routes/root";
 import * as places from "./routes/places";
 import { MapExampleRoute } from "./routes/map-example";
 import { HomeRoute, loader as homeLoader } from "./routes/home";
+import { Footer } from "./routes/footer";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
         element: <MapExampleRoute />,
       },
     ],
+  },
+  {
+    path: "/",
+    element: <Footer />,
   },
 ]);
 
