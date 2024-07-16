@@ -1,19 +1,65 @@
-# Nusaventure
+# 🏝️ Nusaventure
 
-**Nusaventure: Travel around Nusantara** is an exciting travel companion app built with React.js, designed to be your gateway to the wonders of Nusantara. Dive into a treasure trove of natural beauty, mouth-watering cuisine, and vibrant cultural gems from every corner of the archipelago. Discover hidden gems, read captivating stories about each locale, and craft your perfect adventure itinerary. Integrated with a robust backend API, Nusaventure ensures smooth sailing as you explore, review, and share your unforgettable journeys. Ready to embark on your next great adventure? Let Nusaventure be your guide!
+**Nusaventure** helps you discover captivating tourist destinations and culinary delights in Nusantara.
 
-## Features
+Nusaventure, short for **Nusantara Adventure**, is a platform that inspires exploration of various legendary tourist spots, delicious culinary varieties, interesting activities and events, understanding the ecosystem and communities, and more.
 
-- **Place Recommendations**: Add favorite places to your personalized list, creating a custom route from one location to another. Get recommendations for culinary spots, tourist attractions, natural sites, historical locations, and more based on your selected destinations.
-- **Custom Trip Planning and Tracking**: Organize your journey by summarizing information about each place you plan to visit. Set up your travel plan, hit start, and the app will track and update your progress, providing real-time updates and insights as you explore.
+## 🌟 Features
 
-## Website Deployment:
+- Explore places  
+  Discover hidden gems and top attractions with detailed reviews, ratings, and insider tips. Your next adventure awaits!
+
+- Track travel history  
+  Effortlessly document your journeys, log visited places, and create a digital scrapbook of your travels. Cherish every moment!
+
+- Social sharing  
+  Share your adventures, connect with fellow travelers, and inspire the world with your stories and photos. Travel together!
+
+## 💻 Website Deployment:
 
 - Link: [Nusaventure](https://nusaventure-com.vercel.app/)
 
-## Tech Stacks and Dependencies
+## 🌐 Tech Stacks and Dependencies
 
-- [Bun]()
-- [Vite]()
-- [Typescript]()
-- []
+- [Bun](https://bun.sh/)
+- [Vite](https://vitejs.dev/)
+- [Typescript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [ReactRouter](https://reactrouter.com/)
+- [React-Map-GL](https://visgl.github.io/react-map-gl/)
+
+## 🎨 UI Designs
+
+Look at [Figma](https://www.figma.com/design/hcYwfXGBenPH999pNQJ7wl/Nusaventure)
+
+## Installation
+
+To set up the project locally, follow these steps:
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/your-username/nusaventure-frontend.git
+   cd nusaventure
+   ```
+
+2. **Install dependencies**:
+
+   ```bash
+   bun install
+   ```
+
+   ```bash
+   bun install --save react-map-gl mapbox-gl @types/mapbox-gl
+   ```
+
+3. **Start the development server**:
+
+   ```bash
+   npm dev
+   ```
+
+4. **Build for production**:
+   ```bash
+   bun build
+   ```
