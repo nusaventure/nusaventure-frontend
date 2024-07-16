@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <footer className="relative p-4 pt-2 bg-footer bg-no-repeat bg-cover bg-bottom">
+    <footer className="relative p-10 pt-2 bg-footer bg-no-repeat bg-cover bg-bottom-5">
       <div className="relative z-10 flex flex-col items-center">
         <img
           src="/images/footer/island.png"
