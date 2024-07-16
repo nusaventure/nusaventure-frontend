@@ -21,28 +21,32 @@ export function HomeRoute() {
   return (
     <div>
       <header>
-        <h1>
+        <h1 className="fixed">
           <Link to="/">🏝️NUSAVENTURE</Link>
         </h1>
       </header>
 
-      <section id="hero" className="bg-stone-800 p-10">
-        <h1>Home</h1>
+      <section
+        id="hero"
+        className="bg-[url('/hero-banner.webp')] bg-cover min-h-screen bg-fixed "
+      >
+        <div className="grid place-content-center">
+          <h1>Home</h1>
+          <div>
+            <p>Where do you want to go?</p>
 
-        <div>
-          <p>Where do you want to go?</p>
-
-          <ul>
-            {heroCategories
-              .filter((_, index) => index <= 9)
-              .map((heroCategory) => (
-                <li key={heroCategory.id}>
-                  <span className="p-2 border-white rounded bg-white">
-                    {heroCategory.name}
-                  </span>
-                </li>
-              ))}
-          </ul>
+            <ul>
+              {heroCategories
+                .filter((_, index) => index <= 9)
+                .map((heroCategory) => (
+                  <li key={heroCategory.id}>
+                    <span className="p-2 border-white rounded bg-white">
+                      {heroCategory.name}
+                    </span>
+                  </li>
+                ))}
+            </ul>
+          </div>
         </div>
       </section>
 
