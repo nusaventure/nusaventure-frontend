@@ -10,11 +10,33 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <RootRoute />,
+    children: [
+      {
+        path: "/",
+        // element: <HomeRoute />,
+      },
+      {
+        path: "/about",
+        // element: <AboutRoute />,
+      },
+      {
+        path: "/places",
+        element: <places.PlacesRoute />,
+        loader: places.loader,
+      },
+      {
+        path: "/track-history",
+        // element: <TrackHistory />,
+      },
+      {
+        path: "/social-sharing",
+        // element: <SocialSharing />,
+      },
+    ],
   },
   {
-    path: "/places",
-    element: <places.PlacesRoute />,
-    loader: places.loader,
+    path: "/",
+    // element: <RootRoute />,
   },
 ]);
 

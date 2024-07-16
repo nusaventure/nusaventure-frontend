@@ -17,7 +17,7 @@ Nusaventure, short for **Nusantara Adventure**, is a platform that inspires expl
 
 ## 💻 Website Deployment:
 
-- Link: [Nusaventure](https://nusaventure-com.vercel.app/)
+- Link: [Nusaventure](https://nusaventure.vercel.app/)
 
 ## 🌐 Tech Stacks and Dependencies
 
