@@ -4,7 +4,7 @@ import { Footer } from "./footer";
 export function RootRoute() {
   return (
     <div className="flex flex-col min-h-screen">
-      <header>{/* Your header content */}</header>
+      <header>{/* Header content */}</header>
       <main className="flex-grow">
         <Outlet />
       </main>
