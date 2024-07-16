@@ -12,6 +12,10 @@ export function RootRoute() {
       <Outlet />
 
       <h1>
+        <Link to="/places">Country</Link>
+      </h1>
+
+      <h1>
         <Link to="/map-example">Map</Link>
       </h1>
 
