@@ -5,6 +5,7 @@ import "./index.css";
 
 import { RootRoute } from "./routes/root";
 import * as places from "./routes/places";
+import { MapExampleRoute } from "./routes/map-example";
 
 const router = createBrowserRouter([
   {
@@ -32,11 +33,11 @@ const router = createBrowserRouter([
         path: "/social-sharing",
         // element: <SocialSharing />,
       },
+      {
+        path: "/map-example",
+        element: <MapExampleRoute />,
+      },
     ],
-  },
-  {
-    path: "/",
-    // element: <RootRoute />,
   },
 ]);
 
