@@ -20,21 +20,27 @@ export function HomeRoute() {
 
   return (
     <div>
-      <header>
-        <h1 className="fixed">
-          <Link to="/">🏝️NUSAVENTURE</Link>
-        </h1>
+      <header className="fixed w-full p-5">
+        <div className="flex  justify-between">
+          <h1>
+            <Link to="/">🏝️NUSAVENTURE</Link>
+          </h1>
+          <h1>
+            <Link to="/">Home</Link>
+          </h1>
+        </div>
       </header>
 
       <section
         id="hero"
         className="bg-[url('/hero-banner.webp')] bg-cover min-h-screen bg-fixed "
       >
-        <div className="grid place-content-center">
+        <div className="flex justify-center content-center items-center h-screen">
           <h1>Home</h1>
           <div>
-            <p>Where do you want to go?</p>
+            <h1>EXPLORE INDONESIA! </h1>
 
+            <input placeholder="Where do you want to go?"></input>
             <ul>
               {heroCategories
                 .filter((_, index) => index <= 9)
