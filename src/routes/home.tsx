@@ -26,7 +26,7 @@ export function HomeRoute() {
         <div className="flex  justify-between">
           <div>
             <Link to="/">
-              <img src="/images/logo.svg" alt="logo" />
+              <img src="./images/logo.svg" alt="logo" />
             </Link>
           </div>
           <Button className="bg-primary-color text-white">
@@ -37,7 +37,7 @@ export function HomeRoute() {
 
       <section
         id="hero"
-        className="bg-[url('images/hero_banner.webp')] bg-cover min-h-screen bg-fixed "
+        className="bg-[url('./images/hero_banner.webp')] bg-cover min-h-screen bg-fixed "
       >
         <div className="flex justify-center content-center items-center h-screen ">
           <div className="flex w-8/12	 gap-6 items-center">
