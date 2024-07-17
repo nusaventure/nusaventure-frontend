@@ -59,20 +59,12 @@
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
 @layer components {
   .bg-footer {
     background-image: url("/images/footer/background.png");
   }
 }
+
 .londrina-solid-regular {
   font-family: "Londrina Solid", sans-serif;
   font-weight: 400;
@@ -84,5 +76,5 @@
 }
 
 .text-primary-color {
-text-decoration: color(#5338f5);
+  text-decoration: color(#5338f5);
 }
