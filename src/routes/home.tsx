@@ -29,7 +29,7 @@ export function HomeRoute() {
               <img src="/images/logo.svg" alt="logo" />
             </Link>
           </div>
-          <Button>
+          <Button className="bg-primary-color text-white">
             <Link to="/">Home</Link>
           </Button>
         </div>
@@ -37,32 +37,34 @@ export function HomeRoute() {
 
       <section
         id="hero"
-        className="bg-[url('images/hero-banner.webp')] bg-cover min-h-screen bg-fixed "
+        className="bg-[url('images/hero_banner.webp')] bg-cover min-h-screen bg-fixed "
       >
         <div className="flex justify-center content-center items-center h-screen ">
-          <div className="flex w-7/12	 gap-6 items-center">
+          <div className="flex w-8/12	 gap-6 items-center">
             <div>
-              <h1 className="londrina-solid-regular text-white text-8xl">
+              <h1 className="londrina-solid-regular text-white text-9xl">
                 EXPLORE
               </h1>
-              <h1 className="londrina-solid-regular text-white text-8xl">
+              <h1 className="londrina-solid-regular text-white text-9xl">
                 NDONESIA!
               </h1>
             </div>
 
-            <div className="flex flex-col gap-4">
-              <Input
-                className="h-12"
-                placeholder="Where do you want to go?"
-              ></Input>
-              <ul className=" flex flex-wrap strech justify-between gap-y-5">
+            <div className="flex flex-col gap-8">
+              <form action="get">
+              <Input  className="h-16 bg-slate-500/30 text-white text-xl backdrop-blur border-slate-300/30 placeholder:text-white placeholder:text-xl" placeholder="🔍Where do you want to go?"/>
+              
+              </form>
+                
+              
+              <ul className=" flex flex-wrap strech  gap-y-2 gap-x-2 ">
                 {heroCategories
-                  .filter((_, index) => index <= 10)
+                  .filter((_, index) => index <= 8)
                   .map((heroCategory) => (
                     <li key={heroCategory.id}>
-                      <span className="p-2 border-white rounded bg-white">
+                      <button className="py-2 px-4 text-white rounded bg-slate-500/30 text-sm backdrop-blur border border-slate-300/30">
                         {heroCategory.name}
-                      </span>
+                      </button>
                     </li>
                   ))}
               </ul>
