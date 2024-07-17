@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import api from "@/libs/api";
 import { Category } from "@/types/category";
 import { Link, useLoaderData } from "react-router-dom";
@@ -22,36 +24,49 @@ export function HomeRoute() {
     <div>
       <header className="fixed w-full p-5">
         <div className="flex  justify-between">
-          <h1>
-            <Link to="/">🏝️NUSAVENTURE</Link>
-          </h1>
-          <h1>
+          <div>
+            <Link to="/">
+              <img src="/images/logo.svg" alt="logo" />
+            </Link>
+          </div>
+          <Button>
             <Link to="/">Home</Link>
-          </h1>
+          </Button>
         </div>
       </header>
 
       <section
         id="hero"
-        className="bg-[url('/hero-banner.webp')] bg-cover min-h-screen bg-fixed "
+        className="bg-[url('images/hero-banner.webp')] bg-cover min-h-screen bg-fixed "
       >
-        <div className="flex justify-center content-center items-center h-screen">
-          <h1>Home</h1>
-          <div>
-            <h1>EXPLORE INDONESIA! </h1>
+        <div className="flex justify-center content-center items-center h-screen ">
+          <div className="flex w-7/12	 gap-6 items-center">
+            <div>
+              <h1 className="londrina-solid-regular text-white text-8xl">
+                EXPLORE
+              </h1>
+              <h1 className="londrina-solid-regular text-white text-8xl">
+                NDONESIA!
+              </h1>
+            </div>
 
-            <input placeholder="Where do you want to go?"></input>
-            <ul>
-              {heroCategories
-                .filter((_, index) => index <= 9)
-                .map((heroCategory) => (
-                  <li key={heroCategory.id}>
-                    <span className="p-2 border-white rounded bg-white">
-                      {heroCategory.name}
-                    </span>
-                  </li>
-                ))}
-            </ul>
+            <div className="flex flex-col gap-4">
+              <Input
+                className="h-12"
+                placeholder="Where do you want to go?"
+              ></Input>
+              <ul className=" flex flex-wrap strech justify-between gap-y-5">
+                {heroCategories
+                  .filter((_, index) => index <= 10)
+                  .map((heroCategory) => (
+                    <li key={heroCategory.id}>
+                      <span className="p-2 border-white rounded bg-white">
+                        {heroCategory.name}
+                      </span>
+                    </li>
+                  ))}
+              </ul>
+            </div>
           </div>
         </div>
       </section>
