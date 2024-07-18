@@ -46,17 +46,18 @@ export function HomeRoute() {
                 EXPLORE
               </h1>
               <h1 className="londrina-solid-regular text-white text-9xl">
-                NDONESIA!
+                INDONESIA!
               </h1>
             </div>
 
             <div className="flex flex-col gap-8">
               <form action="get">
-              <Input  className="h-16 bg-slate-500/30 text-white text-xl backdrop-blur border-slate-300/30 placeholder:text-white placeholder:text-xl" placeholder="🔍Where do you want to go?"/>
-              
+                <Input
+                  className="h-16 bg-slate-500/30 text-white text-xl backdrop-blur border-slate-300/30 placeholder:text-white placeholder:text-xl"
+                  placeholder="🔍Where do you want to go?"
+                />
               </form>
-                
-              
+
               <ul className=" flex flex-wrap strech  gap-y-2 gap-x-2 ">
                 {heroCategories
                   .filter((_, index) => index <= 8)
@@ -83,8 +84,58 @@ export function HomeRoute() {
         <pre>{JSON.stringify(favoritePlaces, null, 2)}</pre>
       </section>
 
-      <section id="features">
-        <p>FEATURES</p>
+      <section id="features" className="py-12 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center">
+            <div className="md:w-1/2 flex justify-center md:justify-start mb-6 md:mb-0">
+              <img
+                src="/public/images/section/mountain.png"
+                alt="mountain"
+                className="h-150 w-150 rounded-md shadow-lg object-cover"
+              />
+            </div>
+            <div className="md:w-1/2 md:pl-8">
+              <p className="text-lg font-semibold text-indigo-600 mb-2">
+                Our Features
+              </p>
+              <h1 className="text-4xl font-bold text-gray-900 mb-8">
+                Get Ready for Your Next Destination
+              </h1>
+              <div className="mb-6">
+                <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                  Explore Destination via Maps
+                </h2>
+                <p className="text-gray-600">
+                  Offers a seamless way to navigate, discover, and plan your
+                  travels. Our interactive maps highlight key attractions, local
+                  amenities, and hidden gems, ensuring an enriching travel
+                  experience.
+                </p>
+              </div>
+              <div className="mb-6">
+                <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                  Trip Planner
+                </h2>
+                <p className="text-gray-600">
+                  Simplifies organizing your travels with easy itinerary
+                  creation, accommodation bookings, and discovery of top
+                  attractions. Plan confidently and enjoy every aspect of your
+                  journey with our comprehensive tool.
+                </p>
+              </div>
+              <div className="mb-6">
+                <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                  Share Your Plan Trip
+                </h2>
+                <p className="text-gray-600">
+                  Makes it easy to share your travel itineraries with friends
+                  and family. Stay connected and make group travel planning
+                  simple and fun.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   );
