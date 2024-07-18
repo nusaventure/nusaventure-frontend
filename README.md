@@ -17,7 +17,7 @@ Nusaventure, short for **Nusantara Adventure**, is a platform that inspires expl
 
 ## 💻 Website Deployment:
 
-- Link: [Nusaventure](https://nusaventure.vercel.app/)
+- Link: [Nusaventure](https://nusaventure.com/)
 
 ## 🌐 Tech Stacks and Dependencies
 
@@ -32,34 +32,24 @@ Nusaventure, short for **Nusantara Adventure**, is a platform that inspires expl
 
 Look at [Figma](https://www.figma.com/design/hcYwfXGBenPH999pNQJ7wl/Nusaventure)
 
-## Installation
+## Getting Started
 
-To set up the project locally, follow these steps:
+Set up `.env` by copying from `.env.example` for reference
 
-1. **Clone the repository**:
+```sh
+cp .env.example .env
+```
 
-   ```bash
-   git clone https://github.com/your-username/nusaventure-frontend.git
-   cd nusaventure
-   ```
+Install dependencies
 
-2. **Install dependencies**:
+```sh
+bun install
+```
 
-   ```bash
-   bun install
-   ```
+Then you can run
 
-   ```bash
-   bun install --save react-map-gl mapbox-gl @types/mapbox-gl
-   ```
+```sh
+bun run dev
+```
 
-3. **Start the development server**:
-
-   ```bash
-   bun dev
-   ```
-
-4. **Build for production**:
-   ```bash
-   bun build
-   ```
+Afterwards, open your browser and navigate to http://localhost:5173 to start exploring the API.
