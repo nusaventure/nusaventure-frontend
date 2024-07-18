@@ -79,9 +79,60 @@ export function HomeRoute() {
         <pre>{JSON.stringify(topDestinations, null, 2)}</pre>
       </section>
 
-      <section id="favorite-places">
-        <p>FAVORITE PLACES</p>
-        <pre>{JSON.stringify(favoritePlaces, null, 2)}</pre>
+      <section
+        id="favorite-places"
+        className="relative z-10 flex flex-col items-center bg-blue-100 py-8"
+      >
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/images/section/wave-background.png"
+            alt="wave background"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="relative z-10 text-center">
+          <p className="text-lg font-semibold text-indigo-600 mb-2">
+            Our Places
+          </p>
+          <h1 className="text-4xl font-bold text-gray-900 mb-8">
+            Favorite Places Curated for You
+          </h1>
+          <div className="flex justify-around w-full max-w-4xl">
+            <div className="flex flex-col items-center">
+              <img
+                src="/public/images/section/island.png"
+                alt="island"
+                className="h-24 w-24 mb-4"
+              />
+              <p className="text-xl font-semibold">30</p>
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                Cities
+              </h2>
+            </div>
+            <div className="flex flex-col items-center">
+              <img
+                src="/public/images/section/buildings.png"
+                alt="building"
+                className="h-24 w-24 mb-4"
+              />
+              <p className="text-xl font-semibold">102</p>
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                Cities
+              </h2>
+            </div>
+            <div className="flex flex-col items-center">
+              <img
+                src="/public/images/section/location.png"
+                alt="location"
+                className="h-24 w-24 mb-4"
+              />
+              <p className="text-xl font-semibold">2304</p>
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                Places
+              </h2>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section id="features" className="py-12 bg-white">
