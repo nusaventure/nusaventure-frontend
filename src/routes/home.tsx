@@ -12,13 +12,13 @@ export async function loader() {
   return {
     heroCategories: responseHeroCategories.data,
     topDestinations: [],
-    favoritePlaces: [],
   };
 }
 
 export function HomeRoute() {
-  const { heroCategories, topDestinations, favoritePlaces } =
-    useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { heroCategories, topDestinations } = useLoaderData() as Awaited<
+    ReturnType<typeof loader>
+  >;
 
   return (
     <div>
@@ -100,7 +100,7 @@ export function HomeRoute() {
           <div className="flex justify-around w-full max-w-4xl">
             <div className="flex flex-col items-center">
               <img
-                src="/public/images/section/island.png"
+                src="images/section/island.png"
                 alt="island"
                 className="h-24 w-24 mb-4"
               />
@@ -111,7 +111,7 @@ export function HomeRoute() {
             </div>
             <div className="flex flex-col items-center">
               <img
-                src="/public/images/section/buildings.png"
+                src="images/section/buildings.png"
                 alt="building"
                 className="h-24 w-24 mb-4"
               />
@@ -122,7 +122,7 @@ export function HomeRoute() {
             </div>
             <div className="flex flex-col items-center">
               <img
-                src="/public/images/section/location.png"
+                src="images/section/location.png"
                 alt="location"
                 className="h-24 w-24 mb-4"
               />
@@ -140,7 +140,7 @@ export function HomeRoute() {
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 flex justify-center md:justify-start mb-6 md:mb-0">
               <img
-                src="/public/images/section/mountain.png"
+                src="images/section/mountain.png"
                 alt="mountain"
                 className="h-150 w-150 rounded-md shadow-lg object-cover"
               />
