@@ -8,7 +8,7 @@ import { topDestinations } from "@/libs/topDestination";
 export async function loader() {
   const responseHeroCategories = await api<{
     data: Array<Category>;
-  }>("/categories");
+  }>("/categories/featured");
 
   return {
     heroCategories: responseHeroCategories.data,
@@ -61,7 +61,6 @@ export function HomeRoute() {
 
               <ul className=" flex flex-wrap strech  gap-y-2 gap-x-2 ">
                 {heroCategories
-                  .filter((_, index) => index <= 8)
                   .map((heroCategory) => (
                     <li key={heroCategory.id}>
                       <button className="py-2 px-4 text-white rounded bg-slate-500/30 text-sm backdrop-blur border border-slate-300/30">
