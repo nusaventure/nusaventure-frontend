@@ -5,7 +5,6 @@ import "./index.css";
 
 import { RootRoute } from "./routes/root";
 import { PlacesIndexRoute, loader as placesIndexLoader } from "./routes/places";
-import { PlacesMapExampleRoute } from "./routes/places/map-example";
 import { HomeRoute, loader as homeLoader } from "./routes/home";
 import { PlacesLayoutRoute } from "./routes/places/layout";
 
@@ -42,16 +41,10 @@ const router = createBrowserRouter([
         element: <PlacesIndexRoute />,
         loader: placesIndexLoader,
       },
-      {
-        path: "/places/map-example",
-        element: <PlacesMapExampleRoute />,
-      },
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+  <RouterProvider router={router} />
 );
