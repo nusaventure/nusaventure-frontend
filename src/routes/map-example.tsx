@@ -1,94 +1,81 @@
-import { useState } from "react";
-import Map, { Marker, Popup } from "react-map-gl";
-
+import Map from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const mapboxAccessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
 export function MapExampleRoute() {
-  const places = [
-    { latitude: -6.1753924, longitude: 106.8271528, name: "Monas" },
-    {
-      latitude: -6.1762405,
-      longitude: 106.82725,
-      name: "National Museum Gallery",
-    },
-    { latitude: -6.1741286, longitude: 106.8284033, name: "Istiqlal Mosque" },
-  ];
-
   return (
-    <div>
-      <MapboxMap
-        coordinate={{
-          latitude: -6.1753924,
-          longitude: 106.8271528,
-          zoom: 14,
+    <div className="flex">
+      <div className="w-1/3 bg-gray-100 p-6">
+        <div className="flex justify-between items-center mb-6">
+          <img
+            src="/images/landing/logo.svg"
+            alt="Nusa Venture"
+            className="h-10"
+          />
+          <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
+            Login
+          </button>
+        </div>
+        <h2 className="text-xl font-bold mb-4">Tanah Lot Temple, Bali</h2>
+        <p className="mb-4">
+          Tanah Lot Temple is one of the most sacred temples in Bali, Indonesia.
+          Here there are two temples located on large rocks. One is located on a
+          boulder and the other is located on a cliff similar to Uluwatu Temple.
+          Tanah Lot Temple is part of Dang Kahyangan Temple.
+        </p>
+        <button className="px-4 py-2 bg-green-500 text-white rounded-md mb-6">
+          Add to Trip Planner
+        </button>
+        <h3 className="text-lg font-semibold mb-4">Another Destination</h3>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="text-center">
+            <img
+              src="/images/top-destination/tugu-yogyakarta.png"
+              alt="Yogyakarta"
+              className="rounded-md mb-2"
+            />
+            <p>Yogyakarta</p>
+          </div>
+          <div className="text-center">
+            <img
+              src="/images/top-destination/tanah-lot.png"
+              alt="Bali"
+              className="rounded-md mb-2"
+            />
+            <p>Bali</p>
+          </div>
+          <div className="text-center">
+            <img
+              src="/images/top-destination/gedung-sate.png"
+              alt="Bandung"
+              className="rounded-md mb-2"
+            />
+            <p>Bandung</p>
+          </div>
+          <div className="text-center">
+            <img
+              src="/images/top-destination/bundaran-hi.png"
+              alt="Jakarta"
+              className="rounded-md mb-2"
+            />
+            <p>Jakarta</p>
+          </div>
+        </div>
+      </div>
+
+      <Map
+        mapboxAccessToken={mapboxAccessToken}
+        initialViewState={{
+          latitude: -8.409518, // Latitude for Bali
+          longitude: 115.188919, // Longitude for Bali
+          zoom: 10,
         }}
-        places={places}
+        style={{ width: "70%", height: "100vh" }}
+        mapStyle="mapbox://styles/mapbox/streets-v9"
       />
     </div>
   );
 }
 
-interface MapboxMapProps {
-  coordinate: {
-    latitude: number;
-    longitude: number;
-    zoom: number;
-  };
-  places: { latitude: number; longitude: number; name: string }[];
-}
-
-export function MapboxMap({
-  coordinate = {
-    latitude: -6.1753924,
-    longitude: 106.8271528,
-    zoom: 14,
-  },
-  places,
-}: MapboxMapProps) {
-  const [hoveredPlace, setHoveredPlace] = useState<null | {
-    latitude: number;
-    longitude: number;
-    name: string;
-  }>(null);
-
-  return (
-    <Map
-      mapboxAccessToken={mapboxAccessToken}
-      initialViewState={coordinate}
-      style={{ width: 600, height: 400 }}
-      mapStyle="mapbox://styles/mapbox/streets-v9"
-    >
-      {places.map((place, index) => (
-        <Marker
-          key={index}
-          longitude={place.longitude}
-          latitude={place.latitude}
-          anchor="bottom"
-        >
-          <img
-            src="/images/pin.png"
-            width={30}
-            height={20}
-            alt={place.name}
-            onMouseEnter={() => setHoveredPlace(place)}
-            onMouseLeave={() => setHoveredPlace(null)}
-            style={{ cursor: "pointer" }}
-          />
-        </Marker>
-      ))}
-
-      {hoveredPlace && (
-        <Popup
-          longitude={hoveredPlace.longitude}
-          latitude={hoveredPlace.latitude}
-          anchor="top"
-          closeButton={false}
-        >
-          <div>{hoveredPlace.name}</div>
-        </Popup>
-      )}
-    </Map>
-  );
-}
+export default MapExampleRoute;
