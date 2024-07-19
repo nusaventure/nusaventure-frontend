@@ -158,7 +158,7 @@ export function HomeRoute() {
               />
               <p className="pt-2 text-5xl font-bold text-[#5338F5]">{placeTopStats.islands}</p>
               <h2 className="pt-5 text-2xl font-semibold text-gray-800 mb-4">
-                Island
+                Islands
               </h2>
             </div>
             <div className="flex flex-col items-center">
