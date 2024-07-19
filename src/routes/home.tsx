@@ -2,22 +2,35 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import api from "@/libs/api";
 import { Category } from "@/types/category";
+import { FeaturedPlace } from "@/types/places";
 import { Link, useLoaderData } from "react-router-dom";
-import { topDestinations } from "@/libs/topDestination";
 
 export async function loader() {
   const responseHeroCategories = await api<{
     data: Array<Category>;
   }>("/categories/featured");
 
+  const responseTopDestinations = await api<{
+    data: Array<FeaturedPlace>;
+  }>("/places/featured");
+
+  const responsePlaceTopStats = await api<{
+    data: {
+      islands: number;
+      cities: number;
+      places: number;
+    };
+  }>("/places/top-stats");
+
   return {
     heroCategories: responseHeroCategories.data,
-    // topDestinations: [],
+    topDestinations: responseTopDestinations.data,
+    placeTopStats: responsePlaceTopStats.data,
   };
 }
-// topDestinations
+
 export function HomeRoute() {
-  const { heroCategories } = useLoaderData() as Awaited<
+  const { heroCategories, topDestinations, placeTopStats } = useLoaderData() as Awaited<
     ReturnType<typeof loader>
   >;
 
@@ -95,23 +108,24 @@ export function HomeRoute() {
               Discover Top Destinations
             </h1>
           </div>
-          <div className="pt-20 relative z-10 flex justify-center ">
+          <div className="pt-20 relative z-10 flex justify-center gap-3">
             {topDestinations.map((destination, index) => (
-              <div
+              <Link
+                to={`/places/${destination.slug}`}
                 key={index}
-                className="h-120 min-w-[250px] rounded-lg overflow-hidden"
+                className="min-w-[250px] overflow-hidden"
               >
                 <img
-                  src={destination.image}
-                  alt={destination.name}
-                  className="object-contain"
+                  src={destination.imageUrl}
+                  alt={destination.title}
+                  className="object-cover rounded-lg h-96"
                 />
                 <div className="p-4">
                   <h2 className="text-lg font-semibold text-gray-800">
-                    {destination.name}
+                    {destination.title}, {destination.city.name}
                   </h2>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -142,7 +156,7 @@ export function HomeRoute() {
                 alt="island"
                 className="h-30 w-30 mb-10 object-contain"
               />
-              <p className="pt-2 text-5xl font-bold text-[#5338F5]">30</p>
+              <p className="pt-2 text-5xl font-bold text-[#5338F5]">{placeTopStats.islands}</p>
               <h2 className="pt-5 text-2xl font-semibold text-gray-800 mb-4">
                 Island
               </h2>
@@ -153,7 +167,7 @@ export function HomeRoute() {
                 alt="building"
                 className="h-30 w-30 mb-10 object-contain"
               />
-              <p className="pt-2 text-5xl font-bold text-[#5338F5]">102</p>
+              <p className="pt-2 text-5xl font-bold text-[#5338F5]">{placeTopStats.cities}</p>
               <h2 className="pt-5 text-2xl font-semibold text-gray-800 mb-4">
                 Cities
               </h2>
@@ -164,7 +178,7 @@ export function HomeRoute() {
                 alt="location"
                 className="h-30 w-30 mb-10 object-contain"
               />
-              <p className="pt-2 text-5xl font-bold text-[#5338F5]">2304</p>
+              <p className="pt-2 text-5xl font-bold text-[#5338F5]">{placeTopStats.places}</p>
               <h2 className="pt-5 text-2xl font-semibold text-gray-800 mb-4">
                 Places
               </h2>
