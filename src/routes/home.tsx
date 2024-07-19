@@ -72,13 +72,13 @@ export function HomeRoute() {
                 />
               </form>
 
-              <ul className=" flex flex-wrap strech  gap-y-2 gap-x-2 ">
+              <ul className="flex flex-wrap strech gap-2">
                 {heroCategories
                   .map((heroCategory) => (
                     <li key={heroCategory.id}>
-                      <button className="py-2 px-4 text-white rounded bg-slate-500/30 text-sm backdrop-blur border border-slate-300/30">
+                      <Link to={`/places?category=${heroCategory.slug}`} className="block py-2 px-4 text-white rounded bg-slate-500/30 text-sm backdrop-blur border border-slate-300/30">
                         {heroCategory.name}
-                      </button>
+                      </Link>
                     </li>
                   ))}
               </ul>
