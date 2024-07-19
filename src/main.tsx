@@ -4,9 +4,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 
 import { RootRoute } from "./routes/root";
-import * as places from "./routes/places";
-import { MapExampleRoute } from "./routes/map-example";
+import { PlacesIndexRoute, loader as placesIndexLoader } from "./routes/places";
+import { PlacesMapExampleRoute } from "./routes/places/map-example";
 import { HomeRoute, loader as homeLoader } from "./routes/home";
+import { PlacesLayoutRoute } from "./routes/places/layout";
 
 const router = createBrowserRouter([
   {
@@ -23,11 +24,6 @@ const router = createBrowserRouter([
         // element: <AboutRoute />,
       },
       {
-        path: "/places",
-        element: <places.PlacesRoute />,
-        loader: places.loader,
-      },
-      {
         path: "/track-history",
         // element: <TrackHistory />,
       },
@@ -35,9 +31,20 @@ const router = createBrowserRouter([
         path: "/social-sharing",
         // element: <SocialSharing />,
       },
+    ],
+  },
+  {
+    path: "/places",
+    element: <PlacesLayoutRoute />,
+    children: [
       {
-        path: "/map-example",
-        element: <MapExampleRoute />,
+        path: "/places",
+        element: <PlacesIndexRoute />,
+        loader: placesIndexLoader,
+      },
+      {
+        path: "/places/map-example",
+        element: <PlacesMapExampleRoute />,
       },
     ],
   },

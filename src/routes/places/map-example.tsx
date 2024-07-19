@@ -3,7 +3,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 const mapboxAccessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
-export function MapExampleRoute() {
+export function PlacesMapExampleRoute() {
   return (
     <div className="flex">
       <div className="w-1/3 bg-gray-100 p-6">
@@ -78,4 +78,4 @@ export function MapExampleRoute() {
   );
 }
 
-export default MapExampleRoute;
+export default PlacesMapExampleRoute;
