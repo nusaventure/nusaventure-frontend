@@ -25,6 +25,7 @@ Nusaventure, short for **Nusantara Adventure**, is a platform that inspires expl
 - [Vite](https://vitejs.dev/)
 - [Typescript](https://www.typescriptlang.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
+- [Shadcn/ui](https://ui.shadcn.com/docs)
 - [ReactRouter](https://reactrouter.com/)
 - [React-Map-GL](https://visgl.github.io/react-map-gl/)
 
@@ -32,24 +33,34 @@ Nusaventure, short for **Nusantara Adventure**, is a platform that inspires expl
 
 Look at [Figma](https://www.figma.com/design/hcYwfXGBenPH999pNQJ7wl/Nusaventure)
 
-## Getting Started
+## Installation
 
-Set up `.env` by copying from `.env.example` for reference
+To set up the project locally, follow these steps:
 
-```sh
-cp .env.example .env
-```
+1. **Clone the repository**:
 
-Install dependencies
+   ```bash
+   git clone https://github.com/your-username/nusaventure-frontend.git
+   cd nusaventure-frontend
+   ```
 
-```sh
-bun install
-```
+2. **Install dependencies**:
 
-Then you can run
+   ```bash
+   bun install
+   ```
 
-```sh
-bun run dev
-```
+   ```bash
+   bun install --save react-map-gl mapbox-gl @types/mapbox-gl
+   ```
 
-Afterwards, open your browser and navigate to http://localhost:5173 to start exploring the API.
+3. **Start the development server**:
+
+   ```bash
+   bun dev
+   ```
+
+4. **Build for production**:
+   ```bash
+   bun build
+   ```
