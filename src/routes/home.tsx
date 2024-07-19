@@ -74,49 +74,59 @@ export function HomeRoute() {
         </div>
       </section>
 
-      <section id="top-destinations">
+      <section
+        id="top-destination"
+        className="w-full h-screen relative z-10 flex flex-col items-center py-8 justify-center"
+      >
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/images/section/vector.png"
+            alt="wave background"
+            className="w-full h-full object-contain bg-top"
+          />
+        </div>
         <p>TOP DESTINATIONS</p>
         <pre>{JSON.stringify(topDestinations, null, 2)}</pre>
       </section>
 
       <section
         id="favorite-places"
-        className="relative z-10 flex flex-col items-center bg-blue-100 py-8"
+        className="w-full h-screen relative z-10 flex flex-col items-center py-8 justify-center"
       >
         <div className="absolute inset-0 z-0">
           <img
             src="/images/section/wave-background.png"
             alt="wave background"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
           />
         </div>
         <div className="relative z-10 text-center">
           <p className="text-lg font-semibold text-indigo-600 mb-2">
             Our Places
           </p>
-          <h1 className="text-4xl font-bold text-gray-900 mb-8">
+          <h1 className="text-4xl font-bold text-gray-1000 mb-8">
             Favorite Places Curated for You
           </h1>
-          <div className="flex justify-around w-full max-w-4xl">
+          <div className="pt-10 flex gap-52 justify-around w-full max-w-4xl">
             <div className="flex flex-col items-center">
               <img
                 src="images/section/island.png"
                 alt="island"
-                className="h-24 w-24 mb-4"
+                className="h-30 w-30 mb-10 object-contain"
               />
-              <p className="text-xl font-semibold">30</p>
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Cities
+              <p className="pt-2 text-5xl font-bold text-[#5338F5]">30</p>
+              <h2 className="pt-5 text-2xl font-semibold text-gray-800 mb-4">
+                Island
               </h2>
             </div>
             <div className="flex flex-col items-center">
               <img
                 src="images/section/buildings.png"
                 alt="building"
-                className="h-24 w-24 mb-4"
+                className="h-30 w-30 mb-10 object-contain"
               />
-              <p className="text-xl font-semibold">102</p>
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              <p className="pt-2 text-5xl font-bold text-[#5338F5]">102</p>
+              <h2 className="pt-5 text-2xl font-semibold text-gray-800 mb-4">
                 Cities
               </h2>
             </div>
@@ -124,10 +134,10 @@ export function HomeRoute() {
               <img
                 src="images/section/location.png"
                 alt="location"
-                className="h-24 w-24 mb-4"
+                className="h-30 w-30 mb-10 object-contain"
               />
-              <p className="text-xl font-semibold">2304</p>
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              <p className="pt-2 text-5xl font-bold text-[#5338F5]">2304</p>
+              <h2 className="pt-5 text-2xl font-semibold text-gray-800 mb-4">
                 Places
               </h2>
             </div>
@@ -149,7 +159,7 @@ export function HomeRoute() {
               <p className="text-lg font-semibold text-indigo-600 mb-2">
                 Our Features
               </p>
-              <h1 className="text-4xl font-bold text-gray-900 mb-8">
+              <h1 className="text-4xl font-bold text-gray-1000 mb-8">
                 Get Ready for Your Next Destination
               </h1>
               <div className="mb-6">
