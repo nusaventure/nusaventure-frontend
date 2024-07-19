@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import api from "@/libs/api";
 import { Category } from "@/types/category";
 import { Link, useLoaderData } from "react-router-dom";
+import { topDestinations } from "@/libs/topDestination";
 
 export async function loader() {
   const responseHeroCategories = await api<{
@@ -11,12 +12,12 @@ export async function loader() {
 
   return {
     heroCategories: responseHeroCategories.data,
-    topDestinations: [],
+    // topDestinations: [],
   };
 }
-
+// topDestinations
 export function HomeRoute() {
-  const { heroCategories, topDestinations } = useLoaderData() as Awaited<
+  const { heroCategories } = useLoaderData() as Awaited<
     ReturnType<typeof loader>
   >;
 
@@ -76,17 +77,43 @@ export function HomeRoute() {
 
       <section
         id="top-destination"
-        className="w-full h-screen relative z-10 flex flex-col items-center py-8 justify-center"
+        className="pl-20 w-full h-screen relative z-10 flex flex-col py-8"
       >
-        <div className="absolute inset-0 z-0">
+        <div className="absolute w-full h-1/2 inset-0 z-0 -top-[30%]">
           <img
             src="/images/section/vector.png"
-            alt="wave background"
-            className="w-full h-full object-contain bg-top"
+            alt="vector"
+            className="w-full h-full object-contain"
           />
         </div>
-        <p>TOP DESTINATIONS</p>
-        <pre>{JSON.stringify(topDestinations, null, 2)}</pre>
+
+        <div className="relative z-10">
+          <p className="text-lg font-semibold text-indigo-600 mb-2">
+            Top Destination
+          </p>
+          <h1 className="text-4xl font-bold text-gray-1000 mb-8">
+            Discover Top Destinations
+          </h1>
+        </div>
+        <div className="pt-20 relative z-10 flex overflow-hidden space-x-4 justify-center">
+          {topDestinations.map((destination, index) => (
+            <div
+              key={index}
+              className="h-120 min-w-[250px] rounded-lg overflow-hidden"
+            >
+              <img
+                src={destination.image}
+                alt={destination.name}
+                className="object-contain"
+              />
+              <div className="p-4">
+                <h2 className="text-lg font-semibold text-gray-800">
+                  {destination.name}
+                </h2>
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section
