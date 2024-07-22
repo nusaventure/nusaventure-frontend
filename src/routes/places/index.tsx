@@ -41,15 +41,16 @@ export function PlacesIndexRoute() {
     })),
   };
 
-  const layerStyle = {
+  const layerStyle: mapboxgl.CircleLayer = {
     id: "points",
     type: "circle",
     paint: {
-      "circle-color": "#11b4da",
+      "circle-color": "red",
       "circle-radius": 6,
       "circle-stroke-width": 1,
       "circle-stroke-color": "#fff",
     },
+    source: "",
   };
 
   return (
