@@ -1,7 +1,8 @@
-import Map, { Layer, Source } from "react-map-gl";
+import Map, { Source } from "react-map-gl";
 import { useLoaderData } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "mapbox-gl/dist/mapbox-gl.css";
+import Layer from "react-map-gl/dist/esm/components/layer";
 
 import api from "@/libs/api";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -25,14 +26,13 @@ export async function loader() {
 export function PlacesIndexRoute() {
   const { places } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
-  console.log({ places });
-
   const geojson = {
     type: "FeatureCollection",
     features: places.map((place) => ({
       type: "Feature",
       properties: {
         title: place.title,
+        id: place.id,
       },
       geometry: {
         type: "Point",
@@ -41,16 +41,51 @@ export function PlacesIndexRoute() {
     })),
   };
 
-  const layerStyle: mapboxgl.CircleLayer = {
-    id: "points",
-    type: "circle",
+  const clusterLayer = {
+    id: "clusters",
+    type: "circle" as const,
+    source: "places",
+    filter: ["has", "point_count"],
     paint: {
-      "circle-color": "red",
-      "circle-radius": 6,
+      "circle-color": [
+        "step",
+        ["get", "point_count"],
+        "#4b0082", // Indigo color
+        100,
+        "#f1f075",
+        750,
+        "#f28cb1",
+      ],
+      "circle-radius": ["step", ["get", "point_count"], 20, 100, 30, 750, 40],
+    },
+  };
+
+  const clusterCountLayer = {
+    id: "cluster-count",
+    type: "symbol" as const,
+    source: "places",
+    filter: ["has", "point_count"],
+    layout: {
+      "text-field": ["get", "point_count_abbreviated"],
+      "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+      "text-size": 12,
+    },
+    paint: {
+      "text-color": "#ffffff", // White color for the text
+    },
+  };
+
+  const unclusteredPointLayer = {
+    id: "unclustered-point",
+    type: "circle" as const,
+    source: "places",
+    filter: ["!", ["has", "point_count"]],
+    paint: {
+      "circle-color": "#4b0082", // Indigo color
+      "circle-radius": 4,
       "circle-stroke-width": 1,
       "circle-stroke-color": "#fff",
     },
-    source: "",
   };
 
   return (
@@ -68,15 +103,24 @@ export function PlacesIndexRoute() {
       <Map
         mapboxAccessToken={mapboxAccessToken}
         initialViewState={{
-          latitude: -0.4752106, // Latitude of center ina
-          longitude: 116.6995672, // Longitude of center ina
+          latitude: -0.4752106,
+          longitude: 116.6995672,
           zoom: 4.75,
         }}
         style={{ width: "70%", height: "100vh" }}
         mapStyle="mapbox://styles/mapbox/streets-v9"
       >
-        <Source id="places" type="geojson" data={geojson}>
-          <Layer {...layerStyle} />
+        <Source
+          id="places"
+          type="geojson"
+          data={geojson}
+          cluster={true}
+          clusterMaxZoom={14}
+          clusterRadius={50}
+        >
+          <Layer {...clusterLayer} />
+          <Layer {...clusterCountLayer} />
+          <Layer {...unclusteredPointLayer} />
         </Source>
       </Map>
     </main>
