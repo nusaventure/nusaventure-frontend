@@ -1,26 +1,56 @@
+import Map, { Layer, Source } from "react-map-gl";
 import { useLoaderData } from "react-router-dom";
 import { Link } from "react-router-dom";
-import Map from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import api from "@/libs/api";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Place } from "@/types/places";
 
 const mapboxAccessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
 export async function loader() {
-  const res = await api<{
-    data: Array<Place>;
+  const responsePlaces = await api<{
+    data: Array<{
+      id: string;
+      title: string;
+      latitude: number;
+      longitude: number;
+      imageUrl: string;
+    }>;
   }>("/places");
 
-  return { places: res.data };
+  return { places: responsePlaces.data };
 }
 
 export function PlacesIndexRoute() {
   const { places } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   console.log({ places });
+
+  const geojson = {
+    type: "FeatureCollection",
+    features: places.map((place) => ({
+      type: "Feature",
+      properties: {
+        title: place.title,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [place.longitude, place.latitude],
+      },
+    })),
+  };
+
+  const layerStyle = {
+    id: "points",
+    type: "circle",
+    paint: {
+      "circle-color": "#11b4da",
+      "circle-radius": 6,
+      "circle-stroke-width": 1,
+      "circle-stroke-color": "#fff",
+    },
+  };
 
   return (
     <main className="flex">
@@ -37,13 +67,17 @@ export function PlacesIndexRoute() {
       <Map
         mapboxAccessToken={mapboxAccessToken}
         initialViewState={{
-          latitude: -8.409518, // Latitude for Bali
-          longitude: 115.188919, // Longitude for Bali
-          zoom: 10,
+          latitude: -0.4752106, // Latitude of center ina
+          longitude: 116.6995672, // Longitude of center ina
+          zoom: 4.75,
         }}
         style={{ width: "70%", height: "100vh" }}
         mapStyle="mapbox://styles/mapbox/streets-v9"
-      />
+      >
+        <Source id="places" type="geojson" data={geojson}>
+          <Layer {...layerStyle} />
+        </Source>
+      </Map>
     </main>
   );
 }
