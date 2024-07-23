@@ -1,3 +1,5 @@
+import { getAccessToken } from "./access-token";
+
 /* eslint-disable no-useless-catch */
 type ApiOptions = Omit<RequestInit, "body"> & {
   body?: Record<string, unknown> | BodyInit;
@@ -9,6 +11,11 @@ async function api<T>(path: string, options: ApiOptions = {}): Promise<T> {
   const headers = new Headers(options.headers);
 
   headers.set("Content-Type", "application/json");
+
+  const token = getAccessToken();
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
 
   const fetchOptions: RequestInit = {
     method: options.method,
