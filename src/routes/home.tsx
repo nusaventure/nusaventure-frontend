@@ -4,6 +4,7 @@ import api from "@/libs/api";
 import { Category } from "@/types/category";
 import { FeaturedPlace } from "@/types/places";
 import { Link, useLoaderData } from "react-router-dom";
+import { Island } from "@/types/islands";
 
 export async function loader() {
   const responseHeroCategories = await api<{
@@ -13,6 +14,10 @@ export async function loader() {
   const responseTopDestinations = await api<{
     data: Array<FeaturedPlace>;
   }>("/places/featured");
+
+  const responseIslands = await api<{
+    data: Array<Island>;
+  }>("/islands");
 
   const responsePlaceTopStats = await api<{
     data: {
@@ -26,13 +31,13 @@ export async function loader() {
     heroCategories: responseHeroCategories.data,
     topDestinations: responseTopDestinations.data,
     placeTopStats: responsePlaceTopStats.data,
+    placeIslands: responseIslands.data,
   };
 }
 
 export function HomeRoute() {
-  const { heroCategories, topDestinations, placeTopStats } = useLoaderData() as Awaited<
-    ReturnType<typeof loader>
-  >;
+  const { heroCategories, topDestinations, placeTopStats, placeIslands } =
+    useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (
     <div>
@@ -73,14 +78,16 @@ export function HomeRoute() {
               </form>
 
               <ul className="flex flex-wrap strech gap-2">
-                {heroCategories
-                  .map((heroCategory) => (
-                    <li key={heroCategory.id}>
-                      <Link to={`/places?category=${heroCategory.slug}`} className="block py-2 px-4 text-white rounded bg-slate-500/30 text-sm backdrop-blur border border-slate-300/30">
-                        {heroCategory.name}
-                      </Link>
-                    </li>
-                  ))}
+                {heroCategories.map((heroCategory) => (
+                  <li key={heroCategory.id}>
+                    <Link
+                      to={`/places?category=${heroCategory.slug}`}
+                      className="block py-2 px-4 text-white rounded bg-slate-500/30 text-sm backdrop-blur border border-slate-300/30"
+                    >
+                      {heroCategory.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
@@ -91,15 +98,15 @@ export function HomeRoute() {
         id="top-destination"
         className=" w-full h-screen relative z-10 flex flex-col py-8 items-center"
       >
-        <div className="absolute w-full h-1/2 inset-0 z-0 -top-[30%]">
+        <div className="absolute w-screen h-full inset-0 z-0 -top-[80%]">
           <img
-            src="/images/section/vector.png"
+            src="/images/section/cloud.webp"
             alt="vector"
             className="w-full h-full object-contain bg-cover"
           />
         </div>
 
-        <div className="max-w-screen-xl " >
+        <div className="max-w-screen-xl ">
           <div className="relative z-10 ">
             <p className="text-lg font-semibold text-indigo-600 mb-2">
               Top Destination
@@ -133,11 +140,11 @@ export function HomeRoute() {
 
       <section
         id="favorite-places"
-        className="w-full h-screen relative z-10 flex flex-col items-center py-8 justify-center"
+        className="w-full h-screen relative z-10 flex flex-col items-center xl:py-20 justify-center"
       >
-        <div className="absolute inset-0 z-0">
+        <div className="absolute w-screen ">
           <img
-            src="/images/section/wave-background.png"
+            src="/images/section/bg-air.svg"
             alt="wave background"
             className="w-full h-full bg-cover"
           />
@@ -146,7 +153,7 @@ export function HomeRoute() {
           <p className="text-lg font-semibold text-indigo-600 mb-2">
             Our Places
           </p>
-          <h1 className="text-4xl font-bold text-gray-1000 mb-8">
+          <h1 className="text-4xl font-bold text-white mb-8">
             Favorite Places Curated for You
           </h1>
           <div className="pt-10 flex gap-52 justify-around w-full max-w-4xl">
@@ -156,7 +163,9 @@ export function HomeRoute() {
                 alt="island"
                 className="h-30 w-30 mb-10 object-contain"
               />
-              <p className="pt-2 text-5xl font-bold text-[#5338F5]">{placeTopStats.islands}</p>
+              <p className="pt-2 text-5xl font-bold text-white">
+                {placeTopStats.islands}
+              </p>
               <h2 className="pt-5 text-2xl font-semibold text-gray-800 mb-4">
                 Islands
               </h2>
@@ -167,7 +176,9 @@ export function HomeRoute() {
                 alt="building"
                 className="h-30 w-30 mb-10 object-contain"
               />
-              <p className="pt-2 text-5xl font-bold text-[#5338F5]">{placeTopStats.cities}</p>
+              <p className="pt-2 text-5xl font-bold text-white">
+                {placeTopStats.cities}
+              </p>
               <h2 className="pt-5 text-2xl font-semibold text-gray-800 mb-4">
                 Cities
               </h2>
@@ -178,11 +189,49 @@ export function HomeRoute() {
                 alt="location"
                 className="h-30 w-30 mb-10 object-contain"
               />
-              <p className="pt-2 text-5xl font-bold text-[#5338F5]">{placeTopStats.places}</p>
+              <p className="pt-2 text-5xl font-bold text-white">
+                {placeTopStats.places}
+              </p>
               <h2 className="pt-5 text-2xl font-semibold text-gray-800 mb-4">
                 Places
               </h2>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="top-destination"
+        className=" w-full h-screen relative z-10 flex flex-col py-8 items-center"
+      >
+        <div className="max-w-screen-xl ">
+          <div className="relative z-10 ">
+            <p className="text-lg font-semibold text-indigo-600 mb-2">
+              islands coverage
+            </p>
+            <h1 className="text-4xl font-bold text-gray-1000 mb-8">
+              Explore Beautiful islands of indonesia
+            </h1>
+          </div>
+          <div className="pt-2 relative z-10 flex justify-center gap-3">
+            {placeIslands.map((island, index) => (
+              <Link
+                to={`/places/${island.name}`}
+                key={index}
+                className="min-w-[250px] overflow-hidden"
+              >
+                <img
+                  src={island.imageUrl}
+                  alt={island.name}
+                  className="object-cover rounded-lg h-96"
+                />
+                <div className="flex justify-center">
+                  <h2 className="text-lg font-semibold text-gray-800">
+                    {island.name}
+                  </h2>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
