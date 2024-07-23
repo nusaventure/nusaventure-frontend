@@ -56,23 +56,20 @@ export function HomeRoute() {
 
       <section
         id="hero"
-        className="bg-[url('/images/landing/hero_banner.webp')] bg-cover min-h-screen bg-fixed "
+        className="bg-[url('/images/landing/hero_banner.webp')] bg-cover bg-fixed h-screen relative "
       >
         <div className="flex justify-center content-center items-center h-screen ">
-          <div className="flex w-8/12	 gap-6 items-center">
+          <div className="flex lg:max-w-5xl max-w-3xl  flex-col gap-6 items-center lg:flex-row px-5  ">
             <div>
-              <h1 className="londrina-solid-regular text-white text-9xl">
-                EXPLORE
-              </h1>
-              <h1 className="londrina-solid-regular text-white text-9xl">
-                INDONESIA!
+              <h1 className="londrina-solid-regular text-white text-6xl md:text-8xl text-center md:text-left ">
+                EXPLORE INDONESIA!
               </h1>
             </div>
 
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-6">
               <form action="get">
                 <Input
-                  className="h-16 bg-slate-500/30 text-white text-xl backdrop-blur border-slate-300/30 placeholder:text-white placeholder:text-xl"
+                  className="h-12 bg-slate-500/30 text-white text-base backdrop-blur border-slate-300/30 placeholder:text-white placeholder:text-base"
                   placeholder="🔍Where do you want to go?"
                 />
               </form>
@@ -82,7 +79,7 @@ export function HomeRoute() {
                   <li key={heroCategory.id}>
                     <Link
                       to={`/places?category=${heroCategory.slug}`}
-                      className="block py-2 px-4 text-white rounded bg-slate-500/30 text-sm backdrop-blur border border-slate-300/30"
+                      className="block py-1 px-3 text-white rounded bg-slate-500/30 text-[12px] backdrop-blur border border-slate-300/30"
                     >
                       {heroCategory.name}
                     </Link>
@@ -92,22 +89,21 @@ export function HomeRoute() {
             </div>
           </div>
         </div>
+        <div className="absolute bottom-0 lg:-bottom-20">
+          <img
+            src="/images/section/cloud.webp"
+            alt="cloud"
+            className="w-screen "
+          />
+        </div>
       </section>
 
       <section
         id="top-destination"
-        className=" w-full h-screen relative z-10 flex flex-col py-8 items-center"
+        className=" w-full z-10 relative flex flex-col py-8 items-center"
       >
-        <div className="absolute w-screen h-full inset-0 z-0 -top-[80%]">
-          <img
-            src="/images/section/cloud.webp"
-            alt="vector"
-            className="w-full h-full object-contain bg-cover"
-          />
-        </div>
-
-        <div className="max-w-screen-xl ">
-          <div className="relative z-10 ">
+        <div className="max-w-screen-xl px-5 ">
+          <div className=" ">
             <p className="text-lg font-semibold text-indigo-600 mb-2">
               Top Destination
             </p>
@@ -115,58 +111,51 @@ export function HomeRoute() {
               Discover Top Destinations
             </h1>
           </div>
-          <div className="pt-20 relative z-10 flex justify-center gap-3">
-            {topDestinations.map((destination, index) => (
-              <Link
-                to={`/places/${destination.slug}`}
-                key={index}
-                className="min-w-[250px] overflow-hidden"
-              >
-                <img
-                  src={destination.imageUrl}
-                  alt={destination.title}
-                  className="object-cover rounded-lg h-96"
-                />
-                <div className="p-4">
-                  <h2 className="text-lg font-semibold text-gray-800">
-                    {destination.title}, {destination.city.name}
-                  </h2>
-                </div>
-              </Link>
-            ))}
+          <div className="flex justify-center gap-6 flex-col md:flex-row ">
+            {topDestinations
+              .filter((_, index) => index <= 3)
+              .map((destination) => (
+                <Link
+                  to={`/places/${destination.slug}`}
+                  key={destination.id}
+                  className="overflow-hidden"
+                >
+                  <img
+                    src={destination.imageUrl}
+                    alt={destination.title}
+                    className="object-cover rounded-lg h-96 w-full md:w-96"
+                  />
+                  <div className="p-4">
+                    <h2 className="text-lg font-semibold text-gray-800 text-center">
+                      {destination.title}, {destination.city.name}
+                    </h2>
+                  </div>
+                </Link>
+              ))}
           </div>
         </div>
       </section>
 
       <section
         id="favorite-places"
-        className="w-full h-screen relative z-10 flex flex-col items-center xl:py-20 justify-center"
+        className="flex flex-col items-center justify-center bg-[url('/images/section/bg-air.svg')] bg-auto lg:bg-cover bg-no-repeat bg-center  w-auto h-screen"
       >
-        <div className="absolute w-screen ">
-          <img
-            src="/images/section/bg-air.svg"
-            alt="wave background"
-            className="w-full h-full bg-cover"
-          />
-        </div>
-        <div className="relative z-10 text-center">
-          <p className="text-lg font-semibold text-indigo-600 mb-2">
-            Our Places
-          </p>
+        <div className="text-center px-5">
+          <p className="text-lg font-semibold text-white mb-2">Our Places</p>
           <h1 className="text-4xl font-bold text-white mb-8">
             Favorite Places Curated for You
           </h1>
-          <div className="pt-10 flex gap-52 justify-around w-full max-w-4xl">
+          <div className="pt-10 flex justify-around w-screen max-w-4xl ">
             <div className="flex flex-col items-center">
               <img
                 src="images/section/island.png"
                 alt="island"
-                className="h-30 w-30 mb-10 object-contain"
+                className="h-24 md:h-36 mb-10"
               />
               <p className="pt-2 text-5xl font-bold text-white">
                 {placeTopStats.islands}
               </p>
-              <h2 className="pt-5 text-2xl font-semibold text-gray-800 mb-4">
+              <h2 className="pt-5 text-2xl font-semibold text-white mb-4">
                 Islands
               </h2>
             </div>
@@ -174,12 +163,12 @@ export function HomeRoute() {
               <img
                 src="images/section/buildings.png"
                 alt="building"
-                className="h-30 w-30 mb-10 object-contain"
+                className="h-24 md:h-36 mb-10"
               />
               <p className="pt-2 text-5xl font-bold text-white">
                 {placeTopStats.cities}
               </p>
-              <h2 className="pt-5 text-2xl font-semibold text-gray-800 mb-4">
+              <h2 className="pt-5 text-2xl font-semibold text-white mb-4">
                 Cities
               </h2>
             </div>
@@ -187,12 +176,12 @@ export function HomeRoute() {
               <img
                 src="images/section/location.png"
                 alt="location"
-                className="h-30 w-30 mb-10 object-contain"
+                className="h-24 md:h-36 mb-10"
               />
               <p className="pt-2 text-5xl font-bold text-white">
                 {placeTopStats.places}
               </p>
-              <h2 className="pt-5 text-2xl font-semibold text-gray-800 mb-4">
+              <h2 className="pt-5 text-2xl font-semibold text-white mb-4">
                 Places
               </h2>
             </div>
@@ -200,12 +189,9 @@ export function HomeRoute() {
         </div>
       </section>
 
-      <section
-        id="top-destination"
-        className=" w-full h-screen relative z-10 flex flex-col py-8 items-center"
-      >
+      <section id="island" className="flex px-5 lg:py-10 justify-center">
         <div className="max-w-screen-xl ">
-          <div className="relative z-10 ">
+          <div className=" ">
             <p className="text-lg font-semibold text-indigo-600 mb-2">
               islands coverage
             </p>
@@ -213,18 +199,15 @@ export function HomeRoute() {
               Explore Beautiful islands of indonesia
             </h1>
           </div>
-          <div className="pt-2 relative z-10 flex justify-center gap-3">
+          <div className="pt-2  grid grid-cols md:grid-cols-4 lg:grid-cols-5 gap-4">
             {placeIslands.map((island, index) => (
-              <Link
-                to={`/places/${island.name}`}
-                key={index}
-                className="min-w-[250px] overflow-hidden"
-              >
+              <Link to={`/places/${island.name}`} key={index} className="">
                 <img
                   src={island.imageUrl}
                   alt={island.name}
-                  className="object-cover rounded-lg h-96"
+                  className="object-cover rounded-lg h-20 w-screen"
                 />
+
                 <div className="flex justify-center">
                   <h2 className="text-lg font-semibold text-gray-800">
                     {island.name}
@@ -236,17 +219,17 @@ export function HomeRoute() {
         </div>
       </section>
 
-      <section id="features" className="py-12 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center">
-            <div className="md:w-1/2 flex justify-center md:justify-start mb-6 md:mb-0">
+      <section id="features" className=" px-5 py-8 flex justify-center ">
+        <div className="max-w-screen-xl ">
+          <div className="flex flex-col lg:flex-row items-center gap-8">
+            <div className=" flex justify-center ">
               <img
                 src="images/section/mountain.png"
                 alt="mountain"
-                className="h-150 w-150 rounded-md shadow-lg object-cover"
+                className="flex-1 rounded-md shadow-lg object-cover w-screen h-96 lg:w-auto lg:h-auto"
               />
             </div>
-            <div className="md:w-1/2 md:pl-8">
+            <div className="flex-1 ">
               <p className="text-lg font-semibold text-indigo-600 mb-2">
                 Our Features
               </p>
