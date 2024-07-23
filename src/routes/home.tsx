@@ -7,25 +7,17 @@ import { Link, useLoaderData } from "react-router-dom";
 import { Island } from "@/types/islands";
 
 export async function loader() {
-  const responseHeroCategories = await api<{
-    data: Array<Category>;
-  }>("/categories/featured");
-
-  const responseTopDestinations = await api<{
-    data: Array<FeaturedPlace>;
-  }>("/places/featured");
-
-  const responseIslands = await api<{
-    data: Array<Island>;
-  }>("/islands");
-
-  const responsePlaceTopStats = await api<{
-    data: {
-      islands: number;
-      cities: number;
-      places: number;
-    };
-  }>("/places/top-stats");
+  const [
+    responseHeroCategories,
+    responseTopDestinations,
+    responseIslands,
+    responsePlaceTopStats
+  ] = await Promise.all([
+    api<{ data: Array<Category> }>("/categories/featured"),
+    api<{ data: Array<FeaturedPlace> }>("/places/featured"),
+    api<{ data: Array<Island> }>("/islands"),
+    api<{ data: { islands: number; cities: number; places: number; } }>("/places/top-stats")
+  ]);
 
   return {
     heroCategories: responseHeroCategories.data,
@@ -34,6 +26,7 @@ export async function loader() {
     placeIslands: responseIslands.data,
   };
 }
+
 
 export function HomeRoute() {
   const { heroCategories, topDestinations, placeTopStats, placeIslands } =
