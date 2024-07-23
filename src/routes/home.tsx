@@ -54,7 +54,7 @@ export function HomeRoute() {
         <div className="flex justify-center content-center items-center h-screen ">
           <div className="flex lg:max-w-5xl max-w-3xl  flex-col gap-6 items-center lg:flex-row px-5  ">
             <div>
-              <h1 className="londrina-solid-regular text-white text-6xl md:text-8xl text-center md:text-left ">
+              <h1 className="londrina-solid-regular text-white text-6xl lg:text-8xl text-center md:text-left ">
                 EXPLORE INDONESIA!
               </h1>
             </div>
