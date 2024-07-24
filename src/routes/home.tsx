@@ -11,12 +11,14 @@ export async function loader() {
     responseHeroCategories,
     responseTopDestinations,
     responseIslands,
-    responsePlaceTopStats
+    responsePlaceTopStats,
   ] = await Promise.all([
     api<{ data: Array<Category> }>("/categories/featured"),
     api<{ data: Array<FeaturedPlace> }>("/places/featured"),
     api<{ data: Array<Island> }>("/islands"),
-    api<{ data: { islands: number; cities: number; places: number; } }>("/places/top-stats")
+    api<{ data: { islands: number; cities: number; places: number } }>(
+      "/places/top-stats"
+    ),
   ]);
 
   return {
@@ -27,23 +29,24 @@ export async function loader() {
   };
 }
 
-
 export function HomeRoute() {
   const { heroCategories, topDestinations, placeTopStats, placeIslands } =
     useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (
     <div>
-      <header className="fixed w-full p-5 z-20 bg-gradient-to-b from-gray-700/60">
-        <div className="flex justify-between">
-          <div>
-            <Link to="/">
-              <img src="/images/landing/logo.svg" alt="logo" />
-            </Link>
+      <header className="fixed w-full p-5 z-20 bg-gradient-to-b from-gray-700/60 justify-center flex ">
+        <div className="max-w-screen-xl w-full w-screen">
+          <div className="flex justify-between ">
+            <div>
+              <Link to="/">
+                <img src="/images/landing/logo.svg" alt="logo" />
+              </Link>
+            </div>
+            <Button className="bg-primary-color text-white">
+              <Link to="/">Home</Link>
+            </Button>
           </div>
-          <Button className="bg-primary-color text-white">
-            <Link to="/">Home</Link>
-          </Button>
         </div>
       </header>
 
@@ -82,7 +85,7 @@ export function HomeRoute() {
             </div>
           </div>
         </div>
-        <div className="absolute bottom-0 lg:-bottom-20">
+        <div className="absolute bottom-0 lg:-bottom-20 pointer-events-none">
           <img
             src="/images/section/cloud.webp"
             alt="cloud"
@@ -131,7 +134,7 @@ export function HomeRoute() {
 
       <section
         id="favorite-places"
-        className="flex flex-col items-center justify-center bg-[url('/images/section/bg-air.svg')] bg-auto lg:bg-cover bg-no-repeat bg-center  w-auto h-screen"
+        className="flex flex-col items-center justify-center bg-[url('/images/section/bg-air.svg')] bg-cover bg-no-repeat bg-center  w-auto h-screen"
       >
         <div className="text-center px-5">
           <p className="text-lg font-semibold text-white mb-2">Our Places</p>
@@ -194,15 +197,15 @@ export function HomeRoute() {
           </div>
           <div className="pt-2  grid grid-cols md:grid-cols-4 lg:grid-cols-5 gap-4">
             {placeIslands.map((island, index) => (
-              <Link to={`/places/${island.name}`} key={index} className="">
+              <Link to={`/places/${island.name}`} key={index} className=" relative">
                 <img
                   src={island.imageUrl}
                   alt={island.name}
-                  className="object-cover rounded-lg h-20 w-screen"
+                  className="object-cover rounded-lg h-36 w-screen"
                 />
 
-                <div className="flex justify-center">
-                  <h2 className="text-lg font-semibold text-gray-800">
+                <div className="flex justify-center absolute  inset-x-1/2 bottom-1/3">
+                  <h2 className="text-3xl text-white uppercase font-semibold text-gray-800">
                     {island.name}
                   </h2>
                 </div>
@@ -212,7 +215,7 @@ export function HomeRoute() {
         </div>
       </section>
 
-      <section id="features" className=" px-5 py-8 flex justify-center ">
+      <section id="features" className=" px-5 py-20 flex justify-center ">
         <div className="max-w-screen-xl ">
           <div className="flex flex-col lg:flex-row items-center gap-8">
             <div className=" flex justify-center ">
