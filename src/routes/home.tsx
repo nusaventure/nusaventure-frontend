@@ -43,9 +43,13 @@ export function HomeRoute() {
                 <img src="/images/landing/logo.svg" alt="logo" />
               </Link>
             </div>
-            <Button className="bg-primary-color text-white">
-              <Link to="/">Home</Link>
-            </Button>
+            <div>
+            <Button className="text-white"><Link to="/places">Places</Link></Button>
+              <Button className="text-white"><Link to="/about">About</Link></Button>
+              <Button className="bg-primary-color text-white">
+                <Link to="/login">Login</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -85,7 +89,7 @@ export function HomeRoute() {
             </div>
           </div>
         </div>
-        <div className="absolute bottom-0 lg:-bottom-20 pointer-events-none">
+        <div className="absolute -bottom-2 lg:-bottom-20 pointer-events-none">
           <img
             src="/images/section/cloud.webp"
             alt="cloud"
@@ -197,7 +201,11 @@ export function HomeRoute() {
           </div>
           <div className="pt-2  grid grid-cols md:grid-cols-4 lg:grid-cols-5 gap-4">
             {placeIslands.map((island, index) => (
-              <Link to={`/places/${island.name}`} key={index} className=" relative">
+              <Link
+                to={`/places/${island.name}`}
+                key={index}
+                className=" relative"
+              >
                 <img
                   src={island.imageUrl}
                   alt={island.name}
