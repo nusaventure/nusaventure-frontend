@@ -3,7 +3,7 @@ import { Footer } from "./footer";
 
 export function RootRoute() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="">
       <header>{/* Header content */}</header>
 
       <main className="flex-grow">
