@@ -1,10 +1,18 @@
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import api from "@/libs/api";
 import { Category } from "@/types/category";
 import { FeaturedPlace } from "@/types/places";
-import { Link, useLoaderData } from "react-router-dom";
+import {
+  ActionFunctionArgs,
+  Form,
+  Link,
+  redirect,
+  useLoaderData,
+} from "react-router-dom";
 import { Island } from "@/types/islands";
+import { cn } from "@/libs/cn";
+import { authProvider } from "@/libs/auth";
 
 export async function loader() {
   const [
@@ -26,12 +34,30 @@ export async function loader() {
     topDestinations: responseTopDestinations.data,
     placeTopStats: responsePlaceTopStats.data,
     placeIslands: responseIslands.data,
+    isAuthenticated: authProvider.isAuthenticated,
   };
 }
 
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  const intent = formData.get("intent");
+
+  if (intent === "logout") {
+    authProvider.logout();
+    return redirect("/");
+  }
+
+  return null;
+}
+
 export function HomeRoute() {
-  const { heroCategories, topDestinations, placeTopStats, placeIslands } =
-    useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const {
+    heroCategories,
+    topDestinations,
+    placeTopStats,
+    placeIslands,
+    isAuthenticated,
+  } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (
     <div>
@@ -44,11 +70,35 @@ export function HomeRoute() {
               </Link>
             </div>
             <div>
-            <Button className="text-white"><Link to="/places">Places</Link></Button>
-              <Button className="text-white"><Link to="/about">About</Link></Button>
-              <Button className="bg-primary-color text-white">
-                <Link to="/login">Login</Link>
+              <Button className="text-white">
+                <Link to="/places">Places</Link>
               </Button>
+              <Button className="text-white">
+                <Link to="/about">About</Link>
+              </Button>
+              {isAuthenticated ? (
+                <Form method="post" action="/" className="inline">
+                  <Button
+                    name="intent"
+                    value="logout"
+                    className="bg-primary-color text-white"
+                  >
+                    Logout
+                  </Button>
+                </Form>
+              ) : (
+                <Link
+                  to="/login"
+                  className={cn(
+                    buttonVariants({
+                      variant: "default",
+                    }),
+                    "bg-primary-color text-white"
+                  )}
+                >
+                  Login
+                </Link>
+              )}
             </div>
           </div>
         </div>

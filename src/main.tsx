@@ -2,27 +2,38 @@ import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 
-import { RootRoute } from "./routes/root";
+import { Slide, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import { RootRoute, loader as rootLoader } from "./routes/root";
 import { PlacesIndexRoute, loader as placesIndexLoader } from "./routes/places";
-import { HomeRoute, loader as homeLoader } from "./routes/home";
+import {
+  HomeRoute,
+  loader as homeLoader,
+  action as homeAction,
+} from "./routes/home";
 import { AboutRoute, loader as aboutLoader } from "./routes/about";
 
 import { PlacesLayoutRoute } from "./routes/places/layout";
+import { LoginRoute, action as loginAction } from "./routes/login";
 
 const router = createBrowserRouter([
   {
+    id: "root",
     path: "/",
     element: <RootRoute />,
+    loader: rootLoader,
     children: [
       {
         path: "/",
         element: <HomeRoute />,
         loader: homeLoader,
+        action: homeAction,
       },
       {
         path: "/about",
-         element: <AboutRoute />,
-         loader: aboutLoader,
+        element: <AboutRoute />,
+        loader: aboutLoader,
       },
       {
         path: "/track-history",
@@ -45,8 +56,28 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/login",
+    element: <LoginRoute />,
+    action: loginAction,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <RouterProvider router={router} />
+  <>
+    <RouterProvider router={router} />
+    <ToastContainer
+      position="top-center"
+      autoClose={2000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable={false}
+      pauseOnHover
+      theme="light"
+      transition={Slide}
+    />
+  </>
 );
