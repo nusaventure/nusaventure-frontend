@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import {
   ActionFunctionArgs,
   Form,
+  Link,
   redirect,
   useSubmit,
 } from "react-router-dom";
@@ -63,40 +64,48 @@ export function LoginRoute() {
   };
 
   return (
-    <div className="flex justify-center mt-6">
-      <Form onSubmit={handleSubmit(onSubmit)} method="post" className="w-1/3">
-        <div className="flex flex-col gap-6">
-          <div>
-            <Label htmlFor="username">Username</Label>
-            <Input
-              type="text"
-              id="username"
-              {...register("username")}
-              required
-            />
-            {errors.username && (
-              <span className="text-sm text-red-500 ml-2">
-                {errors.username?.message}
-              </span>
-            )}
-          </div>
-          <div>
-            <Label htmlFor="password">Password</Label>
-            <Input type="password" {...register("password")} required />
-            {errors.password && (
-              <span className="text-sm text-red-500 ml-2">
-                {errors.password?.message}
-              </span>
-            )}
-          </div>
+    <>
+      <div className="flex justify-center mt-6">
+        <Form onSubmit={handleSubmit(onSubmit)} method="post" className="w-1/3">
+          <div className="flex flex-col gap-6">
+            <div>
+              <Label htmlFor="username">Username</Label>
+              <Input
+                type="text"
+                id="username"
+                {...register("username")}
+                required
+              />
+              {errors.username && (
+                <span className="text-sm text-red-500 ml-2">
+                  {errors.username?.message}
+                </span>
+              )}
+            </div>
+            <div>
+              <Label htmlFor="password">Password</Label>
+              <Input type="password" {...register("password")} required />
+              {errors.password && (
+                <span className="text-sm text-red-500 ml-2">
+                  {errors.password?.message}
+                </span>
+              )}
+            </div>
 
-          <div className="text-center">
-            <Button className="bg-primary-color text-white min-w-32">
-              Login
-            </Button>
+            <div className="text-center">
+              <Button className="bg-primary-color text-white min-w-32">
+                Login
+              </Button>
+            </div>
           </div>
-        </div>
-      </Form>
-    </div>
+        </Form>
+      </div>
+      <div className="text-sm flex flex-row gap-2 justify-center mt-5">
+        <p>Don't have an account?</p>
+        <Link className="hover:underline text-blue-500" to="/register">
+          Register
+        </Link>
+      </div>
+    </>
   );
 }

@@ -16,6 +16,7 @@ import { AboutRoute, loader as aboutLoader } from "./routes/about";
 
 import { PlacesLayoutRoute } from "./routes/places/layout";
 import { LoginRoute, action as loginAction } from "./routes/login";
+import { RegisterRoute, action as registerAction } from "./routes/register";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +61,11 @@ const router = createBrowserRouter([
     path: "/login",
     element: <LoginRoute />,
     action: loginAction,
+  },
+  {
+    path: "/register",
+    element: <RegisterRoute />,
+    action: registerAction,
   },
 ]);
 
