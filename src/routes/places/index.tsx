@@ -1,24 +1,61 @@
 import Map, { Source } from "react-map-gl";
-import { useLoaderData } from "react-router-dom";
+import {
+  LoaderFunctionArgs,
+  useLoaderData,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { Link } from "react-router-dom";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Layer from "react-map-gl/dist/esm/components/layer";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 import api from "@/libs/api";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import NusaVentureLogo from "/images/places/nusa-venture-black.svg";
+import { FormEvent, useEffect } from "react";
+
+type responsePlaces = {
+  data: Array<{
+    id: string;
+    title: string;
+    latitude: number;
+    longitude: number;
+    imageUrl: string;
+    description: string;
+    address: string;
+    categories: Array<{
+      id: string;
+      name: string;
+      slug: string;
+    }>;
+  }>;
+};
+
+type Places = {
+  id: string;
+  title: string;
+  latitude: number;
+  longitude: number;
+  imageUrl: string;
+  description: string;
+  address: string;
+  categories: Array<{
+    id: string;
+    name: string;
+    slug: string;
+  }>;
+};
 
 const mapboxAccessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
-export async function loader() {
-  const responsePlaces = await api<{
-    data: Array<{
-      id: string;
-      title: string;
-      latitude: number;
-      longitude: number;
-      imageUrl: string;
-    }>;
-  }>("/places");
+export async function loader({ request }: LoaderFunctionArgs) {
+  const searchParams = new URL(request.url).searchParams.get("q");
+
+  const responsePlaces = await api<responsePlaces>(
+    `places?search=${searchParams ?? ""}`
+  );
 
   return { places: responsePlaces.data };
 }
@@ -90,15 +127,12 @@ export function PlacesIndexRoute() {
 
   return (
     <main className="flex">
-      <ScrollArea className="h-screen w-1/3 fixed top-0 left-0">
-        <aside>
-          <PlacesSidebarHeader />
-          <div className="bg-stone-100 p-4">
-            <PlaceDetailPlaceholder />
-            <AnotherDestinations />
-          </div>
-        </aside>
-      </ScrollArea>
+      <aside className="w-[720px] h-screen flex flex-col">
+        <PlacesSidebarHeader />
+        <div className="p-6 h-[85%]">
+          <PlaceDetailPlaceholder places={places} />
+        </div>
+      </aside>
 
       <Map
         mapboxAccessToken={mapboxAccessToken}
@@ -128,76 +162,100 @@ export function PlacesIndexRoute() {
 }
 
 function PlacesSidebarHeader() {
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("q");
+  const navigate = useNavigate();
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const query = formData.get("search") as string;
+    navigate(`/places?q=${encodeURIComponent(query)}`);
+  };
+
+  useEffect(() => {
+    if (query) {
+      const searchInput = document.getElementById("search") as HTMLInputElement;
+      if (searchInput) {
+        searchInput.value = query;
+      }
+    }
+  }, [query]);
+
   return (
-    <header className="bg-stone-400 p-2 flex justify-between items-center">
-      <img src="/images/landing/logo.svg" alt="Nusa Venture" className="h-10" />
+    <header className="px-6 py-4 flex justify-between items-center gap-6">
+      <Link to="/">
+        <img src={NusaVentureLogo} alt="Nusa Venture" className="h-10" />
+      </Link>
+
+      <form onSubmit={handleSubmit} className="w-full">
+        <Input
+          id="search"
+          type="text"
+          placeholder="Search"
+          name="search"
+          onChange={(event) => console.log(event.target.value)}
+          className="focus-visible:ring-0 bg-neutral-200 focus-visible:ring-transparent"
+        />
+      </form>
+
       <nav>
-        <Link
-          to="/login"
-          className="px-4 py-2 bg-blue-500 text-white rounded-md"
-        >
-          Login
-        </Link>
+        <Button className="bg-primary-color text-white">
+          <Link to="/login">Login</Link>
+        </Button>
       </nav>
     </header>
   );
 }
 
-function PlaceDetailPlaceholder() {
-  return (
-    <div>
-      <h2 className="text-xl font-bold mb-4">Example</h2>
-      <p className="mb-4">
-        Example detail Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        Praesentium quia quidem mollitia velit provident quasi error? Nemo
-        distinctio, alias fugit tenetur facere neque quidem optio, at commodi
-        maiores doloribus asperiores?
-      </p>
-      <button className="px-4 py-2 bg-green-500 text-white rounded-md mb-6">
-        Add to Trip Planner
-      </button>
-    </div>
-  );
-}
+function PlaceDetailPlaceholder({ places }: { places: Places[] }) {
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("q");
 
-function AnotherDestinations() {
   return (
-    <div>
-      <h3 className="text-lg font-semibold mb-4">Another Destination</h3>
-      <div className="grid grid-cols-2 gap-4">
-        <div className="text-center">
-          <img
-            src="/images/top-destination/tugu-yogyakarta.png"
-            alt="Yogyakarta"
-            className="rounded-md mb-2"
-          />
-          <p>Yogyakarta</p>
-        </div>
-        <div className="text-center">
-          <img
-            src="/images/top-destination/tanah-lot.png"
-            alt="Bali"
-            className="rounded-md mb-2"
-          />
-          <p>Bali</p>
-        </div>
-        <div className="text-center">
-          <img
-            src="/images/top-destination/gedung-sate.png"
-            alt="Bandung"
-            className="rounded-md mb-2"
-          />
-          <p>Bandung</p>
-        </div>
-        <div className="text-center">
-          <img
-            src="/images/top-destination/bundaran-hi.png"
-            alt="Jakarta"
-            className="rounded-md mb-2"
-          />
-          <p>Jakarta</p>
-        </div>
-      </div>
+    <div className="h-[100%]">
+      <p className="font-medium text-xl mb-6">Show result of "{query}"</p>
+
+      <ScrollArea className="h-[100%] pb-10">
+        {places.map((place, index) => (
+          <div
+            className="flex flex-row gap-4 mb-4 min-h-[145px] w-full"
+            key={index}
+          >
+            <img
+              width="198px"
+              height="145px"
+              className="object-cover rounded-lg w-[198px] h-[145px]"
+              src={place.imageUrl}
+              alt={place.title}
+            />
+
+            <div className="flex flex-col gap-2 flex-1">
+              <p className="text-xl font-bold">{place.title}</p>
+
+              <div className="flex flex-row gap-4">
+                {place.categories.map((category, index) => (
+                  <div
+                    key={index}
+                    className="px-[10px] py-[5px] bg-blue-200 rounded-3xl"
+                  >
+                    <p className="font-bold text-xs text-blue-600">
+                      {category.name}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-sm font-medium text-gray-500 truncate text-ellipsis w-[360px]">
+                {place.description}
+              </p>
+              <p className="text-sm font-medium text-gray-500 truncate text-ellipsis w-[360px]">
+                {place.address}
+              </p>
+            </div>
+          </div>
+        ))}
+      </ScrollArea>
     </div>
   );
 }
