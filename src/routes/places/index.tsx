@@ -1,4 +1,4 @@
-import Map, { Source } from "react-map-gl";
+import Map, { MapRef, PointLike, Source } from "react-map-gl";
 import { useLoaderData } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -6,6 +6,8 @@ import Layer from "react-map-gl/dist/esm/components/layer";
 
 import api from "@/libs/api";
 import { ScrollArea } from "@/components/ui/scroll-area";
+
+import { useRef } from "react";
 
 const mapboxAccessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
@@ -25,6 +27,7 @@ export async function loader() {
 
 export function PlacesIndexRoute() {
   const { places } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const mapRef = useRef<MapRef>(null);
 
   const geojson = {
     type: "FeatureCollection",
@@ -88,6 +91,45 @@ export function PlacesIndexRoute() {
     },
   };
 
+  const onClusterClick = (event: {
+    point: PointLike | [PointLike, PointLike] | undefined;
+  }) => {
+    if (!mapRef.current) return;
+
+    const features = mapRef.current.queryRenderedFeatures(event.point, {
+      layers: ["clusters"],
+    });
+
+    if (!features.length) return;
+
+    const feature = features[0];
+    const clusterId = feature.properties?.cluster_id;
+    const mapboxSource = mapRef.current.getSource("places") as any;
+
+    if (!mapboxSource || clusterId === undefined) return;
+
+    mapboxSource.getClusterExpansionZoom(
+      clusterId,
+      (err: any, zoom: number) => {
+        if (err || !mapRef.current) {
+          return;
+        }
+
+        const geometry = feature.geometry;
+
+        // Check if the geometry type is 'Point'
+        if (geometry.type === "Point") {
+          const coordinates = geometry.coordinates as [number, number];
+
+          mapRef.current.easeTo({
+            center: coordinates,
+            zoom: zoom,
+          });
+        }
+      }
+    );
+  };
+
   return (
     <main className="flex">
       <ScrollArea className="h-screen w-1/3 fixed top-0 left-0">
@@ -101,6 +143,7 @@ export function PlacesIndexRoute() {
       </ScrollArea>
 
       <Map
+        ref={mapRef}
         mapboxAccessToken={mapboxAccessToken}
         initialViewState={{
           latitude: -0.4752106,
@@ -109,6 +152,7 @@ export function PlacesIndexRoute() {
         }}
         style={{ width: "70%", height: "100vh" }}
         mapStyle="mapbox://styles/mapbox/streets-v9"
+        onClick={onClusterClick}
       >
         <Source
           id="places"

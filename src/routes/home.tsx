@@ -11,12 +11,14 @@ export async function loader() {
     responseHeroCategories,
     responseTopDestinations,
     responseIslands,
-    responsePlaceTopStats
+    responsePlaceTopStats,
   ] = await Promise.all([
     api<{ data: Array<Category> }>("/categories/featured"),
     api<{ data: Array<FeaturedPlace> }>("/places/featured"),
     api<{ data: Array<Island> }>("/islands"),
-    api<{ data: { islands: number; cities: number; places: number; } }>("/places/top-stats")
+    api<{ data: { islands: number; cities: number; places: number } }>(
+      "/places/top-stats"
+    ),
   ]);
 
   return {
@@ -26,7 +28,6 @@ export async function loader() {
     placeIslands: responseIslands.data,
   };
 }
-
 
 export function HomeRoute() {
   const { heroCategories, topDestinations, placeTopStats, placeIslands } =
@@ -186,10 +187,10 @@ export function HomeRoute() {
         <div className="max-w-screen-xl ">
           <div className=" ">
             <p className="text-lg font-semibold text-indigo-600 mb-2">
-              islands coverage
+              Islands Coverage
             </p>
             <h1 className="text-4xl font-bold text-gray-1000 mb-8">
-              Explore Beautiful islands of indonesia
+              Explore Beautiful Islands of Indonesia
             </h1>
           </div>
           <div className="pt-2  grid grid-cols md:grid-cols-4 lg:grid-cols-5 gap-4">
