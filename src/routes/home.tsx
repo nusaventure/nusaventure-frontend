@@ -2,21 +2,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import api from "@/libs/api";
 import { Category } from "@/types/category";
-import { FeaturedPlace } from "@/types/places";
-import { Link, useLoaderData } from "react-router-dom";
 import { Island } from "@/types/islands";
+import { FeaturedPlace } from "@/types/places";
+import { FormEvent } from "react";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
 
 export async function loader() {
   const [
     responseHeroCategories,
     responseTopDestinations,
     responseIslands,
-    responsePlaceTopStats
+    responsePlaceTopStats,
   ] = await Promise.all([
     api<{ data: Array<Category> }>("/categories/featured"),
     api<{ data: Array<FeaturedPlace> }>("/places/featured"),
     api<{ data: Array<Island> }>("/islands"),
-    api<{ data: { islands: number; cities: number; places: number; } }>("/places/top-stats")
+    api<{ data: { islands: number; cities: number; places: number } }>(
+      "/places/top-stats"
+    ),
   ]);
 
   return {
@@ -27,10 +30,18 @@ export async function loader() {
   };
 }
 
-
 export function HomeRoute() {
   const { heroCategories, topDestinations, placeTopStats, placeIslands } =
     useLoaderData() as Awaited<ReturnType<typeof loader>>;
+
+  const navigate = useNavigate();
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const query = formData.get("search") as string;
+    navigate(`/places?q=${encodeURIComponent(query)}`);
+  };
 
   return (
     <div>
@@ -41,9 +52,14 @@ export function HomeRoute() {
               <img src="/images/landing/logo.svg" alt="logo" />
             </Link>
           </div>
-          <Button className="bg-primary-color text-white">
-            <Link to="/">Home</Link>
-          </Button>
+
+          <div className="flex flex-row items-center gap-6 text-white">
+            <Link to="/places">Places</Link>
+            <Link to="/about">About</Link>
+            <Button className="bg-primary-color text-white">
+              <Link to="/login">Login</Link>
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -63,10 +79,12 @@ export function HomeRoute() {
             </div>
 
             <div className="flex flex-col gap-8">
-              <form action="get">
+              <form onSubmit={handleSubmit}>
                 <Input
                   className="h-16 bg-slate-500/30 text-white text-xl backdrop-blur border-slate-300/30 placeholder:text-white placeholder:text-xl"
                   placeholder="🔍Where do you want to go?"
+                  type="text"
+                  name="search"
                 />
               </form>
 
