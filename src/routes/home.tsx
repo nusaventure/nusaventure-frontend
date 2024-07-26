@@ -2,9 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import api from "@/libs/api";
 import { Category } from "@/types/category";
-import { FeaturedPlace } from "@/types/places";
-import { Link, useLoaderData } from "react-router-dom";
 import { Island } from "@/types/islands";
+import { FeaturedPlace } from "@/types/places";
+import { FormEvent } from "react";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
 
 export async function loader() {
   const [
@@ -33,19 +34,28 @@ export function HomeRoute() {
   const { heroCategories, topDestinations, placeTopStats, placeIslands } =
     useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
+  const navigate = useNavigate();
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const query = formData.get("search") as string;
+    navigate(`/places?q=${encodeURIComponent(query)}`);
+  };
+
   return (
     <div>
       <header className="fixed w-full p-5 z-20 bg-gradient-to-b from-gray-700/60 justify-center flex ">
-        <div className="max-w-screen-xl w-full w-screen">
+        <div className="max-w-screen-xl w-full">
           <div className="flex justify-between ">
             <div>
               <Link to="/">
                 <img src="/images/landing/logo.svg" alt="logo" />
               </Link>
             </div>
-            <div>
-            <Button className="text-white"><Link to="/places">Places</Link></Button>
-              <Button className="text-white"><Link to="/about">About</Link></Button>
+            <div className="flex flex-row items-center gap-6 text-white">
+              <Link to="/places">Places</Link>
+              <Link to="/about">About</Link>
               <Button className="bg-primary-color text-white">
                 <Link to="/login">Login</Link>
               </Button>
@@ -67,10 +77,12 @@ export function HomeRoute() {
             </div>
 
             <div className="flex flex-col gap-6">
-              <form action="get">
+              <form onSubmit={handleSubmit}>
                 <Input
                   className="h-12 bg-slate-500/30 text-white text-base backdrop-blur border-slate-300/30 placeholder:text-white placeholder:text-base"
                   placeholder="🔍Where do you want to go?"
+                  type="text"
+                  name="search"
                 />
               </form>
 
@@ -213,7 +225,7 @@ export function HomeRoute() {
                 />
 
                 <div className="flex justify-center absolute  inset-x-1/2 bottom-1/3">
-                  <h2 className="text-3xl text-white uppercase font-semibold text-gray-800">
+                  <h2 className="text-3xl text-white uppercase font-semibold ">
                     {island.name}
                   </h2>
                 </div>
