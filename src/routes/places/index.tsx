@@ -1,60 +1,48 @@
-import Map, { MapRef, PointLike, Source } from "react-map-gl";
-import { useLoaderData } from "react-router-dom";
-import { Link } from "react-router-dom";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { FeaturedPlace, Place } from "@/types/places";
 import "mapbox-gl/dist/mapbox-gl.css";
+import Map, { MapRef, PointLike, Source } from "react-map-gl";
 import Layer from "react-map-gl/dist/esm/components/layer";
+import {
+  Form,
+  Link,
+  LoaderFunctionArgs,
+  useLoaderData,
+} from "react-router-dom";
 
-import api from "@/libs/api";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import api from "@/libs/api";
+import NusaVentureLogo from "/images/places/nusa-venture-black.svg";
 
-import { useEffect, useRef, useState } from "react";
+type responsePlaces = { data: Array<Place> };
+
+import { useRef } from "react";
 
 const mapboxAccessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
-export async function loader() {
-  const responsePlaces = await api<{
-    data: Array<{
-      id: string;
-      title: string;
-      latitude: number;
-      longitude: number;
-      imageUrl: string;
-    }>;
-  }>("/places");
+export async function loader({ request }: LoaderFunctionArgs) {
+  const keyword = new URL(request.url).searchParams.get("q");
 
-  return { places: responsePlaces.data };
+  const [responsePlaces, responseTopDestinations] = await Promise.all([
+    api<responsePlaces>(`places?search=${keyword ?? ""}`),
+    api<{ data: Array<FeaturedPlace> }>("/places/featured"),
+  ]);
+
+  return {
+    keyword: keyword ?? "",
+    places: responsePlaces.data,
+    topDestinations: responseTopDestinations.data,
+  };
 }
 
 export function PlacesIndexRoute() {
-  const { places } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { places, keyword } = useLoaderData() as Awaited<
+    ReturnType<typeof loader>
+  >;
+
   const mapRef = useRef<MapRef>(null);
-  const [hoveredPlace, setHoveredPlace] = useState<any>(null);
-
-  useEffect(() => {
-    if (mapRef.current) {
-      const map = mapRef.current.getMap();
-
-      // Load the image and add it to the map
-      const loadImage = async () => {
-        const image = new Image();
-        image.src = "/images/section/location.png";
-
-        image.onload = () => {
-          map.addImage("custom-marker", image);
-        };
-
-        image.onerror = (error) => {
-          console.error("Error loading image", error);
-        };
-      };
-
-      map.on("load", loadImage);
-
-      return () => {
-        map.off("load", loadImage);
-      };
-    }
-  }, []);
 
   const geojson = {
     type: "FeatureCollection",
@@ -107,13 +95,14 @@ export function PlacesIndexRoute() {
 
   const unclusteredPointLayer = {
     id: "unclustered-point",
-    type: "symbol" as const, // Ensure the layer type is 'symbol'
+    type: "circle" as const,
     source: "places",
     filter: ["!", ["has", "point_count"]],
-    layout: {
-      "icon-image": "custom-marker", // Use the custom marker image
-      "icon-size": 1.5, // Adjust size
-      "icon-allow-overlap": true,
+    paint: {
+      "circle-color": "#4b0082", // Indigo color
+      "circle-radius": 4,
+      "circle-stroke-width": 1,
+      "circle-stroke-color": "#fff",
     },
   };
 
@@ -156,28 +145,14 @@ export function PlacesIndexRoute() {
     );
   };
 
-  const onMouseEnter = (event: any) => {
-    const feature = event.features[0];
-    if (feature) {
-      setHoveredPlace(feature.properties);
-    }
-  };
-
-  const onMouseLeave = () => {
-    setHoveredPlace(null);
-  };
-
   return (
     <main className="flex">
-      <ScrollArea className="h-screen w-1/3 fixed top-0 left-0">
-        <aside>
-          <PlacesSidebarHeader />
-          <div className="bg-stone-100 p-4">
-            <PlaceDetailPlaceholder />
-            <AnotherDestinations />
-          </div>
-        </aside>
-      </ScrollArea>
+      <aside className="w-[720px] h-screen flex flex-col">
+        <PlacesSidebarHeader />
+        <div className="p-6 h-[85%]">
+          <PlaceDetailPlaceholder places={places} keyword={keyword} />
+        </div>
+      </aside>
 
       <Map
         ref={mapRef}
@@ -190,8 +165,6 @@ export function PlacesIndexRoute() {
         style={{ width: "70%", height: "100vh" }}
         mapStyle="mapbox://styles/mapbox/streets-v9"
         onClick={onClusterClick}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
       >
         <Source
           id="places"
@@ -205,88 +178,88 @@ export function PlacesIndexRoute() {
           <Layer {...clusterCountLayer} />
           <Layer {...unclusteredPointLayer} />
         </Source>
-        {hoveredPlace && (
-          <div className="absolute top-0 left-0 p-4 bg-white border rounded shadow-lg">
-            <h3>{hoveredPlace.title}</h3>
-            <Link to={`/places/${hoveredPlace.id}`}>View Details</Link>
-          </div>
-        )}
       </Map>
     </main>
   );
 }
 
 function PlacesSidebarHeader() {
+  const { keyword } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+
   return (
-    <header className="bg-stone-400 p-2 flex justify-between items-center">
-      <img src="/images/landing/logo.svg" alt="Nusa Venture" className="h-10" />
+    <header className="px-6 py-4 flex justify-between items-center gap-6">
+      <Link to="/">
+        <img src={NusaVentureLogo} alt="Nusa Venture" className="h-10" />
+      </Link>
+
+      <Form method="get" action="/places" className="w-full">
+        <Input
+          type="search"
+          name="q"
+          placeholder="Search places..."
+          defaultValue={keyword}
+          className="focus-visible:ring-0 bg-neutral-200 focus-visible:ring-transparent"
+        />
+      </Form>
+
       <nav>
-        <Link
-          to="/login"
-          className="px-4 py-2 bg-blue-500 text-white rounded-md"
-        >
-          Login
-        </Link>
+        <Button className="bg-primary-color text-white">
+          <Link to="/login">Login</Link>
+        </Button>
       </nav>
     </header>
   );
 }
 
-function PlaceDetailPlaceholder() {
+function PlaceDetailPlaceholder({
+  places,
+  keyword,
+}: {
+  places: Place[];
+  keyword: string;
+}) {
   return (
-    <div>
-      <h2 className="text-xl font-bold mb-4">Example</h2>
-      <p className="mb-4">
-        Example detail Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        Praesentium quia quidem mollitia velit provident quasi error? Nemo
-        distinctio, alias fugit tenetur facere neque quidem optio, at commodi
-        maiores doloribus asperiores?
-      </p>
-      <button className="px-4 py-2 bg-green-500 text-white rounded-md mb-6">
-        Add to Trip Planner
-      </button>
-    </div>
-  );
-}
+    <div className="h-[100%]">
+      <p className="font-medium text-xl mb-6">Show result of "{keyword}"</p>
 
-function AnotherDestinations() {
-  return (
-    <div>
-      <h3 className="text-lg font-semibold mb-4">Another Destination</h3>
-      <div className="grid grid-cols-2 gap-4">
-        <div className="text-center">
-          <img
-            src="/images/top-destination/tugu-yogyakarta.png"
-            alt="Yogyakarta"
-            className="rounded-md mb-2"
-          />
-          <p>Yogyakarta</p>
-        </div>
-        <div className="text-center">
-          <img
-            src="/images/top-destination/tanah-lot.png"
-            alt="Bali"
-            className="rounded-md mb-2"
-          />
-          <p>Bali</p>
-        </div>
-        <div className="text-center">
-          <img
-            src="/images/top-destination/gedung-sate.png"
-            alt="Bandung"
-            className="rounded-md mb-2"
-          />
-          <p>Bandung</p>
-        </div>
-        <div className="text-center">
-          <img
-            src="/images/top-destination/bundaran-hi.png"
-            alt="Jakarta"
-            className="rounded-md mb-2"
-          />
-          <p>Jakarta</p>
-        </div>
-      </div>
+      <ScrollArea className="h-[100%]">
+        {places.map((place, index) => (
+          <div
+            className="flex flex-row gap-4 mb-4 min-h-[145px] w-full"
+            key={index}
+          >
+            <img
+              className="object-cover rounded-lg w-[198px] h-[145px]"
+              src={place.imageUrl}
+              alt={place.title}
+            />
+
+            <div className="flex flex-col gap-2 flex-1 overflow-hidden">
+              <p className="text-xl font-bold">{place.title}</p>
+
+              <div className="flex flex-row gap-4 ">
+                {place.categories.map((category, index) => (
+                  <div
+                    key={index}
+                    className="px-[10px] py-[5px] bg-blue-200 rounded-3xl"
+                  >
+                    <p className="font-bold text-xs text-blue-600">
+                      {category.name}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-sm font-medium text-gray-500 truncate text-ellipsis">
+                {place.description}
+              </p>
+              <p className="text-sm font-medium text-gray-500 truncate text-ellipsis">
+                {place.address}
+              </p>
+            </div>
+          </div>
+        ))}
+      </ScrollArea>
     </div>
   );
 }

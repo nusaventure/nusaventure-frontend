@@ -1,8 +1,3 @@
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import api from "@/libs/api";
-import { Category } from "@/types/category";
-import { FeaturedPlace } from "@/types/places";
 import {
   ActionFunctionArgs,
   Form,
@@ -10,9 +5,15 @@ import {
   redirect,
   useLoaderData,
 } from "react-router-dom";
+
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import api from "@/libs/api";
+import { Category } from "@/types/category";
 import { Island } from "@/types/islands";
-import { cn } from "@/libs/cn";
+import { FeaturedPlace } from "@/types/places";
 import { authProvider } from "@/libs/auth";
+import { cn } from "@/libs/cn";
 
 export async function loader() {
   const [
@@ -62,7 +63,7 @@ export function HomeRoute() {
   return (
     <div>
       <header className="fixed w-full p-5 z-20 bg-gradient-to-b from-gray-700/60 justify-center flex ">
-        <div className="max-w-screen-xl w-full w-screen">
+        <div className="max-w-screen-xl w-full">
           <div className="flex justify-between ">
             <div>
               <Link to="/">
@@ -117,18 +118,20 @@ export function HomeRoute() {
             </div>
 
             <div className="flex flex-col gap-6">
-              <form action="get">
+              <Form method="get" action="/places">
                 <Input
                   className="h-12 bg-slate-500/30 text-white text-base backdrop-blur border-slate-300/30 placeholder:text-white placeholder:text-base"
-                  placeholder="🔍Where do you want to go?"
+                  placeholder="🔍 Where do you want to go?"
+                  type="search"
+                  name="q"
                 />
-              </form>
+              </Form>
 
               <ul className="flex flex-wrap strech gap-2">
                 {heroCategories.map((heroCategory) => (
                   <li key={heroCategory.id}>
                     <Link
-                      to={`/places?category=${heroCategory.slug}`}
+                      to={`/places?q=${heroCategory.slug}`}
                       className="block py-1 px-3 text-white rounded bg-slate-500/30 text-[12px] backdrop-blur border border-slate-300/30"
                     >
                       {heroCategory.name}
@@ -161,9 +164,9 @@ export function HomeRoute() {
               Discover Top Destinations
             </h1>
           </div>
-          <div className="flex justify-center gap-6 flex-col md:flex-row ">
+          <div className=" gap-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
             {topDestinations
-              .filter((_, index) => index <= 3)
+              .filter((_, index) => index <= 5)
               .map((destination) => (
                 <Link
                   to={`/places/${destination.slug}`}
@@ -188,53 +191,54 @@ export function HomeRoute() {
 
       <section
         id="favorite-places"
-        className="flex flex-col items-center justify-center bg-[url('/images/section/bg-air.svg')] bg-cover bg-no-repeat bg-center  w-auto h-screen"
+        className="flex flex-col items-center justify-center bg-[url('/images/section/bg-sea.svg')] bg-cover bg-no-repeat bg-center px-5 w-auto h-screen"
       >
-        <div className="text-center px-5">
-          <p className="text-lg font-semibold text-white mb-2">Our Places</p>
-          <h1 className="text-4xl font-bold text-white mb-8">
+        <header>
+          <h1 className="text-lg font-semibold text-white mb-2">Our Places</h1>
+          <h2 className="text-4xl font-bold text-white mb-8">
             Favorite Places Curated for You
-          </h1>
-          <div className="pt-10 flex justify-around w-screen max-w-4xl ">
-            <div className="flex flex-col items-center">
-              <img
-                src="images/section/island.png"
-                alt="island"
-                className="h-24 md:h-36 mb-10"
-              />
-              <p className="pt-2 text-5xl font-bold text-white">
-                {placeTopStats.islands}
-              </p>
-              <h2 className="pt-5 text-2xl font-semibold text-white mb-4">
-                Islands
-              </h2>
-            </div>
-            <div className="flex flex-col items-center">
-              <img
-                src="images/section/buildings.png"
-                alt="building"
-                className="h-24 md:h-36 mb-10"
-              />
-              <p className="pt-2 text-5xl font-bold text-white">
-                {placeTopStats.cities}
-              </p>
-              <h2 className="pt-5 text-2xl font-semibold text-white mb-4">
-                Cities
-              </h2>
-            </div>
-            <div className="flex flex-col items-center">
-              <img
-                src="images/section/location.png"
-                alt="location"
-                className="h-24 md:h-36 mb-10"
-              />
-              <p className="pt-2 text-5xl font-bold text-white">
-                {placeTopStats.places}
-              </p>
-              <h2 className="pt-5 text-2xl font-semibold text-white mb-4">
-                Places
-              </h2>
-            </div>
+          </h2>
+        </header>
+
+        <div className="pt-10 flex justify-around w-screen max-w-4xl ">
+          <div className="flex flex-col items-center">
+            <img
+              src="images/section/island.png"
+              alt="island"
+              className="h-24 md:h-36 mb-10"
+            />
+            <p className="pt-2 text-5xl font-bold text-white">
+              {placeTopStats.islands}
+            </p>
+            <h2 className="pt-5 text-2xl font-semibold text-white mb-4">
+              Islands
+            </h2>
+          </div>
+          <div className="flex flex-col items-center">
+            <img
+              src="images/section/buildings.png"
+              alt="building"
+              className="h-24 md:h-36 mb-10"
+            />
+            <p className="pt-2 text-5xl font-bold text-white">
+              {placeTopStats.cities}
+            </p>
+            <h2 className="pt-5 text-2xl font-semibold text-white mb-4">
+              Cities
+            </h2>
+          </div>
+          <div className="flex flex-col items-center">
+            <img
+              src="images/section/location.png"
+              alt="location"
+              className="h-24 md:h-36 mb-10"
+            />
+            <p className="pt-2 text-5xl font-bold text-white">
+              {placeTopStats.places}
+            </p>
+            <h2 className="pt-5 text-2xl font-semibold text-white mb-4">
+              Places
+            </h2>
           </div>
         </div>
       </section>
@@ -249,7 +253,7 @@ export function HomeRoute() {
               Explore Beautiful Islands of Indonesia
             </h1>
           </div>
-          <div className="pt-2  grid grid-cols md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <div className="pt-2  grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {placeIslands.map((island, index) => (
               <Link
                 to={`/places/${island.name}`}
@@ -263,7 +267,7 @@ export function HomeRoute() {
                 />
 
                 <div className="flex justify-center absolute  inset-x-1/2 bottom-1/3">
-                  <h2 className="text-3xl text-white uppercase font-semibold text-gray-800">
+                  <h2 className="text-2xl md:text-3xl text-white uppercase font-semibold text-gray-800">
                     {island.name}
                   </h2>
                 </div>

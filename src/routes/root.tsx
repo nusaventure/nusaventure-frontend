@@ -13,8 +13,6 @@ export async function loader() {
 export function RootRoute() {
   return (
     <div className="">
-      <header>{/* Header content */}</header>
-
       <main className="flex-grow">
         <Outlet />
       </main>
