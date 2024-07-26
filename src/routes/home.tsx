@@ -80,7 +80,7 @@ export function HomeRoute() {
               <form onSubmit={handleSubmit}>
                 <Input
                   className="h-12 bg-slate-500/30 text-white text-base backdrop-blur border-slate-300/30 placeholder:text-white placeholder:text-base"
-                  placeholder="🔍Where do you want to go?"
+                  placeholder="🔍 Where do you want to go?"
                   type="text"
                   name="search"
                 />
@@ -150,53 +150,54 @@ export function HomeRoute() {
 
       <section
         id="favorite-places"
-        className="flex flex-col items-center justify-center bg-[url('/images/section/bg-air.svg')] bg-cover bg-no-repeat bg-center  w-auto h-screen"
+        className="flex flex-col items-center justify-center bg-[url('/images/section/bg-sea.svg')] bg-cover bg-no-repeat bg-center px-5 w-auto h-screen"
       >
-        <div className="text-center px-5">
-          <p className="text-lg font-semibold text-white mb-2">Our Places</p>
-          <h1 className="text-4xl font-bold text-white mb-8">
+        <header>
+          <h1 className="text-lg font-semibold text-white mb-2">Our Places</h1>
+          <h2 className="text-4xl font-bold text-white mb-8">
             Favorite Places Curated for You
-          </h1>
-          <div className="pt-10 flex justify-around w-screen max-w-4xl ">
-            <div className="flex flex-col items-center">
-              <img
-                src="images/section/island.png"
-                alt="island"
-                className="h-24 md:h-36 mb-10"
-              />
-              <p className="pt-2 text-5xl font-bold text-white">
-                {placeTopStats.islands}
-              </p>
-              <h2 className="pt-5 text-2xl font-semibold text-white mb-4">
-                Islands
-              </h2>
-            </div>
-            <div className="flex flex-col items-center">
-              <img
-                src="images/section/buildings.png"
-                alt="building"
-                className="h-24 md:h-36 mb-10"
-              />
-              <p className="pt-2 text-5xl font-bold text-white">
-                {placeTopStats.cities}
-              </p>
-              <h2 className="pt-5 text-2xl font-semibold text-white mb-4">
-                Cities
-              </h2>
-            </div>
-            <div className="flex flex-col items-center">
-              <img
-                src="images/section/location.png"
-                alt="location"
-                className="h-24 md:h-36 mb-10"
-              />
-              <p className="pt-2 text-5xl font-bold text-white">
-                {placeTopStats.places}
-              </p>
-              <h2 className="pt-5 text-2xl font-semibold text-white mb-4">
-                Places
-              </h2>
-            </div>
+          </h2>
+        </header>
+
+        <div className="pt-10 flex justify-around w-screen max-w-4xl ">
+          <div className="flex flex-col items-center">
+            <img
+              src="images/section/island.png"
+              alt="island"
+              className="h-24 md:h-36 mb-10"
+            />
+            <p className="pt-2 text-5xl font-bold text-white">
+              {placeTopStats.islands}
+            </p>
+            <h2 className="pt-5 text-2xl font-semibold text-white mb-4">
+              Islands
+            </h2>
+          </div>
+          <div className="flex flex-col items-center">
+            <img
+              src="images/section/buildings.png"
+              alt="building"
+              className="h-24 md:h-36 mb-10"
+            />
+            <p className="pt-2 text-5xl font-bold text-white">
+              {placeTopStats.cities}
+            </p>
+            <h2 className="pt-5 text-2xl font-semibold text-white mb-4">
+              Cities
+            </h2>
+          </div>
+          <div className="flex flex-col items-center">
+            <img
+              src="images/section/location.png"
+              alt="location"
+              className="h-24 md:h-36 mb-10"
+            />
+            <p className="pt-2 text-5xl font-bold text-white">
+              {placeTopStats.places}
+            </p>
+            <h2 className="pt-5 text-2xl font-semibold text-white mb-4">
+              Places
+            </h2>
           </div>
         </div>
       </section>
