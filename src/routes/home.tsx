@@ -114,9 +114,9 @@ export function HomeRoute() {
               Discover Top Destinations
             </h1>
           </div>
-          <div className="flex justify-center gap-6 flex-col md:flex-row ">
+          <div className=" gap-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
             {topDestinations
-              .filter((_, index) => index <= 3)
+              .filter((_, index) => index <= 5)
               .map((destination) => (
                 <Link
                   to={`/places/${destination.slug}`}
@@ -203,7 +203,7 @@ export function HomeRoute() {
               Explore Beautiful Islands of Indonesia
             </h1>
           </div>
-          <div className="pt-2  grid grid-cols md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <div className="pt-2  grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {placeIslands.map((island, index) => (
               <Link
                 to={`/places/${island.name}`}
@@ -217,7 +217,7 @@ export function HomeRoute() {
                 />
 
                 <div className="flex justify-center absolute  inset-x-1/2 bottom-1/3">
-                  <h2 className="text-3xl text-white uppercase font-semibold ">
+                  <h2 className="text-2xl md:text-3xl text-white uppercase font-semibold text-gray-800">
                     {island.name}
                   </h2>
                 </div>
