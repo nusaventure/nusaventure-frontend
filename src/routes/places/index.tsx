@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Map, { MapRef, PointLike, Source } from "react-map-gl";
 import {
+  Form,
   LoaderFunctionArgs,
   useLoaderData,
-  useNavigate,
   useSearchParams,
 } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -47,22 +48,26 @@ type Places = {
   }>;
 };
 
-import { useEffect, useRef, FormEvent } from "react";
+import { useEffect, useRef } from "react";
 
 const mapboxAccessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const searchParams = new URL(request.url).searchParams.get("q");
+  const keyword = new URL(request.url).searchParams.get("q");
 
   const responsePlaces = await api<responsePlaces>(
-    `places?search=${searchParams ?? ""}`
+    `places?search=${keyword ?? ""}`
   );
 
-  return { places: responsePlaces.data };
+  return {
+    keyword: keyword ?? "",
+    places: responsePlaces.data,
+  };
 }
 
 export function PlacesIndexRoute() {
   const { places } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+
   const mapRef = useRef<MapRef>(null);
 
   const geojson = {
@@ -205,16 +210,9 @@ export function PlacesIndexRoute() {
 }
 
 function PlacesSidebarHeader() {
+  const { keyword } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q");
-  const navigate = useNavigate();
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const query = formData.get("search") as string;
-    navigate(`/places?q=${encodeURIComponent(query)}`);
-  };
 
   useEffect(() => {
     if (query) {
@@ -231,16 +229,15 @@ function PlacesSidebarHeader() {
         <img src={NusaVentureLogo} alt="Nusa Venture" className="h-10" />
       </Link>
 
-      <form onSubmit={handleSubmit} className="w-full">
+      <Form method="get" action="/places" className="w-full">
         <Input
-          id="search"
-          type="text"
-          placeholder="Search"
-          name="search"
-          onChange={(event) => console.log(event.target.value)}
+          type="search"
+          name="q"
+          placeholder="Search places..."
+          defaultValue={keyword}
           className="focus-visible:ring-0 bg-neutral-200 focus-visible:ring-transparent"
         />
-      </form>
+      </Form>
 
       <nav>
         <Button className="bg-primary-color text-white">

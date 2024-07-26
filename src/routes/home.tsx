@@ -1,11 +1,11 @@
+import { Form, Link, useLoaderData } from "react-router-dom";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import api from "@/libs/api";
 import { Category } from "@/types/category";
 import { Island } from "@/types/islands";
 import { FeaturedPlace } from "@/types/places";
-import { FormEvent } from "react";
-import { Link, useLoaderData, useNavigate } from "react-router-dom";
 
 export async function loader() {
   const [
@@ -33,15 +33,6 @@ export async function loader() {
 export function HomeRoute() {
   const { heroCategories, topDestinations, placeTopStats, placeIslands } =
     useLoaderData() as Awaited<ReturnType<typeof loader>>;
-
-  const navigate = useNavigate();
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const query = formData.get("search") as string;
-    navigate(`/places?q=${encodeURIComponent(query)}`);
-  };
 
   return (
     <div>
@@ -77,20 +68,20 @@ export function HomeRoute() {
             </div>
 
             <div className="flex flex-col gap-6">
-              <form onSubmit={handleSubmit}>
+              <Form method="get" action="/places">
                 <Input
                   className="h-12 bg-slate-500/30 text-white text-base backdrop-blur border-slate-300/30 placeholder:text-white placeholder:text-base"
                   placeholder="🔍 Where do you want to go?"
-                  type="text"
-                  name="search"
+                  type="search"
+                  name="q"
                 />
-              </form>
+              </Form>
 
               <ul className="flex flex-wrap strech gap-2">
                 {heroCategories.map((heroCategory) => (
                   <li key={heroCategory.id}>
                     <Link
-                      to={`/places?category=${heroCategory.slug}`}
+                      to={`/places?q=${heroCategory.slug}`}
                       className="block py-1 px-3 text-white rounded bg-slate-500/30 text-[12px] backdrop-blur border border-slate-300/30"
                     >
                       {heroCategory.name}
