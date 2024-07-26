@@ -81,7 +81,7 @@ export function HomeRoute() {
                 {heroCategories.map((heroCategory) => (
                   <li key={heroCategory.id}>
                     <Link
-                      to={`/places?q=${heroCategory.slug}`}
+                      to={`/places?q=${heroCategory.name}`}
                       className="block py-1 px-3 text-white rounded bg-slate-500/30 text-[12px] backdrop-blur border border-slate-300/30"
                     >
                       {heroCategory.name}
