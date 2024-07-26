@@ -5,6 +5,8 @@ import "./index.css";
 import { RootRoute } from "./routes/root";
 import { PlacesIndexRoute, loader as placesIndexLoader } from "./routes/places";
 import { HomeRoute, loader as homeLoader } from "./routes/home";
+import { AboutRoute, loader as aboutLoader } from "./routes/about";
+
 import { PlacesLayoutRoute } from "./routes/places/layout";
 
 const router = createBrowserRouter([
@@ -19,7 +21,8 @@ const router = createBrowserRouter([
       },
       {
         path: "/about",
-        // element: <AboutRoute />,
+         element: <AboutRoute />,
+         loader: aboutLoader,
       },
       {
         path: "/track-history",

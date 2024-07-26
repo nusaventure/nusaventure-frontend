@@ -1,4 +1,4 @@
-import Map, { Source } from "react-map-gl";
+import Map, { MapRef, PointLike, Source } from "react-map-gl";
 import {
   LoaderFunctionArgs,
   useLoaderData,
@@ -14,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import api from "@/libs/api";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import NusaVentureLogo from "/images/places/nusa-venture-black.svg";
-import { FormEvent, useEffect } from "react";
 
 type responsePlaces = {
   data: Array<{
@@ -48,6 +47,8 @@ type Places = {
   }>;
 };
 
+import { useEffect, useRef, useState, FormEvent } from "react";
+
 const mapboxAccessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -62,6 +63,34 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export function PlacesIndexRoute() {
   const { places } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const mapRef = useRef<MapRef>(null);
+  const [hoveredPlace, setHoveredPlace] = useState<any>(null);
+
+  useEffect(() => {
+    if (mapRef.current) {
+      const map = mapRef.current.getMap();
+
+      // Load the image and add it to the map
+      const loadImage = async () => {
+        const image = new Image();
+        image.src = "/images/section/location.png";
+
+        image.onload = () => {
+          map.addImage("custom-marker", image);
+        };
+
+        image.onerror = (error) => {
+          console.error("Error loading image", error);
+        };
+      };
+
+      map.on("load", loadImage);
+
+      return () => {
+        map.off("load", loadImage);
+      };
+    }
+  }, []);
 
   const geojson = {
     type: "FeatureCollection",
@@ -114,15 +143,64 @@ export function PlacesIndexRoute() {
 
   const unclusteredPointLayer = {
     id: "unclustered-point",
-    type: "circle" as const,
+    type: "symbol" as const, // Ensure the layer type is 'symbol'
     source: "places",
     filter: ["!", ["has", "point_count"]],
-    paint: {
-      "circle-color": "#4b0082", // Indigo color
-      "circle-radius": 4,
-      "circle-stroke-width": 1,
-      "circle-stroke-color": "#fff",
+    layout: {
+      "icon-image": "custom-marker", // Use the custom marker image
+      "icon-size": 1.5, // Adjust size
+      "icon-allow-overlap": true,
     },
+  };
+
+  const onClusterClick = (event: {
+    point: PointLike | [PointLike, PointLike] | undefined;
+  }) => {
+    if (!mapRef.current) return;
+
+    const features = mapRef.current.queryRenderedFeatures(event.point, {
+      layers: ["clusters"],
+    });
+
+    if (!features.length) return;
+
+    const feature = features[0];
+    const clusterId = feature.properties?.cluster_id;
+    const mapboxSource = mapRef.current.getSource("places") as any;
+
+    if (!mapboxSource || clusterId === undefined) return;
+
+    mapboxSource.getClusterExpansionZoom(
+      clusterId,
+      (err: any, zoom: number) => {
+        if (err || !mapRef.current) {
+          return;
+        }
+
+        const geometry = feature.geometry;
+
+        // Check if the geometry type is 'Point'
+        if (geometry.type === "Point") {
+          const coordinates = geometry.coordinates as [number, number];
+
+          mapRef.current.easeTo({
+            center: coordinates,
+            zoom: zoom,
+          });
+        }
+      }
+    );
+  };
+
+  const onMouseEnter = (event: any) => {
+    const feature = event.features[0];
+    if (feature) {
+      setHoveredPlace(feature.properties);
+    }
+  };
+
+  const onMouseLeave = () => {
+    setHoveredPlace(null);
   };
 
   return (
@@ -135,6 +213,7 @@ export function PlacesIndexRoute() {
       </aside>
 
       <Map
+        ref={mapRef}
         mapboxAccessToken={mapboxAccessToken}
         initialViewState={{
           latitude: -0.4752106,
@@ -143,6 +222,9 @@ export function PlacesIndexRoute() {
         }}
         style={{ width: "70%", height: "100vh" }}
         mapStyle="mapbox://styles/mapbox/streets-v9"
+        onClick={onClusterClick}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
       >
         <Source
           id="places"
@@ -156,6 +238,12 @@ export function PlacesIndexRoute() {
           <Layer {...clusterCountLayer} />
           <Layer {...unclusteredPointLayer} />
         </Source>
+        {hoveredPlace && (
+          <div className="absolute top-0 left-0 p-4 bg-white border rounded shadow-lg">
+            <h3>{hoveredPlace.title}</h3>
+            <Link to={`/places/${hoveredPlace.id}`}>View Details</Link>
+          </div>
+        )}
       </Map>
     </main>
   );
