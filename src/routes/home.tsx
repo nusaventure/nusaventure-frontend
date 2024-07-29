@@ -191,10 +191,10 @@ export function HomeRoute() {
 
       <section
         id="favorite-places"
-        className="flex flex-col items-center justify-center bg-[url('/images/section/bg-sea.svg')] bg-cover bg-no-repeat bg-center px-5 w-auto h-screen"
+        className="flex flex-col items-center justify-center bg-[url('/images/section/bg-sea.svg')] bg-cover bg-no-repeat bg-center px-5 py-16 w-auto h-screen"
       >
         <header>
-          <h1 className="text-lg font-semibold text-white mb-2">Our Places</h1>
+          <h1 className="text-lg font-semibold text-white mb-2 text-center">Our Places</h1>
           <h2 className="text-4xl font-bold text-white mb-8">
             Favorite Places Curated for You
           </h2>
