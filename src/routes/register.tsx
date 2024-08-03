@@ -1,13 +1,15 @@
+import PageMeta from "@/components/page-meta";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import api from "@/libs/api";
+import api, { ApiErrorResponse } from "@/libs/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
   ActionFunctionArgs,
   Form,
   redirect,
+  useNavigation,
   useSubmit,
 } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -46,8 +48,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     });
 
     return redirect("/login");
-  } catch (error: any) {
-    toast.error(error.message);
+  } catch (error: unknown) {
+    toast.error((error as ApiErrorResponse).data.message);
 
     return null;
   }
@@ -72,78 +74,87 @@ export function RegisterRoute() {
     });
   };
 
-  return (
-    <div className="flex justify-center mt-6">
-      <Form onSubmit={handleSubmit(onSubmit)} method="post" className="w-1/3">
-        <div className="flex flex-col gap-6">
-          <div>
-            <Label htmlFor="firstName">First Name</Label>
-            <Input
-              type="text"
-              id="firstName"
-              {...register("firstName")}
-              required
-            />
-            {errors.firstName && (
-              <span className="text-sm text-red-500 ml-2">
-                {errors.firstName?.message}
-              </span>
-            )}
-          </div>
-          <div>
-            <Label htmlFor="lastName">Last Name</Label>
-            <Input
-              type="text"
-              id="lastName"
-              {...register("lastName")}
-              required
-            />
-            {errors.lastName && (
-              <span className="text-sm text-red-500 ml-2">
-                {errors.lastName?.message}
-              </span>
-            )}
-          </div>
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input type="email" id="email" {...register("email")} required />
-            {errors.email && (
-              <span className="text-sm text-red-500 ml-2">
-                {errors.email?.message}
-              </span>
-            )}
-          </div>
-          <div>
-            <Label htmlFor="username">Username</Label>
-            <Input
-              type="text"
-              id="username"
-              {...register("username")}
-              required
-            />
-            {errors.username && (
-              <span className="text-sm text-red-500 ml-2">
-                {errors.username?.message}
-              </span>
-            )}
-          </div>
-          <div>
-            <Label htmlFor="password">Password</Label>
-            <Input type="password" {...register("password")} required />
-            {errors.password && (
-              <span className="text-sm text-red-500 ml-2">
-                {errors.password?.message}
-              </span>
-            )}
-          </div>
+  const { state } = useNavigation();
 
-          <div className="text-center">
-            <Button className="bg-primary-color text-white min-w-32">
-              Register
-            </Button>
+  return (
+    <>
+      <PageMeta title="Register" />
+
+      <div className="flex justify-center mt-6">
+        <Form onSubmit={handleSubmit(onSubmit)} method="post" className="w-1/3">
+          <div className="flex flex-col gap-6">
+            <div>
+              <Label htmlFor="firstName">First Name</Label>
+              <Input
+                type="text"
+                id="firstName"
+                {...register("firstName")}
+                required
+              />
+              {errors.firstName && (
+                <span className="text-sm text-red-500 ml-2">
+                  {errors.firstName?.message}
+                </span>
+              )}
+            </div>
+            <div>
+              <Label htmlFor="lastName">Last Name</Label>
+              <Input
+                type="text"
+                id="lastName"
+                {...register("lastName")}
+                required
+              />
+              {errors.lastName && (
+                <span className="text-sm text-red-500 ml-2">
+                  {errors.lastName?.message}
+                </span>
+              )}
+            </div>
+            <div>
+              <Label htmlFor="email">Email</Label>
+              <Input type="email" id="email" {...register("email")} required />
+              {errors.email && (
+                <span className="text-sm text-red-500 ml-2">
+                  {errors.email?.message}
+                </span>
+              )}
+            </div>
+            <div>
+              <Label htmlFor="username">Username</Label>
+              <Input
+                type="text"
+                id="username"
+                {...register("username")}
+                required
+              />
+              {errors.username && (
+                <span className="text-sm text-red-500 ml-2">
+                  {errors.username?.message}
+                </span>
+              )}
+            </div>
+            <div>
+              <Label htmlFor="password">Password</Label>
+              <Input type="password" {...register("password")} required />
+              {errors.password && (
+                <span className="text-sm text-red-500 ml-2">
+                  {errors.password?.message}
+                </span>
+              )}
+            </div>
+
+            <div className="text-center">
+              <Button
+                className="bg-primary-color text-white min-w-32"
+                disabled={state === "submitting" || state === "loading"}
+              >
+                Register
+              </Button>
+            </div>
           </div>
-        </div>
-      </Form>
-    </div>
+        </Form>
+      </div>
+    </>
   );
 }

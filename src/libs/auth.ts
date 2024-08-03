@@ -4,7 +4,7 @@ import {
   removeAccessToken,
   setAccessToken,
 } from "./access-token";
-import api from "./api";
+import api, { ApiErrorResponse } from "./api";
 
 type User = {
   id: string;
@@ -53,10 +53,10 @@ export const authProvider: AuthProvider = {
         success: true,
         message: "Success",
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        message: error.message,
+        message: (error as ApiErrorResponse).data.message,
       };
     }
   },
@@ -68,8 +68,14 @@ export const authProvider: AuthProvider = {
 
         authProvider.isAuthenticated = true;
         authProvider.user = data;
-      } catch (error: any) {
-        toast.error(error.message);
+      } catch (e: unknown) {
+        const error = e as ApiErrorResponse;
+
+        if (error.status == 401) {
+          this.logout();
+        }
+
+        toast.error(error.data.message);
       }
     }
   },

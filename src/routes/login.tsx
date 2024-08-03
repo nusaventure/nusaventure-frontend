@@ -1,3 +1,4 @@
+import PageMeta from "@/components/page-meta";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,6 +10,7 @@ import {
   Form,
   Link,
   redirect,
+  useNavigation,
   useSubmit,
 } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -37,6 +39,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   );
 
   if (login.success) {
+    toast.success("Login successful");
     return redirect("/");
   } else {
     toast.error(login.message);
@@ -63,8 +66,12 @@ export function LoginRoute() {
     });
   };
 
+  const { state } = useNavigation();
+
   return (
     <>
+      <PageMeta title="Login" />
+
       <div className="flex justify-center mt-6">
         <Form onSubmit={handleSubmit(onSubmit)} method="post" className="w-1/3">
           <div className="flex flex-col gap-6">
@@ -93,7 +100,10 @@ export function LoginRoute() {
             </div>
 
             <div className="text-center">
-              <Button className="bg-primary-color text-white min-w-32">
+              <Button
+                className="bg-primary-color text-white min-w-32"
+                disabled={state === "submitting" || state === "loading"}
+              >
                 Login
               </Button>
             </div>
