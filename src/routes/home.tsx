@@ -15,6 +15,7 @@ import { FeaturedPlace } from "@/types/places";
 import { authProvider } from "@/libs/auth";
 import { cn } from "@/libs/cn";
 import PageMeta from "@/components/page-meta";
+import { toast } from "react-toastify";
 
 export async function loader() {
   const [
@@ -46,6 +47,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (intent === "logout") {
     authProvider.logout();
+    toast.success("You have been logged out");
     return redirect("/");
   }
 
