@@ -5,6 +5,11 @@ type ApiOptions = Omit<RequestInit, "body"> & {
   body?: Record<string, unknown> | BodyInit;
 };
 
+export type ApiErrorResponse = {
+  status: number;
+  data: any;
+};
+
 const BASE_URL = import.meta.env.VITE_BACKEND_API_URL as string;
 
 async function api<T>(path: string, options: ApiOptions = {}): Promise<T> {
@@ -48,13 +53,16 @@ async function api<T>(path: string, options: ApiOptions = {}): Promise<T> {
     const response = await fetch(finalUrl, fetchOptions);
 
     if (!response.ok) {
-      throw await response.json();
+      throw {
+        status: response.status,
+        data: await response.json(),
+      } as ApiErrorResponse;
     }
 
     const data: T = await response.json();
     return data;
   } catch (error) {
-    throw error;
+    throw error as ApiErrorResponse;
   }
 }
 

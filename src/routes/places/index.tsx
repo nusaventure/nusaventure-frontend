@@ -19,6 +19,7 @@ import NusaVentureLogo from "/images/places/nusa-venture-black.svg";
 type responsePlaces = { data: Array<Place> };
 
 import { useRef } from "react";
+import PageMeta from "@/components/page-meta";
 
 const mapboxAccessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
@@ -146,44 +147,48 @@ export function PlacesIndexRoute() {
   };
 
   return (
-    <main className="flex">
-      <aside className="w-[720px] h-screen flex flex-col">
-        <PlacesSidebarHeader />
-        <div className="p-6 h-[85%]">
-          <PlaceDetailPlaceholder
-            places={places}
-            keyword={keyword}
-            topDestinations={topDestinations}
-          />
-        </div>
-      </aside>
+    <>
+      <PageMeta title="Places" />
 
-      <Map
-        ref={mapRef}
-        mapboxAccessToken={mapboxAccessToken}
-        initialViewState={{
-          latitude: -0.4752106,
-          longitude: 116.6995672,
-          zoom: 4.75,
-        }}
-        style={{ width: "70%", height: "100vh" }}
-        mapStyle="mapbox://styles/mapbox/streets-v9"
-        onClick={onClusterClick}
-      >
-        <Source
-          id="places"
-          type="geojson"
-          data={geojson}
-          cluster={true}
-          clusterMaxZoom={14}
-          clusterRadius={50}
+      <main className="flex">
+        <aside className="w-[720px] h-screen flex flex-col">
+          <PlacesSidebarHeader />
+          <div className="p-6 h-[85%]">
+            <PlaceDetailPlaceholder
+              places={places}
+              keyword={keyword}
+              topDestinations={topDestinations}
+            />
+          </div>
+        </aside>
+
+        <Map
+          ref={mapRef}
+          mapboxAccessToken={mapboxAccessToken}
+          initialViewState={{
+            latitude: -0.4752106,
+            longitude: 116.6995672,
+            zoom: 4.75,
+          }}
+          style={{ width: "70%", height: "100vh" }}
+          mapStyle="mapbox://styles/mapbox/streets-v9"
+          onClick={onClusterClick}
         >
-          <Layer {...clusterLayer} />
-          <Layer {...clusterCountLayer} />
-          <Layer {...unclusteredPointLayer} />
-        </Source>
-      </Map>
-    </main>
+          <Source
+            id="places"
+            type="geojson"
+            data={geojson}
+            cluster={true}
+            clusterMaxZoom={14}
+            clusterRadius={50}
+          >
+            <Layer {...clusterLayer} />
+            <Layer {...clusterCountLayer} />
+            <Layer {...unclusteredPointLayer} />
+          </Source>
+        </Map>
+      </main>
+    </>
   );
 }
 

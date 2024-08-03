@@ -14,6 +14,7 @@ import { Island } from "@/types/islands";
 import { FeaturedPlace } from "@/types/places";
 import { authProvider } from "@/libs/auth";
 import { cn } from "@/libs/cn";
+import PageMeta from "@/components/page-meta";
 
 export async function loader() {
   const [
@@ -62,6 +63,8 @@ export function HomeRoute() {
 
   return (
     <div>
+      <PageMeta title="Nusaventure" />
+
       <header className="fixed w-full p-5 z-20 bg-gradient-to-b from-gray-700/60 justify-center flex ">
         <div className="max-w-screen-xl w-full">
           <div className="flex justify-between ">
