@@ -1,6 +1,7 @@
 // import { useLoaderData } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import PageMeta from "@/components/page-meta";
 
 export async function loader() {
   const responseAbout = "/about";
@@ -11,6 +12,8 @@ export async function loader() {
 export function AboutRoute() {
   return (
     <div>
+      <PageMeta title="About Us" />
+
       <header className="fixed w-full p-5 z-20 bg-gradient-to-b from-gray-700/60 justify-center flex ">
         <div className="max-w-screen-xl w-full">
           <div className="flex justify-between ">

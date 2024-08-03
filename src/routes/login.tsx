@@ -1,3 +1,4 @@
+import PageMeta from "@/components/page-meta";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -65,6 +66,8 @@ export function LoginRoute() {
 
   return (
     <>
+      <PageMeta title="Login" />
+
       <div className="flex justify-center mt-6">
         <Form onSubmit={handleSubmit(onSubmit)} method="post" className="w-1/3">
           <div className="flex flex-col gap-6">
