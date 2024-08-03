@@ -56,7 +56,7 @@ export function AboutRoute() {
           </div>
           <div className="flex flex-col items-center  gap-4">
             <img
-              src="/images/about/mazizram.jpeg"
+              src="/images/about/azizramdan.jpg"
               alt="Aziz Ramdan"
               className="w-[200px] h-auto rounded-full border border-white border-4"
             />
