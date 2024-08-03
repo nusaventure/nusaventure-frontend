@@ -10,6 +10,7 @@ import {
   Form,
   Link,
   redirect,
+  useNavigation,
   useSubmit,
 } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -65,6 +66,8 @@ export function LoginRoute() {
     });
   };
 
+  const { state } = useNavigation();
+
   return (
     <>
       <PageMeta title="Login" />
@@ -97,7 +100,10 @@ export function LoginRoute() {
             </div>
 
             <div className="text-center">
-              <Button className="bg-primary-color text-white min-w-32">
+              <Button
+                className="bg-primary-color text-white min-w-32"
+                disabled={state === "submitting" || state === "loading"}
+              >
                 Login
               </Button>
             </div>
