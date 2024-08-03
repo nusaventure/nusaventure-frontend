@@ -9,6 +9,7 @@ import {
   ActionFunctionArgs,
   Form,
   redirect,
+  useNavigation,
   useSubmit,
 } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -72,6 +73,8 @@ export function RegisterRoute() {
       method: "post",
     });
   };
+
+  const { state } = useNavigation();
 
   return (
     <>
@@ -142,7 +145,10 @@ export function RegisterRoute() {
             </div>
 
             <div className="text-center">
-              <Button className="bg-primary-color text-white min-w-32">
+              <Button
+                className="bg-primary-color text-white min-w-32"
+                disabled={state === "submitting" || state === "loading"}
+              >
                 Register
               </Button>
             </div>
