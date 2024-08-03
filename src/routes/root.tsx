@@ -22,12 +22,14 @@ export async function loader() {
 }
 
 export function RootRoute() {
-  const navigation = useNavigation();
+  const { state } = useNavigation();
 
   return (
     <div className="">
+      {state === "loading" && <TopBarProgress />}
+
       <main className="flex-grow">
-        {navigation.state == "loading" ? <TopBarProgress /> : <Outlet />}
+        <Outlet />
       </main>
 
       <Footer />
