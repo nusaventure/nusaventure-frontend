@@ -1,17 +1,8 @@
-import { Outlet, useNavigation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { Footer } from "./footer";
 import { authProvider } from "@/libs/auth";
 import { getAccessToken } from "@/libs/access-token";
-import TopBarProgress from "react-topbar-progress-indicator";
-
-TopBarProgress.config({
-  barColors: {
-    "0": "#f6c973",
-    "1.0": "#f6c973",
-  },
-  barThickness: 5,
-  shadowBlur: 2,
-});
+import { TopBarProgress } from "@/components/top-bar-progress";
 
 export async function loader() {
   if (getAccessToken()) {
@@ -22,11 +13,9 @@ export async function loader() {
 }
 
 export function RootRoute() {
-  const { state } = useNavigation();
-
   return (
     <div className="">
-      {state === "loading" && <TopBarProgress />}
+      <TopBarProgress />
 
       <main className="flex-grow">
         <Outlet />
