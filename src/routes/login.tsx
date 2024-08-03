@@ -38,6 +38,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   );
 
   if (login.success) {
+    toast.success("Login successful");
     return redirect("/");
   } else {
     toast.error(login.message);
