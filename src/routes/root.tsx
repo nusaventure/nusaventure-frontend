@@ -1,9 +1,10 @@
 import { Outlet } from "react-router-dom";
 import { Footer } from "./footer";
 import { authProvider } from "@/libs/auth";
+import { getAccessToken } from "@/libs/access-token";
 
 export async function loader() {
-  if (!authProvider.isAuthenticated) {
+  if (getAccessToken()) {
     await authProvider.fetchUser();
   }
 

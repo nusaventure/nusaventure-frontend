@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import api from "@/libs/api";
+import api, { ApiErrorResponse } from "@/libs/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -46,8 +46,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     });
 
     return redirect("/login");
-  } catch (error: any) {
-    toast.error(error.message);
+  } catch (error: unknown) {
+    toast.error((error as ApiErrorResponse).data.message);
 
     return null;
   }
