@@ -48,6 +48,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       },
     });
 
+    toast.success("Register successful");
     return redirect("/login");
   } catch (error: unknown) {
     toast.error((error as ApiErrorResponse).data.message);
