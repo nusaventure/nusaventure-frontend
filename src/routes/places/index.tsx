@@ -58,6 +58,7 @@ export function PlacesIndexRoute() {
       <main className="flex">
         <aside className="w-[720px] h-screen flex flex-col">
           <PlacesSidebarHeader />
+
           <div className="p-6 h-[85%]">
             <PlaceDetailPlaceholder
               places={places}
