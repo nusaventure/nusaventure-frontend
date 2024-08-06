@@ -10,7 +10,15 @@ import {
   Link,
   LoaderFunctionArgs,
   useLoaderData,
+  useNavigate,
 } from "react-router-dom";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import api from "@/libs/api";
@@ -28,6 +36,7 @@ const mapboxAccessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const keyword = new URL(request.url).searchParams.get("q");
+  const filter = new URL(request.url).searchParams.get("filter");
 
   const [responsePlaces, responseTopDestinations] = await Promise.all([
     api<responsePlaces>(`places?search=${keyword ?? ""}`),
@@ -36,6 +45,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return {
     keyword: keyword ?? "",
+    filter: filter ?? "",
     places: responsePlaces.data,
     topDestinations: responseTopDestinations.data,
     isAuthenticated: authProvider.isAuthenticated,
@@ -43,9 +53,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export function PlacesIndexRoute() {
-  const { places, keyword, topDestinations } = useLoaderData() as Awaited<
-    ReturnType<typeof loader>
-  >;
+  const { places, keyword, topDestinations, filter } =
+    useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   const mapRef = useRef<MapRef>(null);
 
@@ -163,6 +172,7 @@ export function PlacesIndexRoute() {
               places={places}
               keyword={keyword}
               topDestinations={topDestinations}
+              filter={filter}
             />
           </div>
         </aside>
@@ -243,65 +253,91 @@ function PlaceDetailPlaceholder({
   places,
   keyword,
   topDestinations,
+  filter,
 }: {
   places: Place[];
   keyword: string;
   topDestinations: Place[];
+  filter: string;
 }) {
-  const placeList = keyword !== "" ? places : topDestinations;
+  const placeList =
+    keyword !== "" || filter === "all-destinations" ? places : topDestinations;
+
+  const navigate = useNavigate();
+
+  const handleSelectChange = (value: string) => {
+    navigate(`/places?filter=${value}`);
+  };
 
   return (
     <div className="h-[100%]">
-      <p className="font-medium text-xl mb-6">
-        {keyword !== "" ? `Show result of "${keyword}"` : "Top destinations:"}
-      </p>
+      <Select
+        onValueChange={handleSelectChange}
+        defaultValue={filter === "" ? "top-destinations" : filter}
+      >
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Theme" />
+        </SelectTrigger>
+        <SelectContent className="bg-white">
+          <SelectItem value="top-destinations">Top Destinations</SelectItem>
+          <SelectItem value="all-destinations">All Destinations</SelectItem>
+        </SelectContent>
+      </Select>
 
-      <ScrollArea className="h-[100%]">
-        {placeList.map((place, index) => (
-          <div
-            className="flex flex-row gap-4 mb-4 min-h-[145px] w-full"
-            key={index}
-          >
-            <Link to={`/places/${place.slug}`}>
-              <img
-                className="object-cover rounded-lg w-[198px] h-[145px]"
-                src={place.imageUrl}
-                alt={place.title}
-              />
-            </Link>
-
-            <div className="flex flex-col gap-2 flex-1 overflow-hidden">
-              <Link
-                to={`/places/${place.slug}`}
-                className="text-xl font-bold hover:underline"
-              >
-                {place.title}
+      {placeList.length > 0 ? (
+        <ScrollArea className="h-[100%] mt-4">
+          {placeList.map((place, index) => (
+            <div
+              className="flex flex-row gap-4 mb-4 min-h-[145px] w-full"
+              key={index}
+            >
+              <Link to={`/places/${place.slug}`}>
+                <img
+                  className="object-cover rounded-lg w-[198px] h-[145px]"
+                  src={place.imageUrl}
+                  alt={place.title}
+                />
               </Link>
 
-              <div className="flex flex-row gap-4 ">
-                {place.categories.map((category, index) => (
-                  <Link
-                    to={`/places?q=${category.name}`}
-                    key={index}
-                    className="px-[10px] py-[5px] bg-blue-200 rounded-3xl hover:bg-blue-300"
-                  >
-                    <p className="font-bold text-xs text-blue-600">
-                      {category.name}
-                    </p>
-                  </Link>
-                ))}
-              </div>
+              <div className="flex flex-col gap-2 flex-1 overflow-hidden">
+                <Link
+                  to={`/places/${place.slug}`}
+                  className="text-xl font-bold hover:underline"
+                >
+                  {place.title}
+                </Link>
 
-              <p className="text-sm font-medium text-gray-500 truncate text-ellipsis max-w-[390px]">
-                {place.description}
-              </p>
-              <p className="text-sm font-medium text-gray-500 truncate text-ellipsis max-w-[390px]">
-                {place.address}
-              </p>
+                <div className="flex flex-row gap-4 ">
+                  {place.categories.map((category, index) => (
+                    <Link
+                      to={`/places?q=${category.name}`}
+                      key={index}
+                      className="px-[10px] py-[5px] bg-blue-200 rounded-3xl hover:bg-blue-300"
+                    >
+                      <p className="font-bold text-xs text-blue-600">
+                        {category.name}
+                      </p>
+                    </Link>
+                  ))}
+                </div>
+
+                <p className="text-sm font-medium text-gray-500 truncate text-ellipsis max-w-[390px]">
+                  {place.description}
+                </p>
+                <p className="text-sm font-medium text-gray-500 truncate text-ellipsis max-w-[390px]">
+                  {place.address}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
-      </ScrollArea>
+          ))}
+        </ScrollArea>
+      ) : (
+        <div className="flex justify-center items-center h-full">
+          <p className="font-medium text-md">
+            Sorry, we couldn't find the location you're looking for.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
