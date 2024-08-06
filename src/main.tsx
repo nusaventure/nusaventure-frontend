@@ -40,11 +40,7 @@ const router = createBrowserRouter([
         element: <AboutRoute />,
         loader: aboutLoader,
       },
-      {
-        path: "/maps",
-        element: <MapsRoute />,
-        loader: mapsLoader,
-      },
+
       {
         path: "/track-history",
         // element: <TrackHistory />,
@@ -76,6 +72,11 @@ const router = createBrowserRouter([
     path: "/register",
     element: <RegisterRoute />,
     action: registerAction,
+  },
+  {
+    path: "/maps",
+    element: <MapsRoute />,
+    loader: mapsLoader,
   },
 ]);
 
