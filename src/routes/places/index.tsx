@@ -76,6 +76,8 @@ export function PlacesIndexRoute() {
         "#f28cb1",
       ],
       "circle-radius": ["step", ["get", "point_count"], 20, 100, 30, 750, 40],
+      "circle-stroke-width": 2, // Adding a border to the clusters
+      "circle-stroke-color": "#ffffff", // White border color
     },
   };
 
@@ -96,14 +98,13 @@ export function PlacesIndexRoute() {
 
   const unclusteredPointLayer = {
     id: "unclustered-point",
-    type: "circle" as const,
+    type: "symbol" as const,
     source: "places",
     filter: ["!", ["has", "point_count"]],
-    paint: {
-      "circle-color": "#4b0082", // Indigo color
-      "circle-radius": 4,
-      "circle-stroke-width": 1,
-      "circle-stroke-color": "#fff",
+    layout: {
+      "icon-image": "custom-marker",
+      "icon-size": 1, // Adjust the size as needed
+      "icon-allow-overlap": true,
     },
   };
 
