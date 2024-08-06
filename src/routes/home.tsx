@@ -121,7 +121,7 @@ export function HomeRoute() {
               Discover Top Destinations
             </h1>
           </div>
-          <div className=" gap-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+          <div className=" gap-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
             {topDestinations
               .filter((_, index) => index <= 5)
               .map((destination) => (
@@ -133,7 +133,7 @@ export function HomeRoute() {
                   <img
                     src={destination.imageUrl}
                     alt={destination.title}
-                    className="object-cover rounded-lg h-96 w-full md:w-96"
+                    className="object-cover rounded-lg h-60 w-full"
                   />
                   <div className="p-4">
                     <h2 className="text-lg font-semibold text-gray-800 text-center">
@@ -148,10 +148,10 @@ export function HomeRoute() {
 
       <section
         id="favorite-places"
-        className="flex flex-col items-center justify-center bg-[url('/images/section/bg-sea.svg')] bg-cover bg-no-repeat bg-center px-5 w-auto h-screen"
+        className="flex flex-col items-center justify-center bg-[url('/images/section/bg-sea.svg')] bg-cover bg-no-repeat bg-center px-5 py-16 w-auto h-screen"
       >
         <header>
-          <h1 className="text-lg font-semibold text-white mb-2">Our Places</h1>
+          <h1 className="text-lg font-semibold text-white mb-2 text-center">Our Places</h1>
           <h2 className="text-4xl font-bold text-white mb-8">
             Favorite Places Curated for You
           </h2>
@@ -213,7 +213,7 @@ export function HomeRoute() {
           <div className="pt-2  grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {placeIslands.map((island, index) => (
               <Link
-                to={`/places/${island.name}`}
+                to={`/places?q=${island.slug}`}
                 key={index}
                 className=" relative"
               >
