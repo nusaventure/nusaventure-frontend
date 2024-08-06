@@ -14,7 +14,10 @@ import {
 } from "./routes/home";
 import { AboutRoute, loader as aboutLoader } from "./routes/about";
 
-import { PlacesLayoutRoute } from "./routes/places/layout";
+import {
+  PlacesLayoutRoute,
+  loader as placesLayoutLoader,
+} from "./routes/places/layout";
 import { LoginRoute, action as loginAction } from "./routes/login";
 import { RegisterRoute, action as registerAction } from "./routes/register";
 import { MapsRoute, loader as mapsLoader } from "./routes/maps";
@@ -55,6 +58,7 @@ const router = createBrowserRouter([
   {
     path: "/places",
     element: <PlacesLayoutRoute />,
+    loader: placesLayoutLoader,
     children: [
       {
         path: "/places",

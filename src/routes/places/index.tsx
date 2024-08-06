@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Place } from "@/types/places";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -28,6 +28,9 @@ type responsePlaces = { data: Array<Place> };
 
 import { useRef } from "react";
 import PageMeta from "@/components/page-meta";
+import { authProvider } from "@/libs/auth";
+import { UserNavigation } from "@/components/user-navigation";
+import { cn } from "@/libs/cn";
 
 const mapboxAccessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
@@ -45,6 +48,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     filter: filter ?? "",
     places: responsePlaces.data,
     topDestinations: responseTopDestinations.data,
+    isAuthenticated: authProvider.isAuthenticated,
   };
 }
 
@@ -204,8 +208,10 @@ export function PlacesIndexRoute() {
 }
 
 function PlacesSidebarHeader() {
-  const { keyword } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
-  console.log(keyword);
+  const { keyword, isAuthenticated } = useLoaderData() as Awaited<
+    ReturnType<typeof loader>
+  >;
+
   return (
     <header className="px-6 py-4 flex justify-between items-center gap-6">
       <Link to="/">
@@ -223,9 +229,21 @@ function PlacesSidebarHeader() {
       </Form>
 
       <nav>
-        <Button className="bg-primary-color text-white">
-          <Link to="/login">Login</Link>
-        </Button>
+        {isAuthenticated ? (
+          <UserNavigation />
+        ) : (
+          <Link
+            to="/login"
+            className={cn(
+              buttonVariants({
+                variant: "default",
+              }),
+              "bg-primary-color text-white"
+            )}
+          >
+            Login
+          </Link>
+        )}
       </nav>
     </header>
   );
