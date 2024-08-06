@@ -1,7 +1,5 @@
-// import { useLoaderData } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import PageMeta from "@/components/page-meta";
+import { HeaderNavigation } from "@/components/header-navigation";
 
 export async function loader() {
   const responseAbout = "/about";
@@ -14,24 +12,7 @@ export function AboutRoute() {
     <div>
       <PageMeta title="About Us" />
 
-      <header className="fixed w-full p-5 z-20 bg-gradient-to-b from-gray-700/60 justify-center flex ">
-        <div className="max-w-screen-xl w-full">
-          <div className="flex justify-between ">
-            <div>
-              <Link to="/">
-                <img src="/images/landing/logo.svg" alt="logo" />
-              </Link>
-            </div>
-            <div className="flex flex-row items-center gap-6 text-white">
-              <Link to="/places">Places</Link>
-              <Link to="/about">About</Link>
-              <Button className="bg-primary-color text-white">
-                <Link to="/login">Login</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <HeaderNavigation />
 
       <section className="bg-[url('/images/about/about-cloud.webp')] bg-no-repeat bg-cover bg-top  px-5">
         <div className="text-center pt-32 pb-16">

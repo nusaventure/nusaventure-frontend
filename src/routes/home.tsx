@@ -5,18 +5,15 @@ import {
   redirect,
   useLoaderData,
 } from "react-router-dom";
-
-import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import api from "@/libs/api";
 import { Category } from "@/types/category";
 import { Island } from "@/types/islands";
 import { FeaturedPlace } from "@/types/places";
 import { authProvider } from "@/libs/auth";
-import { cn } from "@/libs/cn";
 import PageMeta from "@/components/page-meta";
 import { toast } from "react-toastify";
-import { UserNavigation } from "@/components/user-navigation";
+import { HeaderNavigation } from "@/components/header-navigation";
 
 export async function loader() {
   const [
@@ -56,52 +53,14 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export function HomeRoute() {
-  const {
-    heroCategories,
-    topDestinations,
-    placeTopStats,
-    placeIslands,
-    isAuthenticated,
-  } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { heroCategories, topDestinations, placeTopStats, placeIslands } =
+    useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (
     <div>
       <PageMeta title="Nusaventure" />
 
-      <header className="fixed w-full p-5 z-20 bg-gradient-to-b from-gray-700/60 justify-center flex ">
-        <div className="max-w-screen-xl w-full">
-          <div className="flex justify-between ">
-            <div>
-              <Link to="/">
-                <img src="/images/landing/logo.svg" alt="logo" />
-              </Link>
-            </div>
-            <div className="flex items-center">
-              <Button className="text-white">
-                <Link to="/places">Places</Link>
-              </Button>
-              <Button className="text-white">
-                <Link to="/about">About</Link>
-              </Button>
-              {isAuthenticated ? (
-                <UserNavigation />
-              ) : (
-                <Link
-                  to="/login"
-                  className={cn(
-                    buttonVariants({
-                      variant: "default",
-                    }),
-                    "bg-primary-color text-white"
-                  )}
-                >
-                  Login
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
+      <HeaderNavigation />
 
       <section
         id="hero"
