@@ -261,7 +261,7 @@ export function HomeRoute() {
           <div className="pt-2  grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {placeIslands.map((island, index) => (
               <Link
-                to={`/places/${island.name}`}
+                to={`/places?q=${island.slug}`}
                 key={index}
                 className=" relative"
               >
