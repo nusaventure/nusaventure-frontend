@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import {
   ActionFunctionArgs,
   Form,
+  Link,
   redirect,
   useNavigation,
   useSubmit,
@@ -152,6 +153,12 @@ export function RegisterRoute() {
                 Register
               </Button>
             </div>
+          </div>
+          <div className="text-sm flex flex-row gap-2 justify-center mt-5">
+            <p>Already have an account?</p>
+            <Link className="hover:underline text-blue-500" to="/login">
+              Login
+            </Link>
           </div>
         </Form>
       </div>
