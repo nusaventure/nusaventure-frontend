@@ -10,7 +10,15 @@ import {
   Link,
   LoaderFunctionArgs,
   useLoaderData,
+  useNavigate,
 } from "react-router-dom";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import api from "@/libs/api";
@@ -25,6 +33,7 @@ const mapboxAccessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const keyword = new URL(request.url).searchParams.get("q");
+  const filter = new URL(request.url).searchParams.get("filter");
 
   const [responsePlaces, responseTopDestinations] = await Promise.all([
     api<responsePlaces>(`places?search=${keyword ?? ""}`),
@@ -33,15 +42,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return {
     keyword: keyword ?? "",
+    filter: filter ?? "",
     places: responsePlaces.data,
     topDestinations: responseTopDestinations.data,
   };
 }
 
 export function PlacesIndexRoute() {
-  const { places, keyword, topDestinations } = useLoaderData() as Awaited<
-    ReturnType<typeof loader>
-  >;
+  const { places, keyword, topDestinations, filter } =
+    useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   const mapRef = useRef<MapRef>(null);
 
@@ -158,6 +167,7 @@ export function PlacesIndexRoute() {
               places={places}
               keyword={keyword}
               topDestinations={topDestinations}
+              filter={filter}
             />
           </div>
         </aside>
@@ -194,7 +204,7 @@ export function PlacesIndexRoute() {
 
 function PlacesSidebarHeader() {
   const { keyword } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
-
+  console.log(keyword);
   return (
     <header className="px-6 py-4 flex justify-between items-center gap-6">
       <Link to="/">
@@ -224,20 +234,38 @@ function PlaceDetailPlaceholder({
   places,
   keyword,
   topDestinations,
+  filter,
 }: {
   places: Place[];
   keyword: string;
   topDestinations: Place[];
+  filter: string;
 }) {
-  const placeList = keyword !== "" ? places : topDestinations;
+  const placeList =
+    keyword !== "" || filter === "all-destinations" ? places : topDestinations;
+
+  const navigate = useNavigate();
+
+  const handleSelectChange = (value: string) => {
+    navigate(`/places?filter=${value}`);
+  };
 
   return (
     <div className="h-[100%]">
-      <p className="font-medium text-xl mb-6">
-        {keyword !== "" ? `Show result of "${keyword}"` : "Top destinations:"}
-      </p>
+      <Select
+        onValueChange={handleSelectChange}
+        defaultValue={filter === "" ? "top-destinations" : filter}
+      >
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Theme" />
+        </SelectTrigger>
+        <SelectContent className="bg-white">
+          <SelectItem value="top-destinations">Top Destinations</SelectItem>
+          <SelectItem value="all-destinations">All Destinations</SelectItem>
+        </SelectContent>
+      </Select>
 
-      <ScrollArea className="h-[100%]">
+      <ScrollArea className="h-[100%] mt-4">
         {placeList.map((place, index) => (
           <div
             className="flex flex-row gap-4 mb-4 min-h-[145px] w-full"
