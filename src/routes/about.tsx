@@ -54,7 +54,7 @@ export function AboutRoute() {
               <div className="text-base md:text-xl font-semibold  ">
                 M Haidar Hanif
               </div>
-              <div className="text-xs text-slate-700 ">Project Manager</div>
+              <div className="text-xl text-slate-700 ">Project Manager</div>
             </div>
           </div>
           <div className="flex flex-col items-center  gap-4">
@@ -67,7 +67,7 @@ export function AboutRoute() {
               <div className="text-base md:text-xl font-semibold  ">
                 Aziz Ramdan Kurniawan
               </div>
-              <div className="text-xs text-slate-700 ">Fullstack Engineer</div>
+              <div className="text-xl text-slate-700 ">Fullstack Engineer</div>
             </div>
           </div>
           <div className="flex flex-col items-center  gap-4">
@@ -80,7 +80,7 @@ export function AboutRoute() {
               <div className="text-base md:text-xl font-semibold  ">
                 M Yusuf Untung Wahyudi
               </div>
-              <div className="text-xs text-slate-700 ">Backend Engineer</div>
+              <div className="text-xl text-slate-700 ">Backend Engineer</div>
             </div>
           </div>
           <div className="flex flex-col items-center  gap-4">
@@ -93,7 +93,7 @@ export function AboutRoute() {
               <div className="text-base md:text-xl font-semibold  ">
                 Brilliant Hanif Almubarak
               </div>
-              <div className="text-xs text-slate-700 ">
+              <div className="text-xl text-slate-700 ">
                 Frontend Engineer/UI-UX Designer
               </div>
             </div>
@@ -108,7 +108,7 @@ export function AboutRoute() {
               <div className="text-base md:text-xl font-semibold  ">
                 Ismail Al Faruqi
               </div>
-              <div className="text-xs text-slate-700 ">Frontend Engineer</div>
+              <div className="text-xl text-slate-700 ">Frontend Engineer</div>
             </div>
           </div>
           <div className="flex flex-col items-center  gap-4">
@@ -121,7 +121,7 @@ export function AboutRoute() {
               <div className="text-base md:text-xl font-semibold  ">
                 Josa Pratama
               </div>
-              <div className="text-xs text-slate-700 ">Backend Engineer</div>
+              <div className="text-xl text-slate-700 ">Backend Engineer</div>
             </div>
           </div>
         </div>
