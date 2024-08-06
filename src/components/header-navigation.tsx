@@ -16,7 +16,7 @@ export function HeaderNavigation() {
               <img src="/images/landing/logo.svg" alt="logo" />
             </Link>
           </div>
-          <div className="flex items-center">
+          <div className="flex flex-row items-center gap-6 text-white text-sm">
             <Button className="text-white">
               <Link to="/places">Places</Link>
             </Button>
