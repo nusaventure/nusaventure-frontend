@@ -16,6 +16,7 @@ import { authProvider } from "@/libs/auth";
 import { cn } from "@/libs/cn";
 import PageMeta from "@/components/page-meta";
 import { toast } from "react-toastify";
+import { UserNavigation } from "@/components/user-navigation";
 
 export async function loader() {
   const [
@@ -75,7 +76,7 @@ export function HomeRoute() {
                 <img src="/images/landing/logo.svg" alt="logo" />
               </Link>
             </div>
-            <div>
+            <div className="flex items-center">
               <Button className="text-white">
                 <Link to="/places">Places</Link>
               </Button>
@@ -83,15 +84,7 @@ export function HomeRoute() {
                 <Link to="/about">About</Link>
               </Button>
               {isAuthenticated ? (
-                <Form method="post" action="/" className="inline">
-                  <Button
-                    name="intent"
-                    value="logout"
-                    className="bg-primary-color text-white"
-                  >
-                    Logout
-                  </Button>
-                </Form>
+                <UserNavigation />
               ) : (
                 <Link
                   to="/login"
