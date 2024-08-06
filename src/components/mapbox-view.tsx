@@ -103,7 +103,7 @@ export function MapboxView({ places }: { places: Place[] }) {
   return (
     <Map
       mapStyle="mapbox://styles/mapbox/streets-v9"
-      style={{ width: "100%", height: "100vh" }}
+      style={{ width: "70%", height: "100vh" }}
       initialViewState={{
         latitude: -0.4752106,
         longitude: 116.6995672,
