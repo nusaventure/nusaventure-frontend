@@ -1,10 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Place } from "@/types/places";
-import "mapbox-gl/dist/mapbox-gl.css";
-import Map, { MapRef, PointLike, Source } from "react-map-gl";
-import Layer from "react-map-gl/dist/esm/components/layer";
 import {
   Form,
   Link,
@@ -12,6 +8,8 @@ import {
   useLoaderData,
   useNavigate,
 } from "react-router-dom";
+import "mapbox-gl/dist/mapbox-gl.css";
+
 import {
   Select,
   SelectContent,
@@ -19,20 +17,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import { ScrollArea } from "@/components/ui/scroll-area";
 import api from "@/libs/api";
-import NusaVentureLogo from "/images/places/nusa-venture-black.svg";
-
-type responsePlaces = { data: Array<Place> };
-
-import { useRef } from "react";
 import PageMeta from "@/components/page-meta";
 import { authProvider } from "@/libs/auth";
 import { UserNavigation } from "@/components/user-navigation";
 import { cn } from "@/libs/cn";
+import { MapboxView } from "@/components/mapbox-view";
 
-const mapboxAccessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
+import NusaVentureLogo from "/images/places/nusa-venture-black.svg";
+
+type responsePlaces = { data: Array<Place> };
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const keyword = new URL(request.url).searchParams.get("q");
@@ -56,110 +51,6 @@ export function PlacesIndexRoute() {
   const { places, keyword, topDestinations, filter } =
     useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
-  const mapRef = useRef<MapRef>(null);
-
-  const geojson = {
-    type: "FeatureCollection",
-    features: places.map((place) => ({
-      type: "Feature",
-      properties: {
-        title: place.title,
-        id: place.id,
-      },
-      geometry: {
-        type: "Point",
-        coordinates: [place.longitude, place.latitude],
-      },
-    })),
-  };
-
-  const clusterLayer = {
-    id: "clusters",
-    type: "circle" as const,
-    source: "places",
-    filter: ["has", "point_count"],
-    paint: {
-      "circle-color": [
-        "step",
-        ["get", "point_count"],
-        "#4b0082", // Indigo color
-        100,
-        "#f1f075",
-        750,
-        "#f28cb1",
-      ],
-      "circle-radius": ["step", ["get", "point_count"], 20, 100, 30, 750, 40],
-      "circle-stroke-width": 2, // Adding a border to the clusters
-      "circle-stroke-color": "#ffffff", // White border color
-    },
-  };
-
-  const clusterCountLayer = {
-    id: "cluster-count",
-    type: "symbol" as const,
-    source: "places",
-    filter: ["has", "point_count"],
-    layout: {
-      "text-field": ["get", "point_count_abbreviated"],
-      "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-      "text-size": 12,
-    },
-    paint: {
-      "text-color": "#ffffff", // White color for the text
-    },
-  };
-
-  const unclusteredPointLayer = {
-    id: "unclustered-point",
-    type: "symbol" as const,
-    source: "places",
-    filter: ["!", ["has", "point_count"]],
-    layout: {
-      "icon-image": "custom-marker",
-      "icon-size": 1, // Adjust the size as needed
-      "icon-allow-overlap": true,
-    },
-  };
-
-  const onClusterClick = (event: {
-    point: PointLike | [PointLike, PointLike] | undefined;
-  }) => {
-    if (!mapRef.current) return;
-
-    const features = mapRef.current.queryRenderedFeatures(event.point, {
-      layers: ["clusters"],
-    });
-
-    if (!features.length) return;
-
-    const feature = features[0];
-    const clusterId = feature.properties?.cluster_id;
-    const mapboxSource = mapRef.current.getSource("places") as any;
-
-    if (!mapboxSource || clusterId === undefined) return;
-
-    mapboxSource.getClusterExpansionZoom(
-      clusterId,
-      (err: any, zoom: number) => {
-        if (err || !mapRef.current) {
-          return;
-        }
-
-        const geometry = feature.geometry;
-
-        // Check if the geometry type is 'Point'
-        if (geometry.type === "Point") {
-          const coordinates = geometry.coordinates as [number, number];
-
-          mapRef.current.easeTo({
-            center: coordinates,
-            zoom: zoom,
-          });
-        }
-      }
-    );
-  };
-
   return (
     <>
       <PageMeta title="Places" />
@@ -177,31 +68,7 @@ export function PlacesIndexRoute() {
           </div>
         </aside>
 
-        <Map
-          ref={mapRef}
-          mapboxAccessToken={mapboxAccessToken}
-          initialViewState={{
-            latitude: -0.4752106,
-            longitude: 116.6995672,
-            zoom: 4.75,
-          }}
-          style={{ width: "70%", height: "100vh" }}
-          mapStyle="mapbox://styles/mapbox/streets-v9"
-          onClick={onClusterClick}
-        >
-          <Source
-            id="places"
-            type="geojson"
-            data={geojson}
-            cluster={true}
-            clusterMaxZoom={14}
-            clusterRadius={50}
-          >
-            <Layer {...clusterLayer} />
-            <Layer {...clusterCountLayer} />
-            <Layer {...unclusteredPointLayer} />
-          </Source>
-        </Map>
+        <MapboxView places={places} />
       </main>
     </>
   );
