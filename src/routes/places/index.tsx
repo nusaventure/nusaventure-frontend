@@ -265,52 +265,60 @@ function PlaceDetailPlaceholder({
         </SelectContent>
       </Select>
 
-      <ScrollArea className="h-[100%] mt-4">
-        {placeList.map((place, index) => (
-          <div
-            className="flex flex-row gap-4 mb-4 min-h-[145px] w-full"
-            key={index}
-          >
-            <Link to={`/places/${place.slug}`}>
-              <img
-                className="object-cover rounded-lg w-[198px] h-[145px]"
-                src={place.imageUrl}
-                alt={place.title}
-              />
-            </Link>
-
-            <div className="flex flex-col gap-2 flex-1 overflow-hidden">
-              <Link
-                to={`/places/${place.slug}`}
-                className="text-xl font-bold hover:underline"
-              >
-                {place.title}
+      {placeList.length > 0 ? (
+        <ScrollArea className="h-[100%] mt-4">
+          {placeList.map((place, index) => (
+            <div
+              className="flex flex-row gap-4 mb-4 min-h-[145px] w-full"
+              key={index}
+            >
+              <Link to={`/places/${place.slug}`}>
+                <img
+                  className="object-cover rounded-lg w-[198px] h-[145px]"
+                  src={place.imageUrl}
+                  alt={place.title}
+                />
               </Link>
 
-              <div className="flex flex-row gap-4 ">
-                {place.categories.map((category, index) => (
-                  <Link
-                    to={`/places?q=${category.name}`}
-                    key={index}
-                    className="px-[10px] py-[5px] bg-blue-200 rounded-3xl hover:bg-blue-300"
-                  >
-                    <p className="font-bold text-xs text-blue-600">
-                      {category.name}
-                    </p>
-                  </Link>
-                ))}
-              </div>
+              <div className="flex flex-col gap-2 flex-1 overflow-hidden">
+                <Link
+                  to={`/places/${place.slug}`}
+                  className="text-xl font-bold hover:underline"
+                >
+                  {place.title}
+                </Link>
 
-              <p className="text-sm font-medium text-gray-500 truncate text-ellipsis max-w-[390px]">
-                {place.description}
-              </p>
-              <p className="text-sm font-medium text-gray-500 truncate text-ellipsis max-w-[390px]">
-                {place.address}
-              </p>
+                <div className="flex flex-row gap-4 ">
+                  {place.categories.map((category, index) => (
+                    <Link
+                      to={`/places?q=${category.name}`}
+                      key={index}
+                      className="px-[10px] py-[5px] bg-blue-200 rounded-3xl hover:bg-blue-300"
+                    >
+                      <p className="font-bold text-xs text-blue-600">
+                        {category.name}
+                      </p>
+                    </Link>
+                  ))}
+                </div>
+
+                <p className="text-sm font-medium text-gray-500 truncate text-ellipsis max-w-[390px]">
+                  {place.description}
+                </p>
+                <p className="text-sm font-medium text-gray-500 truncate text-ellipsis max-w-[390px]">
+                  {place.address}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
-      </ScrollArea>
+          ))}
+        </ScrollArea>
+      ) : (
+        <div className="flex justify-center items-center h-full">
+          <p className="font-medium text-md">
+            Sorry, we couldn't find the location you're looking for.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
