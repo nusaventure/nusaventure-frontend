@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Map,
   Source,
@@ -8,7 +8,7 @@ import {
   type GeoJSONSource,
 } from "react-map-gl";
 import { type GeoJSONFeature } from "mapbox-gl";
-import { type GeoJsonObject } from "geojson";
+import { type FeatureCollection } from "geojson";
 
 import api from "@/libs/api";
 import { Place } from "@/types/places";
@@ -39,10 +39,25 @@ type FeatureProperties = {
   slug: string;
 };
 
-export function MapsRoute() {
-  const { places } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+export function MapboxView({
+  places,
+  initialViewState = {
+    latitude: -0.4752106,
+    longitude: 116.6995672,
+    zoom: 3,
+  },
+}: {
+  places: Place[];
+  initialViewState?: {
+    latitude: number;
+    longitude: number;
+    zoom: number;
+  };
+}) {
+  const navigate = useNavigate();
+  const mapRef = useRef<MapRef>(null);
 
-  const geojson = {
+  const geojson: FeatureCollection = {
     type: "FeatureCollection",
     features: places.map((place) => ({
       type: "Feature",
@@ -59,18 +74,6 @@ export function MapsRoute() {
     })),
   };
 
-  return (
-    <div className="h-screen">
-      <MapboxView geojson={geojson as any}></MapboxView>
-    </div>
-  );
-}
-
-export function MapboxView({ geojson }: { geojson: GeoJsonObject }) {
-  const navigate = useNavigate();
-
-  const mapRef = useRef<MapRef>(null);
-
   const onClick = (event: any) => {
     if (!mapRef.current) return;
 
@@ -80,8 +83,11 @@ export function MapboxView({ geojson }: { geojson: GeoJsonObject }) {
     const feature = features[0];
     const clusterId = feature.properties?.cluster_id;
     const featureProperties = feature.properties as FeatureProperties;
+    console.log({ featureProperties });
 
     const isPropertiesTypePlace = featureProperties.type === "Place";
+
+    console.log({ isPropertiesTypePlace });
 
     if (isPropertiesTypePlace) {
       // Redirect
@@ -110,12 +116,9 @@ export function MapboxView({ geojson }: { geojson: GeoJsonObject }) {
 
   return (
     <Map
-      initialViewState={{
-        latitude: -0.4752106,
-        longitude: 116.6995672,
-        zoom: 4.75,
-      }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
+      style={{ width: "70%", height: "100vh" }}
+      initialViewState={initialViewState}
       mapboxAccessToken={MAPBOX_TOKEN}
       interactiveLayerIds={[
         String(clusterLayer.id),

@@ -1,30 +1,37 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Place } from "@/types/places";
-import "mapbox-gl/dist/mapbox-gl.css";
-import Map, { MapRef, PointLike, Source } from "react-map-gl";
-import Layer from "react-map-gl/dist/esm/components/layer";
 import {
   Form,
   Link,
   LoaderFunctionArgs,
   useLoaderData,
+  useNavigate,
 } from "react-router-dom";
+import "mapbox-gl/dist/mapbox-gl.css";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import api from "@/libs/api";
+import PageMeta from "@/components/page-meta";
+import { authProvider } from "@/libs/auth";
+import { UserNavigation } from "@/components/user-navigation";
+import { cn } from "@/libs/cn";
+import { MapboxView } from "@/components/mapbox-view";
+
 import NusaVentureLogo from "/images/places/nusa-venture-black.svg";
 
 type responsePlaces = { data: Array<Place> };
 
-import { useRef } from "react";
-import PageMeta from "@/components/page-meta";
-
-const mapboxAccessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
-
 export async function loader({ request }: LoaderFunctionArgs) {
   const keyword = new URL(request.url).searchParams.get("q");
+  const filter = new URL(request.url).searchParams.get("filter");
 
   const [responsePlaces, responseTopDestinations] = await Promise.all([
     api<responsePlaces>(`places?search=${keyword ?? ""}`),
@@ -33,119 +40,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return {
     keyword: keyword ?? "",
+    filter: filter ?? "",
     places: responsePlaces.data,
     topDestinations: responseTopDestinations.data,
+    isAuthenticated: authProvider.isAuthenticated,
   };
 }
 
 export function PlacesIndexRoute() {
-  const { places, keyword, topDestinations } = useLoaderData() as Awaited<
-    ReturnType<typeof loader>
-  >;
-
-  const mapRef = useRef<MapRef>(null);
-
-  const geojson = {
-    type: "FeatureCollection",
-    features: places.map((place) => ({
-      type: "Feature",
-      properties: {
-        title: place.title,
-        id: place.id,
-      },
-      geometry: {
-        type: "Point",
-        coordinates: [place.longitude, place.latitude],
-      },
-    })),
-  };
-
-  const clusterLayer = {
-    id: "clusters",
-    type: "circle" as const,
-    source: "places",
-    filter: ["has", "point_count"],
-    paint: {
-      "circle-color": [
-        "step",
-        ["get", "point_count"],
-        "#4b0082", // Indigo color
-        100,
-        "#f1f075",
-        750,
-        "#f28cb1",
-      ],
-      "circle-radius": ["step", ["get", "point_count"], 20, 100, 30, 750, 40],
-      "circle-stroke-width": 2, // Adding a border to the clusters
-      "circle-stroke-color": "#ffffff", // White border color
-    },
-  };
-
-  const clusterCountLayer = {
-    id: "cluster-count",
-    type: "symbol" as const,
-    source: "places",
-    filter: ["has", "point_count"],
-    layout: {
-      "text-field": ["get", "point_count_abbreviated"],
-      "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-      "text-size": 12,
-    },
-    paint: {
-      "text-color": "#ffffff", // White color for the text
-    },
-  };
-
-  const unclusteredPointLayer = {
-    id: "unclustered-point",
-    type: "symbol" as const,
-    source: "places",
-    filter: ["!", ["has", "point_count"]],
-    layout: {
-      "icon-image": "custom-marker",
-      "icon-size": 1, // Adjust the size as needed
-      "icon-allow-overlap": true,
-    },
-  };
-
-  const onClusterClick = (event: {
-    point: PointLike | [PointLike, PointLike] | undefined;
-  }) => {
-    if (!mapRef.current) return;
-
-    const features = mapRef.current.queryRenderedFeatures(event.point, {
-      layers: ["clusters"],
-    });
-
-    if (!features.length) return;
-
-    const feature = features[0];
-    const clusterId = feature.properties?.cluster_id;
-    const mapboxSource = mapRef.current.getSource("places") as any;
-
-    if (!mapboxSource || clusterId === undefined) return;
-
-    mapboxSource.getClusterExpansionZoom(
-      clusterId,
-      (err: any, zoom: number) => {
-        if (err || !mapRef.current) {
-          return;
-        }
-
-        const geometry = feature.geometry;
-
-        // Check if the geometry type is 'Point'
-        if (geometry.type === "Point") {
-          const coordinates = geometry.coordinates as [number, number];
-
-          mapRef.current.easeTo({
-            center: coordinates,
-            zoom: zoom,
-          });
-        }
-      }
-    );
-  };
+  const { places, keyword, topDestinations, filter } =
+    useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (
     <>
@@ -154,47 +58,27 @@ export function PlacesIndexRoute() {
       <main className="flex">
         <aside className="w-[720px] h-screen flex flex-col">
           <PlacesSidebarHeader />
+
           <div className="p-6 h-[85%]">
             <PlaceDetailPlaceholder
               places={places}
               keyword={keyword}
               topDestinations={topDestinations}
+              filter={filter}
             />
           </div>
         </aside>
 
-        <Map
-          ref={mapRef}
-          mapboxAccessToken={mapboxAccessToken}
-          initialViewState={{
-            latitude: -0.4752106,
-            longitude: 116.6995672,
-            zoom: 4.75,
-          }}
-          style={{ width: "70%", height: "100vh" }}
-          mapStyle="mapbox://styles/mapbox/streets-v9"
-          onClick={onClusterClick}
-        >
-          <Source
-            id="places"
-            type="geojson"
-            data={geojson}
-            cluster={true}
-            clusterMaxZoom={14}
-            clusterRadius={50}
-          >
-            <Layer {...clusterLayer} />
-            <Layer {...clusterCountLayer} />
-            <Layer {...unclusteredPointLayer} />
-          </Source>
-        </Map>
+        <MapboxView places={places} />
       </main>
     </>
   );
 }
 
 function PlacesSidebarHeader() {
-  const { keyword } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { keyword, isAuthenticated } = useLoaderData() as Awaited<
+    ReturnType<typeof loader>
+  >;
 
   return (
     <header className="px-6 py-4 flex justify-between items-center gap-6">
@@ -213,9 +97,21 @@ function PlacesSidebarHeader() {
       </Form>
 
       <nav>
-        <Button className="bg-primary-color text-white">
-          <Link to="/login">Login</Link>
-        </Button>
+        {isAuthenticated ? (
+          <UserNavigation />
+        ) : (
+          <Link
+            to="/login"
+            className={cn(
+              buttonVariants({
+                variant: "default",
+              }),
+              "bg-primary-color text-white"
+            )}
+          >
+            Login
+          </Link>
+        )}
       </nav>
     </header>
   );
@@ -225,65 +121,91 @@ function PlaceDetailPlaceholder({
   places,
   keyword,
   topDestinations,
+  filter,
 }: {
   places: Place[];
   keyword: string;
   topDestinations: Place[];
+  filter: string;
 }) {
-  const placeList = keyword !== "" ? places : topDestinations;
+  const placeList =
+    keyword !== "" || filter === "all-destinations" ? places : topDestinations;
+
+  const navigate = useNavigate();
+
+  const handleSelectChange = (value: string) => {
+    navigate(`/places?filter=${value}`);
+  };
 
   return (
     <div className="h-[100%]">
-      <p className="font-medium text-xl mb-6">
-        {keyword !== "" ? `Show result of "${keyword}"` : "Top destinations:"}
-      </p>
+      <Select
+        onValueChange={handleSelectChange}
+        defaultValue={filter === "" ? "top-destinations" : filter}
+      >
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Theme" />
+        </SelectTrigger>
+        <SelectContent className="bg-white">
+          <SelectItem value="top-destinations">Top Destinations</SelectItem>
+          <SelectItem value="all-destinations">All Destinations</SelectItem>
+        </SelectContent>
+      </Select>
 
-      <ScrollArea className="h-[100%]">
-        {placeList.map((place, index) => (
-          <div
-            className="flex flex-row gap-4 mb-4 min-h-[145px] w-full"
-            key={index}
-          >
-            <Link to={`/places/${place.slug}`}>
-              <img
-                className="object-cover rounded-lg w-[198px] h-[145px]"
-                src={place.imageUrl}
-                alt={place.title}
-              />
-            </Link>
-
-            <div className="flex flex-col gap-2 flex-1 overflow-hidden">
-              <Link
-                to={`/places/${place.slug}`}
-                className="text-xl font-bold hover:underline"
-              >
-                {place.title}
+      {placeList.length > 0 ? (
+        <ScrollArea className="h-[100%] mt-4">
+          {placeList.map((place, index) => (
+            <div
+              className="flex flex-row gap-4 mb-4 min-h-[145px] w-full"
+              key={index}
+            >
+              <Link to={`/places/${place.slug}`}>
+                <img
+                  className="object-cover rounded-lg w-[198px] h-[145px]"
+                  src={place.imageUrl}
+                  alt={place.title}
+                />
               </Link>
 
-              <div className="flex flex-row gap-4 ">
-                {place.categories.map((category, index) => (
-                  <Link
-                    to={`/places?q=${category.name}`}
-                    key={index}
-                    className="px-[10px] py-[5px] bg-blue-200 rounded-3xl hover:bg-blue-300"
-                  >
-                    <p className="font-bold text-xs text-blue-600">
-                      {category.name}
-                    </p>
-                  </Link>
-                ))}
-              </div>
+              <div className="flex flex-col gap-2 flex-1 overflow-hidden">
+                <Link
+                  to={`/places/${place.slug}`}
+                  className="text-xl font-bold hover:underline"
+                >
+                  {place.title}
+                </Link>
 
-              <p className="text-sm font-medium text-gray-500 truncate text-ellipsis max-w-[390px]">
-                {place.description}
-              </p>
-              <p className="text-sm font-medium text-gray-500 truncate text-ellipsis max-w-[390px]">
-                {place.address}
-              </p>
+                <div className="flex flex-row gap-4 ">
+                  {place.categories.map((category, index) => (
+                    <Link
+                      to={`/places?q=${category.name}`}
+                      key={index}
+                      className="px-[10px] py-[5px] bg-blue-200 rounded-3xl hover:bg-blue-300"
+                    >
+                      <p className="font-bold text-xs text-blue-600">
+                        {category.name}
+                      </p>
+                    </Link>
+                  ))}
+                </div>
+
+                <p className="text-sm font-medium text-gray-500 truncate text-ellipsis max-w-[390px]">
+                  {place.description}
+                </p>
+                <p className="text-sm font-medium text-gray-500 truncate text-ellipsis max-w-[390px]">
+                  {place.address}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
-      </ScrollArea>
+          ))}
+        </ScrollArea>
+      ) : (
+        <div className="flex justify-center items-center h-full">
+          <p className="font-medium text-md">
+            Sorry, we couldn't find the location you're looking for.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
