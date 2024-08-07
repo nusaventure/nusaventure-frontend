@@ -117,7 +117,7 @@ export function MapboxView({
   return (
     <Map
       mapStyle="mapbox://styles/mapbox/streets-v9"
-      style={{ width: "70%", height: "100vh" }}
+      style={{ width: "100%", height: "100vh" }}
       initialViewState={initialViewState}
       mapboxAccessToken={MAPBOX_TOKEN}
       interactiveLayerIds={[

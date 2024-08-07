@@ -24,6 +24,7 @@ import { authProvider } from "@/libs/auth";
 import { UserNavigation } from "@/components/user-navigation";
 import { cn } from "@/libs/cn";
 import { MapboxView } from "@/components/mapbox-view";
+import { Button } from "@/components/ui/button";
 
 import NusaVentureLogo from "/images/places/nusa-venture-black.svg";
 
@@ -48,7 +49,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export function PlacesIndexRoute() {
-  const { places, keyword, topDestinations, filter } =
+  const { places, keyword, topDestinations, filter, isAuthenticated } =
     useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (
@@ -56,7 +57,7 @@ export function PlacesIndexRoute() {
       <PageMeta title="Places" />
 
       <main className="flex">
-        <aside className="w-[720px] h-screen flex flex-col">
+        <aside className="w-[1000px] h-screen flex flex-col">
           <PlacesSidebarHeader />
 
           <div className="p-6 h-[85%]">
@@ -68,8 +69,34 @@ export function PlacesIndexRoute() {
             />
           </div>
         </aside>
-
-        <MapboxView places={places} />
+        <div className="flex flex-col w-full">
+          <div className=" pt-3 pr-5 place-self-end fixed z-20 flex ">
+            <Button className="text-white">
+              <Link to="/places">Places</Link>
+            </Button>
+            <Button className="text-white">
+              <Link to="/about">About</Link>
+            </Button>
+            <nav>
+              {isAuthenticated ? (
+                <UserNavigation />
+              ) : (
+                <Link
+                  to="/login"
+                  className={cn(
+                    buttonVariants({
+                      variant: "default",
+                    }),
+                    "bg-primary-color text-white"
+                  )}
+                >
+                  Login
+                </Link>
+              )}
+            </nav>
+          </div>
+          <MapboxView places={places} />
+        </div>
       </main>
     </>
   );

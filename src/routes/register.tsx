@@ -148,7 +148,7 @@ export function RegisterRoute() {
 
             <div className="text-center">
               <Button
-                className="bg-primary-color text-white min-w-32"
+                className="bg-primary-color text-white w-full"
                 disabled={state === "submitting" || state === "loading"}
               >
                 Register
