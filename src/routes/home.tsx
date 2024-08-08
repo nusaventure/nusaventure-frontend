@@ -224,7 +224,7 @@ export function HomeRoute() {
                 />
 
                 <div className="flex justify-center absolute  inset-x-1/2 bottom-1/3">
-                  <h2 className="text-2xl md:text-3xl text-white uppercase font-semibold text-gray-800">
+                  <h2 className="text-2xl md:text-3xl text-white uppercase font-semibold">
                     {island.name}
                   </h2>
                 </div>

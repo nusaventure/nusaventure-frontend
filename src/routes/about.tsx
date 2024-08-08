@@ -24,12 +24,12 @@ export function AboutRoute() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 px-5 gap-y-20 px-10 md:px-20 gap-x-5 ">
+        <div className="grid grid-cols-2 md:grid-cols-3 px-5 gap-y-20  md:px-20 gap-x-5 ">
           <div className="flex flex-col items-center  gap-4 ">
             <img
               src="/images/about/mhaidar.jpg"
               alt="M Haidar Hanif"
-              className="w-[200px] h-auto rounded-full border border-white border-4"
+              className="w-[200px] h-auto rounded-full  border-white border-4"
             />
             <div className="text-center">
               <div className="text-base md:text-xl font-semibold  ">
@@ -42,7 +42,7 @@ export function AboutRoute() {
             <img
               src="/images/about/azizramdan.jpg"
               alt="Aziz Ramdan"
-              className="w-[200px] h-auto rounded-full border border-white border-4"
+              className="w-[200px] h-auto rounded-full  border-white border-4"
             />
             <div className="text-center">
               <div className="text-base md:text-xl font-semibold  ">
@@ -55,7 +55,7 @@ export function AboutRoute() {
             <img
               src="/images/about/myusuf.webp"
               alt="M Yusuf UW"
-              className="w-[200px] h-auto bg-cover bg-no-repeat rounded-full border border-white border-4"
+              className="w-[200px] h-auto bg-cover bg-no-repeat rounded-full  border-white border-4"
             />
             <div className="text-center">
               <div className="text-base md:text-xl font-semibold  ">
@@ -68,7 +68,7 @@ export function AboutRoute() {
             <img
               src="/images/about/hanifptw.webp"
               alt="hanifptw"
-              className="w-[200px] h-auto  rounded-full border border-white border-4"
+              className="w-[200px] h-auto  rounded-full  border-white border-4"
             />
             <div className="text-center">
               <div className="text-base md:text-xl font-semibold  ">
@@ -83,7 +83,7 @@ export function AboutRoute() {
             <img
               src="/images/about/ismail.jpeg"
               alt="ismailfaruqi"
-              className="w-[200px] h-auto rounded-full border border-white border-4"
+              className="w-[200px] h-auto rounded-full  border-white border-4"
             />
             <div className="text-center">
               <div className="text-base md:text-xl font-semibold  ">
@@ -96,7 +96,7 @@ export function AboutRoute() {
             <img
               src="/images/about/josa.webp"
               alt="josapratama"
-              className="w-[200px] h-auto bg-auto bg-center rounded-full border border-white border-4"
+              className="w-[200px] h-auto bg-auto bg-center rounded-full  border-white border-4"
             />
             <div className="text-center">
               <div className="text-base md:text-xl font-semibold  ">

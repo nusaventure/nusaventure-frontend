@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import api from "@/libs/api";
+import api, { BASE_URL } from "@/libs/api";
 import PageMeta from "@/components/page-meta";
 import { authProvider } from "@/libs/auth";
 import { UserNavigation } from "@/components/user-navigation";
@@ -27,6 +27,8 @@ import { MapboxView } from "@/components/mapbox-view";
 import { Button } from "@/components/ui/button";
 
 import NusaVentureLogo from "/images/places/nusa-venture-black.svg";
+import React, { useEffect, useState } from "react";
+import { Share, Star } from "lucide-react";
 
 type responsePlaces = { data: Array<Place> };
 
@@ -52,6 +54,25 @@ export function PlacesIndexRoute() {
   const { places, keyword, topDestinations, filter, isAuthenticated } =
     useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
+  const [data, setData] = useState<Place | null>(null);
+  const [isDetailed, setIsDetailed] = useState<boolean>(false);
+  const [isSelected, setIsSelected] = useState<string>("");
+
+  const responseDetailPlace = async (slug: string) => {
+    const response = await fetch(`${BASE_URL}places/${slug ?? ""}`);
+
+    const results = await response.json();
+    return setData(results?.data);
+  };
+
+  useEffect(() => {
+    if (isSelected !== "") {
+      responseDetailPlace(isSelected);
+    }
+  }, [isSelected]);
+
+  console.log(data);
+
   return (
     <>
       <PageMeta title="Places" />
@@ -60,14 +81,58 @@ export function PlacesIndexRoute() {
         <aside className="w-[1000px] h-screen flex flex-col">
           <PlacesSidebarHeader />
 
-          <div className="p-6 h-[85%]">
-            <PlaceDetailPlaceholder
-              places={places}
-              keyword={keyword}
-              topDestinations={topDestinations}
-              filter={filter}
-            />
-          </div>
+          {isDetailed ? (
+            <>
+              {data !== null && (
+                <div className="flex flex-col gap-4">
+                  <div className=" h-[250px] w-full relative ">
+                  <img className=" w-full h-full object-cover object-center rounded-lg  "
+                    src={data.imageUrl}
+                    alt={data.title}
+                  />
+                  </div>
+                  <div className="text-2xl font-bold ">{data.title}</div>
+                  <div>{data.description}</div>
+                  <div className="flex gap-4">
+                    <Button
+                      className={cn(
+                        buttonVariants({
+                          variant: "default",
+                        }),
+                        "bg-[#FFD062] text-black"
+                      )}
+                    >
+                      <Star className="h-4 w-4 mr-1" />
+                      Save
+                    </Button>
+                    <Button
+                      className={cn(
+                        buttonVariants({
+                          variant: "secondary",
+                        }),
+                        "bg-[#E6E6E6] text-black"
+                      )}
+                    >
+                      <Share className="h-4 w-4 mr-1" />
+                      Share
+                    </Button>
+                  </div>
+                  <hr />
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="p-6 h-[85%]">
+              <PlaceDetailPlaceholder
+                places={places}
+                keyword={keyword}
+                topDestinations={topDestinations}
+                filter={filter}
+                setIsDetailed={setIsDetailed}
+                setIsSelected={setIsSelected}
+              />
+            </div>
+          )}
         </aside>
         <div className="flex flex-col w-full">
           <div className=" pt-3 pr-5 place-self-end fixed z-20 flex ">
@@ -149,11 +214,15 @@ function PlaceDetailPlaceholder({
   keyword,
   topDestinations,
   filter,
+  setIsDetailed,
+  setIsSelected,
 }: {
   places: Place[];
   keyword: string;
   topDestinations: Place[];
   filter: string;
+  setIsDetailed: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsSelected: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const placeList =
     keyword !== "" || filter === "all-destinations" ? places : topDestinations;
@@ -181,10 +250,10 @@ function PlaceDetailPlaceholder({
 
       {placeList.length > 0 ? (
         <ScrollArea className="h-[100%] mt-4">
-          {placeList.map((place, index) => (
+          {placeList.map((place) => (
             <div
               className="flex flex-row gap-4 mb-4 min-h-[145px] w-full"
-              key={index}
+              key={place.id}
             >
               <Link to={`/places/${place.slug}`}>
                 <img
@@ -194,13 +263,18 @@ function PlaceDetailPlaceholder({
                 />
               </Link>
 
-              <div className="flex flex-col gap-2 flex-1 overflow-hidden">
-                <Link
-                  to={`/places/${place.slug}`}
-                  className="text-xl font-bold hover:underline"
+              <div className="flex flex-col gap-2 flex-1 items-start overflow-hidden">
+                <button
+                  //   to={`/places/${place.slug}`}
+                  onClick={() => {
+                    setIsDetailed(true);
+                    setIsSelected(place.slug);
+                  }}
                 >
-                  {place.title}
-                </Link>
+                  <span className="text-xl font-bold hover:underline">
+                    {place.title}
+                  </span>
+                </button>
 
                 <div className="flex flex-row gap-4 ">
                   {place.categories.map((category, index) => (
