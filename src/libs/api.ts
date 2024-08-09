@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getAccessToken } from "./access-token";
 
 /* eslint-disable no-useless-catch */
@@ -10,7 +11,7 @@ export type ApiErrorResponse = {
   data: any;
 };
 
-const BASE_URL = import.meta.env.VITE_BACKEND_API_URL as string;
+export const BASE_URL = import.meta.env.VITE_BACKEND_API_URL as string;
 
 async function api<T>(path: string, options: ApiOptions = {}): Promise<T> {
   const headers = new Headers(options.headers);

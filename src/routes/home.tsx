@@ -148,7 +148,7 @@ export function HomeRoute() {
 
       <section
         id="favorite-places"
-        className="flex flex-col items-center justify-center bg-[url('/images/section/bg-sea.svg')] bg-cover bg-no-repeat bg-center px-5 py-16 w-auto h-screen"
+        className="flex flex-col items-center justify-center bg-[url('/images/section/bg-sea.svg')] bg-cover bg-no-repeat bg-center px-5 py-16 w-auto h-[850px]"
       >
         <header>
           <h1 className="text-lg font-semibold text-white mb-2 text-center">Our Places</h1>
@@ -224,7 +224,7 @@ export function HomeRoute() {
                 />
 
                 <div className="flex justify-center absolute  inset-x-1/2 bottom-1/3">
-                  <h2 className="text-2xl md:text-3xl text-white uppercase font-semibold text-gray-800">
+                  <h2 className="text-2xl md:text-3xl text-white uppercase font-semibold">
                     {island.name}
                   </h2>
                 </div>

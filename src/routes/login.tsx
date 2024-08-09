@@ -72,7 +72,8 @@ export function LoginRoute() {
     <>
       <PageMeta title="Login" />
 
-      <div className="flex justify-center mt-6">
+      <div className="flex flex-col justify-center h-screen items-center">
+        <img className="h-24 w-auto mb-4" src="/images/places/nusa-venture-black.svg" alt="logo" />
         <Form onSubmit={handleSubmit(onSubmit)} method="post" className="w-1/3">
           <div className="flex flex-col gap-6">
             <div>
@@ -101,7 +102,7 @@ export function LoginRoute() {
 
             <div className="text-center">
               <Button
-                className="bg-primary-color text-white min-w-32"
+                className="bg-primary-color text-white w-full"
                 disabled={state === "submitting" || state === "loading"}
               >
                 Login
@@ -109,12 +110,12 @@ export function LoginRoute() {
             </div>
           </div>
         </Form>
-      </div>
-      <div className="text-sm flex flex-row gap-2 justify-center mt-5">
-        <p>Don't have an account?</p>
-        <Link className="hover:underline text-blue-500" to="/register">
-          Register
-        </Link>
+        <div className="text-sm flex flex-row gap-2 justify-center mt-5">
+          <p>Don't have an account?</p>
+          <Link className="hover:underline text-blue-500" to="/register">
+            Register
+          </Link>
+        </div>
       </div>
     </>
   );

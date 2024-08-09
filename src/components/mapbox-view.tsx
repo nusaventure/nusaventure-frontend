@@ -39,7 +39,21 @@ type FeatureProperties = {
   slug: string;
 };
 
-export function MapboxView({ places }: { places: Place[] }) {
+export function MapboxView({
+  places,
+  initialViewState = {
+    latitude: -0.4752106,
+    longitude: 116.6995672,
+    zoom: 3,
+  },
+}: {
+  places: Place[];
+  initialViewState?: {
+    latitude: number;
+    longitude: number;
+    zoom: number;
+  };
+}) {
   const navigate = useNavigate();
   const mapRef = useRef<MapRef>(null);
 
@@ -103,12 +117,8 @@ export function MapboxView({ places }: { places: Place[] }) {
   return (
     <Map
       mapStyle="mapbox://styles/mapbox/streets-v9"
-      style={{ width: "70%", height: "100vh" }}
-      initialViewState={{
-        latitude: -0.4752106,
-        longitude: 116.6995672,
-        zoom: 4.75,
-      }}
+      style={{ width: "100%", height: "100vh" }}
+      initialViewState={initialViewState}
       mapboxAccessToken={MAPBOX_TOKEN}
       interactiveLayerIds={[
         String(clusterLayer.id),

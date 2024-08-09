@@ -24,6 +24,7 @@ import { authProvider } from "@/libs/auth";
 import { UserNavigation } from "@/components/user-navigation";
 import { cn } from "@/libs/cn";
 import { MapboxView } from "@/components/mapbox-view";
+import { Button } from "@/components/ui/button";
 
 import NusaVentureLogo from "/images/places/nusa-venture-black.svg";
 
@@ -48,7 +49,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export function PlacesIndexRoute() {
-  const { places, keyword, topDestinations, filter } =
+  const { places, keyword, topDestinations, filter, isAuthenticated } =
     useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (
@@ -56,8 +57,9 @@ export function PlacesIndexRoute() {
       <PageMeta title="Places" />
 
       <main className="flex">
-        <aside className="w-[720px] h-screen flex flex-col">
+        <aside className="w-[1000px] h-screen flex flex-col">
           <PlacesSidebarHeader />
+
           <div className="p-6 h-[85%]">
             <PlaceDetailPlaceholder
               places={places}
@@ -67,8 +69,34 @@ export function PlacesIndexRoute() {
             />
           </div>
         </aside>
-
-        <MapboxView places={places} />
+        <div className="flex flex-col w-full">
+          <div className=" pt-3 pr-5 place-self-end fixed z-20 flex ">
+            <Button className="text-white">
+              <Link to="/places">Places</Link>
+            </Button>
+            <Button className="text-white">
+              <Link to="/about">About</Link>
+            </Button>
+            <nav>
+              {isAuthenticated ? (
+                <UserNavigation />
+              ) : (
+                <Link
+                  to="/login"
+                  className={cn(
+                    buttonVariants({
+                      variant: "default",
+                    }),
+                    "bg-primary-color text-white"
+                  )}
+                >
+                  Login
+                </Link>
+              )}
+            </nav>
+          </div>
+          <MapboxView places={places} />
+        </div>
       </main>
     </>
   );
@@ -153,10 +181,10 @@ function PlaceDetailPlaceholder({
 
       {placeList.length > 0 ? (
         <ScrollArea className="h-[100%] mt-4">
-          {placeList.map((place, index) => (
+          {placeList.map((place) => (
             <div
               className="flex flex-row gap-4 mb-4 min-h-[145px] w-full"
-              key={index}
+              key={place.id}
             >
               <Link to={`/places/${place.slug}`}>
                 <img
@@ -166,12 +194,11 @@ function PlaceDetailPlaceholder({
                 />
               </Link>
 
-              <div className="flex flex-col gap-2 flex-1 overflow-hidden">
-                <Link
-                  to={`/places/${place.slug}`}
-                  className="text-xl font-bold hover:underline"
-                >
-                  {place.title}
+              <div className="flex flex-col gap-2 flex-1 items-start overflow-hidden">
+                <Link to={`/places/${place.slug}`}>
+                  <span className="text-xl font-bold hover:underline">
+                    {place.title}
+                  </span>
                 </Link>
 
                 <div className="flex flex-row gap-4 ">
