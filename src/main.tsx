@@ -21,6 +21,9 @@ import {
 import { LoginRoute, action as loginAction } from "./routes/login";
 import { RegisterRoute, action as registerAction } from "./routes/register";
 import { MapsRoute, loader as mapsLoader } from "./routes/maps";
+import PlaceSlugRoute, {
+  loader as placeSlugLoader,
+} from "./routes/places/place-slug";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +63,11 @@ const router = createBrowserRouter([
         path: "/places",
         element: <PlacesIndexRoute />,
         loader: placesIndexLoader,
+      },
+      {
+        path: "/places/:slug",
+        element: <PlaceSlugRoute />,
+        loader: placeSlugLoader,
       },
     ],
   },
