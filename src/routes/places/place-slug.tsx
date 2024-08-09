@@ -13,7 +13,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   return responsePlace.data;
 }
 
-export default function PlaceSlugRoute() {
+export function PlaceSlugRoute() {
   const place = useLoaderData() as Place;
 
   return (

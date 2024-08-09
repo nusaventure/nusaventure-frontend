@@ -21,7 +21,8 @@ import {
 import { LoginRoute, action as loginAction } from "./routes/login";
 import { RegisterRoute, action as registerAction } from "./routes/register";
 import { MapsRoute, loader as mapsLoader } from "./routes/maps";
-import PlaceSlugRoute, {
+import {
+  PlaceSlugRoute,
   loader as placeSlugLoader,
 } from "./routes/places/place-slug";
 
