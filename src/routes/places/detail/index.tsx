@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Form,
   Link,
@@ -142,7 +141,6 @@ export const PlaceDetailIndexRoute = () => {
 };
 
 function PlacesSidebarHeader() {
-
   const { keyword, isAuthenticated } = useLoaderData() as Awaited<
     ReturnType<typeof loader>
   >;

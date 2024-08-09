@@ -45,15 +45,6 @@ const router = createBrowserRouter([
         element: <AboutRoute />,
         loader: aboutLoader,
       },
-
-      {
-        path: "/track-history",
-        // element: <TrackHistory />,
-      },
-      {
-        path: "/social-sharing",
-        // element: <SocialSharing />,
-      },
     ],
   },
   {
