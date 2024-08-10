@@ -159,19 +159,25 @@ export const PlaceDetailIndexRoute = () => {
               <h2 className="font-bold text-lg mb-2">Another Destination</h2>
               <div className="grid grid-cols-4 gap-4 w-full">
                 {renderPlaces.map((item) => (
-                  <div>
-                    <div
-                      className="w-full h-[120px] relative mb-2"
-                      key={item.id}
-                    >
-                      <img
-                        src={item.imageUrl}
-                        alt={item.title}
-                        className="object-cover w-full h-full rounded-lg"
-                      />
+                  <Link
+                    to={`/places/${item.slug}`}
+                    key={item.id}
+                    className="overflow-hidden"
+                  >
+                    <div>
+                      <div
+                        className="w-full h-[120px] relative mb-2"
+                        key={item.id}
+                      >
+                        <img
+                          src={item.imageUrl}
+                          alt={item.title}
+                          className="object-cover w-full h-full rounded-lg"
+                        />
+                      </div>
+                      <p className="text-center text-sm">{item.title}</p>
                     </div>
-                    <p className="text-center text-sm">{item.title}</p>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>
