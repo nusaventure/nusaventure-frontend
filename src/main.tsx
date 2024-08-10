@@ -29,6 +29,7 @@ import { PlaceSlugRoute } from "./routes/places/place-slug";
 import {
   SavedPlacesRoute,
   loader as savedPlacesLoader,
+  action as savedPlacesAction,
 } from "./routes/dashboard/saved-places";
 
 const router = createBrowserRouter([
@@ -92,6 +93,7 @@ const router = createBrowserRouter([
     path: "/dashboard/saved-places",
     element: <SavedPlacesRoute />,
     loader: savedPlacesLoader,
+    action: savedPlacesAction,
   },
 ]);
 

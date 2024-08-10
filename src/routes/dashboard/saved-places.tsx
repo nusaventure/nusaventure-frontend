@@ -1,5 +1,10 @@
 import PageMeta from "@/components/page-meta";
-import { Link, useLoaderData } from "react-router-dom";
+import {
+  ActionFunctionArgs,
+  Form,
+  Link,
+  useLoaderData,
+} from "react-router-dom";
 import NusaVentureLogo from "/images/places/nusa-venture-black.svg";
 import { Place } from "@/types/places";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -8,6 +13,7 @@ import emptyImage from "/images/saved-places/empty.png";
 import api from "@/libs/api";
 import { Button } from "@/components/ui/button";
 import starIcon from "/images/saved-places/star.svg";
+import { toast } from "react-toastify";
 
 export async function loader() {
   const places = await api<{
@@ -17,6 +23,22 @@ export async function loader() {
   return {
     places: places.data,
   };
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  console.log(formData.get("placeId"));
+
+  // await api("/saved-places", {
+  //   method: "delete",
+  //   body: {
+  //     placeId: formData.get("placeId"),
+  //   },
+  // });
+
+  toast.success("Saved places removed");
+
+  return null;
 }
 
 export function SavedPlacesRoute() {
@@ -98,7 +120,8 @@ function PlaceDetailPlaceholder({ places }: { places: Place[] }) {
                 <p className="text-sm font-medium text-gray-500 truncate text-ellipsis max-w-[390px]">
                   {place.address}
                 </p>
-                <div>
+                <Form method="delete">
+                  <input type="hidden" name="placeId" value={place.id} />
                   <Button
                     size="sm"
                     className="bg-yellow-300 hover:bg-yellow-400 flex gap-1"
@@ -106,7 +129,7 @@ function PlaceDetailPlaceholder({ places }: { places: Place[] }) {
                     <img src={starIcon} alt="star" />
                     Saved
                   </Button>
-                </div>
+                </Form>
               </div>
             </div>
           ))}
