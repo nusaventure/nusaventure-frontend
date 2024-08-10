@@ -24,8 +24,18 @@ import { MapsRoute, loader as mapsLoader } from "./routes/maps";
 import {
   PlaceDetailIndexRoute,
   loader as placeDetailLoader,
+  action as placeDetailAction,
 } from "./routes/places/detail";
 import { PlaceSlugRoute } from "./routes/places/place-slug";
+import {
+  SavedPlacesRoute,
+  loader as savedPlacesLoader,
+  action as savedPlacesAction,
+} from "./routes/dashboard/saved-places";
+import {
+  DashboardLayoutRoute,
+  loader as dashboardLayoutLoader,
+} from "./routes/dashboard";
 
 const router = createBrowserRouter([
   {
@@ -56,6 +66,7 @@ const router = createBrowserRouter([
         path: "/places/:slug",
         element: <PlaceDetailIndexRoute />,
         loader: placeDetailLoader,
+        action: placeDetailAction,
       },
       {
         path: "/places",
@@ -83,6 +94,19 @@ const router = createBrowserRouter([
     path: "/maps",
     element: <MapsRoute />,
     loader: mapsLoader,
+  },
+  {
+    path: "/dashboard",
+    element: <DashboardLayoutRoute />,
+    loader: dashboardLayoutLoader,
+    children: [
+      {
+        path: "/dashboard/saved-places",
+        element: <SavedPlacesRoute />,
+        loader: savedPlacesLoader,
+        action: savedPlacesAction,
+      },
+    ],
   },
 ]);
 
