@@ -12,8 +12,8 @@ import { MapboxView } from "@/components/mapbox-view";
 import emptyImage from "/images/saved-places/empty.png";
 import api from "@/libs/api";
 import { Button } from "@/components/ui/button";
-import starIcon from "/images/saved-places/star.svg";
 import { toast } from "react-toastify";
+import { Star } from "lucide-react";
 
 export async function loader() {
   const places = await api<{
@@ -36,7 +36,7 @@ export async function action({ request }: ActionFunctionArgs) {
   //   },
   // });
 
-  toast.success("Saved places removed");
+  toast.success("Saved places removed successfully");
 
   return null;
 }
@@ -124,9 +124,9 @@ function PlaceDetailPlaceholder({ places }: { places: Place[] }) {
                   <input type="hidden" name="placeId" value={place.id} />
                   <Button
                     size="sm"
-                    className="bg-yellow-300 hover:bg-yellow-400 flex gap-1"
+                    className="bg-yellow-300 hover:bg-yellow-400"
                   >
-                    <img src={starIcon} alt="star" />
+                    <Star fill="black" className="h-4 w-4 mr-1" />
                     Saved
                   </Button>
                 </Form>
