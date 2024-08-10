@@ -1,4 +1,5 @@
 import {
+  ActionFunctionArgs,
   Form,
   Link,
   LoaderFunctionArgs,
@@ -16,6 +17,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { MapboxView } from "@/components/mapbox-view";
 import { Input } from "@/components/ui/input";
 import { UserNavigation } from "@/components/user-navigation";
+import { toast } from "react-toastify";
 
 type responsePlace = { data: Place };
 type responsePlaces = { data: Array<Place> };
@@ -38,6 +40,22 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     isAuthenticated: authProvider.isAuthenticated,
   };
 };
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  console.log(formData.get("placeId"));
+
+  // await api("/saved-places", {
+  //   method: "post",
+  //   body: {
+  //     placeId: formData.get("placeId"),
+  //   },
+  // });
+
+  toast.success("Place saved successfully");
+
+  return null;
+}
 
 export const PlaceDetailIndexRoute = () => {
   const { place, places, isAuthenticated } = useLoaderData() as Awaited<
@@ -64,17 +82,31 @@ export const PlaceDetailIndexRoute = () => {
             <div className="text-2xl font-bold ">{place.title}</div>
             <div>{place.description}</div>
             <div className="flex gap-4">
-              <Button
-                className={cn(
-                  buttonVariants({
-                    variant: "default",
-                  }),
-                  "bg-[#FFD062] text-black"
-                )}
-              >
-                <Star className="h-4 w-4 mr-1" />
-                Save
-              </Button>
+              {isAuthenticated ? (
+                <Form method="post">
+                  <input type="hidden" name="placeId" value={place.id} />
+                  <Button
+                    size="sm"
+                    className="bg-yellow-300 hover:bg-yellow-400"
+                  >
+                    <Star className="h-4 w-4 mr-1" />
+                    Save Place
+                  </Button>
+                </Form>
+              ) : (
+                <Link
+                  to={`/login?redirect=/places/${place.slug}`}
+                  className={cn(
+                    buttonVariants({
+                      variant: "default",
+                    }),
+                    "bg-yellow-300 hover:bg-yellow-400"
+                  )}
+                >
+                  <Star className="h-4 w-4 mr-1" />
+                  Save Place
+                </Link>
+              )}
               <Button
                 className={cn(
                   buttonVariants({

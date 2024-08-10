@@ -24,6 +24,7 @@ import { MapsRoute, loader as mapsLoader } from "./routes/maps";
 import {
   PlaceDetailIndexRoute,
   loader as placeDetailLoader,
+  action as placeDetailAction,
 } from "./routes/places/detail";
 import { PlaceSlugRoute } from "./routes/places/place-slug";
 import {
@@ -61,6 +62,7 @@ const router = createBrowserRouter([
         path: "/places/:slug",
         element: <PlaceDetailIndexRoute />,
         loader: placeDetailLoader,
+        action: placeDetailAction,
       },
       {
         path: "/places",
