@@ -60,7 +60,7 @@ export function PlacesIndexRoute() {
         <aside className="w-[1000px] h-screen flex flex-col">
           <PlacesSidebarHeader />
 
-          <div className="p-6 h-[85%]">
+          <div className=" h-[85%]">
             <PlaceDetailPlaceholder
               places={places}
               keyword={keyword}
@@ -103,12 +103,10 @@ export function PlacesIndexRoute() {
 }
 
 function PlacesSidebarHeader() {
-  const { keyword, isAuthenticated } = useLoaderData() as Awaited<
-    ReturnType<typeof loader>
-  >;
+  const { keyword } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (
-    <header className="px-6 py-4 flex justify-between items-center gap-6">
+    <header className="p-4 flex justify-between items-center gap-6">
       <Link to="/">
         <img src={NusaVentureLogo} alt="Nusa Venture" className="h-10" />
       </Link>
@@ -122,24 +120,6 @@ function PlacesSidebarHeader() {
           className="focus-visible:ring-0 bg-neutral-200 focus-visible:ring-transparent"
         />
       </Form>
-
-      <nav>
-        {isAuthenticated ? (
-          <UserNavigation />
-        ) : (
-          <Link
-            to="/login"
-            className={cn(
-              buttonVariants({
-                variant: "default",
-              }),
-              "bg-primary-color text-white"
-            )}
-          >
-            Login
-          </Link>
-        )}
-      </nav>
     </header>
   );
 }
@@ -165,25 +145,27 @@ function PlaceDetailPlaceholder({
   };
 
   return (
-    <div className="h-[100%]">
-      <Select
-        onValueChange={handleSelectChange}
-        defaultValue={filter === "" ? "top-destinations" : filter}
-      >
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Theme" />
-        </SelectTrigger>
-        <SelectContent className="bg-white">
-          <SelectItem value="top-destinations">Top Destinations</SelectItem>
-          <SelectItem value="all-destinations">All Destinations</SelectItem>
-        </SelectContent>
-      </Select>
+    <div className="h-[100%] ">
+      <div className="px-4">
+        <Select
+          onValueChange={handleSelectChange}
+          defaultValue={filter === "" ? "top-destinations" : filter}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Theme" />
+          </SelectTrigger>
+          <SelectContent className="bg-white">
+            <SelectItem value="top-destinations">Top Destinations</SelectItem>
+            <SelectItem value="all-destinations">All Destinations</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
       {placeList.length > 0 ? (
         <ScrollArea className="h-[100%] mt-4">
           {placeList.map((place) => (
             <div
-              className="flex flex-row gap-4 mb-4 min-h-[145px] w-full"
+              className="flex flex-row gap-4 mb-4 min-h-[145px] w-full px-4"
               key={place.id}
             >
               <Link to={`/places/${place.slug}`}>
