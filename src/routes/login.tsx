@@ -31,6 +31,8 @@ const loginSchema = z
   .required();
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  const redirectTo = new URL(request.url).searchParams.get("redirect");
+
   const formData = await request.formData();
 
   const login = await authProvider.login(
@@ -40,7 +42,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   if (login.success) {
     toast.success("Login successful");
-    return redirect("/");
+    return redirect(redirectTo || "/");
   } else {
     toast.error(login.message);
     return null;
@@ -73,7 +75,11 @@ export function LoginRoute() {
       <PageMeta title="Login" />
 
       <div className="flex flex-col justify-center h-screen items-center">
-        <img className="h-24 w-auto mb-4" src="/images/places/nusa-venture-black.svg" alt="logo" />
+        <img
+          className="h-24 w-auto mb-4"
+          src="/images/places/nusa-venture-black.svg"
+          alt="logo"
+        />
         <Form onSubmit={handleSubmit(onSubmit)} method="post" className="w-1/3">
           <div className="flex flex-col gap-6">
             <div>
