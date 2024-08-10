@@ -14,6 +14,7 @@ import api from "@/libs/api";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import { Star } from "lucide-react";
+import { HeaderNavigationMenu } from "@/components/header-navigation";
 
 export async function loader() {
   const places = await api<{
@@ -58,6 +59,9 @@ export function SavedPlacesRoute() {
           </div>
         </aside>
         <div className="flex flex-col w-full">
+          <div className="pt-3 pr-5 place-self-end fixed z-20 flex ">
+            <HeaderNavigationMenu />
+          </div>
           <MapboxView places={places} />
         </div>
       </main>
