@@ -1,5 +1,11 @@
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+
 import { Place } from "@/types/places";
 import {
   Form,
@@ -27,6 +33,7 @@ import { MapboxView } from "@/components/mapbox-view";
 import { Button } from "@/components/ui/button";
 
 import NusaVentureLogo from "/images/places/nusa-venture-black.svg";
+import { Category } from "@/types/category";
 
 type responsePlaces = { data: Array<Place> };
 
@@ -34,10 +41,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const keyword = new URL(request.url).searchParams.get("q");
   const filter = new URL(request.url).searchParams.get("filter");
 
-  const [responsePlaces, responseTopDestinations] = await Promise.all([
-    api<responsePlaces>(`places?search=${keyword ?? ""}`),
-    api<responsePlaces>("/places/featured"),
-  ]);
+  const [responsePlaces, responseTopDestinations, responseCategories] =
+    await Promise.all([
+      api<responsePlaces>(`places?search=${keyword ?? ""}`),
+      api<responsePlaces>("/places/featured"),
+      api<{ data: Array<Category> }>("/categories/featured"),
+    ]);
 
   return {
     keyword: keyword ?? "",
@@ -45,6 +54,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     places: responsePlaces.data,
     topDestinations: responseTopDestinations.data,
     isAuthenticated: authProvider.isAuthenticated,
+    categories: responseCategories.data,
   };
 }
 
@@ -57,7 +67,7 @@ export function PlacesIndexRoute() {
       <PageMeta title="Places" />
 
       <main className="flex">
-        <aside className="w-[1000px] h-screen flex flex-col">
+        <aside className="w-[50%] h-screen flex flex-col">
           <PlacesSidebarHeader />
 
           <div className=" h-[85%]">
@@ -103,23 +113,41 @@ export function PlacesIndexRoute() {
 }
 
 function PlacesSidebarHeader() {
-  const { keyword } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { keyword, categories } = useLoaderData() as Awaited<
+    ReturnType<typeof loader>
+  >;
 
   return (
-    <header className="p-4 flex justify-between items-center gap-6">
-      <Link to="/">
-        <img src={NusaVentureLogo} alt="Nusa Venture" className="h-10" />
-      </Link>
+    <header className="p-4 flex flex-col gap-4 ">
+      <div className="justify-between items-center gap-6 flex">
+        <Link to="/">
+          <img src={NusaVentureLogo} alt="Nusa Venture" className="h-10" />
+        </Link>
 
-      <Form method="get" action="/places" className="w-full">
-        <Input
-          type="search"
-          name="q"
-          placeholder="Search places..."
-          defaultValue={keyword}
-          className="focus-visible:ring-0 bg-neutral-200 focus-visible:ring-transparent"
-        />
-      </Form>
+        <Form method="get" action="/places" className="w-full">
+          <Input
+            type="search"
+            name="q"
+            placeholder="Search places..."
+            defaultValue={keyword}
+            className="focus-visible:ring-0 bg-neutral-200 focus-visible:ring-transparent"
+          />
+        </Form>
+      </div>
+      <Carousel>
+        <CarouselContent>
+          {categories.map((category) => (
+            <CarouselItem key={category.id} className="basis-auto ">
+              <Link
+                to={`/places?q=${category.name}`}
+                className="py-2 px-3 text-black rounded bg-gray-200 text-[12px] border-slate-300"
+              >
+                {category.name}
+              </Link>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
     </header>
   );
 }
