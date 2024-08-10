@@ -32,6 +32,10 @@ import {
   loader as savedPlacesLoader,
   action as savedPlacesAction,
 } from "./routes/dashboard/saved-places";
+import {
+  DashboardLayoutRoute,
+  loader as dashboardLayoutLoader,
+} from "./routes/dashboard";
 
 const router = createBrowserRouter([
   {
@@ -92,10 +96,17 @@ const router = createBrowserRouter([
     loader: mapsLoader,
   },
   {
-    path: "/dashboard/saved-places",
-    element: <SavedPlacesRoute />,
-    loader: savedPlacesLoader,
-    action: savedPlacesAction,
+    path: "/dashboard",
+    element: <DashboardLayoutRoute />,
+    loader: dashboardLayoutLoader,
+    children: [
+      {
+        path: "/dashboard/saved-places",
+        element: <SavedPlacesRoute />,
+        loader: savedPlacesLoader,
+        action: savedPlacesAction,
+      },
+    ],
   },
 ]);
 
