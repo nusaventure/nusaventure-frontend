@@ -43,16 +43,29 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
+  const intent = formData.get("intent");
+
   console.log(formData.get("placeId"));
 
-  // await api("/saved-places", {
-  //   method: "post",
-  //   body: {
-  //     placeId: formData.get("placeId"),
-  //   },
-  // });
+  if (intent === "save-place") {
+    // await api("/saved-places", {
+    //   method: "post",
+    //   body: {
+    //     placeId: formData.get("placeId"),
+    //   },
+    // });
 
-  toast.success("Place saved successfully");
+    toast.success("Place saved successfully");
+  } else if (intent === "remove-saved-place") {
+    // await api("/saved-places", {
+    //   method: "delete",
+    //   body: {
+    //     placeId: formData.get("placeId"),
+    //   },
+    // });
+
+    toast.success("Saved places removed successfully");
+  }
 
   return null;
 }
@@ -83,16 +96,33 @@ export const PlaceDetailIndexRoute = () => {
             <div>{place.description}</div>
             <div className="flex gap-4">
               {isAuthenticated ? (
-                <Form method="post">
-                  <input type="hidden" name="placeId" value={place.id} />
-                  <Button
-                    size="sm"
-                    className="bg-yellow-300 hover:bg-yellow-400"
-                  >
-                    <Star className="h-4 w-4 mr-1" />
-                    Save Place
-                  </Button>
-                </Form>
+                place.isSaved ? (
+                  <Form method="delete">
+                    <input type="hidden" name="placeId" value={place.id} />
+                    <Button
+                      size="sm"
+                      className="bg-yellow-300 hover:bg-yellow-400"
+                      name="intent"
+                      value="remove-saved-place"
+                    >
+                      <Star fill="black" className="h-4 w-4 mr-1" />
+                      Saved
+                    </Button>
+                  </Form>
+                ) : (
+                  <Form method="post">
+                    <input type="hidden" name="placeId" value={place.id} />
+                    <Button
+                      size="sm"
+                      className="bg-yellow-300 hover:bg-yellow-400"
+                      name="intent"
+                      value="save-place"
+                    >
+                      <Star className="h-4 w-4 mr-1" />
+                      Save Place
+                    </Button>
+                  </Form>
+                )
               ) : (
                 <Link
                   to={`/login?redirect=/places/${place.slug}`}
