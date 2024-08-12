@@ -92,6 +92,17 @@ export function MapboxView({
     if (isPropertiesTypePlace) {
       // Redirect
       navigate(`/places/${featureProperties.slug}`);
+
+      // Zoom to the selected place
+      const geometry = feature.geometry;
+      if (geometry.type === "Point") {
+        const coordinates = geometry.coordinates as [number, number];
+        mapRef.current?.easeTo({
+          center: coordinates,
+          zoom: 12, // Adjust the zoom level as needed
+          duration: 1000, // Adjust the duration of the zoom animation
+        });
+      }
     }
 
     const mapboxSource = mapRef.current.getSource(
