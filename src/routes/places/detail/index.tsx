@@ -5,8 +5,7 @@ import {
   LoaderFunctionArgs,
   useLoaderData,
 } from "react-router-dom";
-import { Share, Star } from "lucide-react";
-
+import { Share, Star, Copy } from "lucide-react";
 import { Place } from "@/types/places";
 import { cn } from "@/libs/cn";
 import api from "@/libs/api";
@@ -19,6 +18,15 @@ import { Input } from "@/components/ui/input";
 import { UserNavigation } from "@/components/user-navigation";
 import { toast } from "react-toastify";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 
 type responsePlace = { data: Place };
 type responsePlaces = { data: Array<Place> };
@@ -75,6 +83,12 @@ export const PlaceDetailIndexRoute = () => {
 
   const renderPlaces = places.slice(0, 4);
 
+  const handleCopy = () => {
+    const link = window.location.href;
+    navigator.clipboard.writeText(link);
+    toast.success("Link copied to clipboard!");
+  };
+
   return (
     <>
       <PageMeta title="Places" />
@@ -98,7 +112,11 @@ export const PlaceDetailIndexRoute = () => {
                   {isAuthenticated ? (
                     place.savedPlaceId ? (
                       <Form method="delete">
-                        <input type="hidden" name="savedPlaceId" value={place.savedPlaceId} />
+                        <input
+                          type="hidden"
+                          name="savedPlaceId"
+                          value={place.savedPlaceId}
+                        />
                         <Button
                           size="sm"
                           className="bg-yellow-300 hover:bg-yellow-400"
@@ -137,17 +155,51 @@ export const PlaceDetailIndexRoute = () => {
                       Save Place
                     </Link>
                   )}
-                  <Button
-                    className={cn(
-                      buttonVariants({
-                        variant: "secondary",
-                      }),
-                      "bg-[#E6E6E6] text-black"
-                    )}
-                  >
-                    <Share className="h-4 w-4 mr-1" />
-                    Share
-                  </Button>
+
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        className={cn(
+                          buttonVariants({
+                            variant: "secondary",
+                          }),
+                          "bg-[#E6E6E6] text-black"
+                        )}
+                      >
+                        <Share className="h-4 w-4 mr-1" />
+                        Share
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-md">
+                      <DialogHeader>
+                        <DialogTitle className="text-center">
+                          Share Place
+                        </DialogTitle>
+                        <DialogDescription>Link for sharing</DialogDescription>
+                      </DialogHeader>
+                      <div className="flex items-center space-x-2">
+                        <div className="grid flex-1 gap-2">
+                          <Label htmlFor="link" className="sr-only">
+                            Link
+                          </Label>
+                          <Input
+                            id="link"
+                            defaultValue={window.location.href}
+                            readOnly
+                          />
+                        </div>
+                        <Button
+                          onClick={handleCopy}
+                          type="submit"
+                          size="sm"
+                          className="px-3"
+                        >
+                          <span className="sr-only">Copy</span>
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </div>
               <hr className="my-6" />
