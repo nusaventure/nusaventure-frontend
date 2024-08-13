@@ -9,14 +9,6 @@ export type Place = {
   zoom: number;
   address: string;
   savedPlaceId?: string;
-  country: {
-    id: string | number;
-    name: string;
-  };
-  state: {
-    id: string | number;
-    name: string;
-  };
   city: {
     id: string | number;
     name: string;
