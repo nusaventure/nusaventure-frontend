@@ -49,21 +49,18 @@ export async function action({ request }: ActionFunctionArgs) {
   console.log(formData.get("placeId"));
 
   if (intent === "save-place") {
-    // await api("/saved-places", {
-    //   method: "post",
-    //   body: {
-    //     placeId: formData.get("placeId"),
-    //   },
-    // });
+    await api("/saved-places", {
+      method: "post",
+      body: {
+        placeId: formData.get("placeId"),
+      },
+    });
 
     toast.success("Place saved successfully");
   } else if (intent === "remove-saved-place") {
-    // await api("/saved-places", {
-    //   method: "delete",
-    //   body: {
-    //     placeId: formData.get("placeId"),
-    //   },
-    // });
+    await api(`/saved-places/${formData.get("savedPlaceId")}`, {
+      method: "delete",
+    });
 
     toast.success("Saved places removed successfully");
   }
@@ -99,9 +96,9 @@ export const PlaceDetailIndexRoute = () => {
                 <div>{place.description}</div>
                 <div className="flex gap-4">
                   {isAuthenticated ? (
-                    place.isSaved ? (
+                    place.savedPlaceId ? (
                       <Form method="delete">
-                        <input type="hidden" name="placeId" value={place.id} />
+                        <input type="hidden" name="savedPlaceId" value={place.savedPlaceId} />
                         <Button
                           size="sm"
                           className="bg-yellow-300 hover:bg-yellow-400"

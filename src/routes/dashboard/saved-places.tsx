@@ -6,7 +6,6 @@ import {
   useLoaderData,
 } from "react-router-dom";
 import NusaVentureLogo from "/images/places/nusa-venture-black.svg";
-import { Place } from "@/types/places";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MapboxView } from "@/components/mapbox-view";
 import emptyImage from "/images/saved-places/empty.png";
@@ -15,27 +14,24 @@ import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import { Star } from "lucide-react";
 import { HeaderNavigationMenu } from "@/components/header-navigation";
+import { SavedPlace } from "@/types/saved-places";
 
 export async function loader() {
-  const places = await api<{
-    data: Array<Place>;
-  }>("/places");
+  const savedPlaces = await api<{
+    data: Array<SavedPlace>;
+  }>("/saved-places");
 
   return {
-    places: places.data,
+    savedPlaces: savedPlaces.data,
   };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
-  console.log(formData.get("placeId"));
 
-  // await api("/saved-places", {
-  //   method: "delete",
-  //   body: {
-  //     placeId: formData.get("placeId"),
-  //   },
-  // });
+  await api(`/saved-places/${formData.get("id")}`, {
+    method: "delete",
+  });
 
   toast.success("Saved places removed successfully");
 
@@ -43,7 +39,8 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export function SavedPlacesRoute() {
-  const { places } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { savedPlaces } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const places = savedPlaces.map(item => item.place)
 
   return (
     <>
@@ -55,7 +52,7 @@ export function SavedPlacesRoute() {
 
           <div className="p-6 h-[85%]">
             <h1 className="text-2xl">Saved Places</h1>
-            <PlaceDetailPlaceholder places={places} />
+            <PlaceDetailPlaceholder savedPlaces={savedPlaces} />
           </div>
         </aside>
         <div className="flex flex-col w-full">
@@ -79,33 +76,33 @@ function PlacesSidebarHeader() {
   );
 }
 
-function PlaceDetailPlaceholder({ places }: { places: Place[] }) {
+function PlaceDetailPlaceholder({ savedPlaces }: { savedPlaces: Array<SavedPlace> }) {
   return (
     <div className="h-[100%]">
-      {places.length > 0 ? (
+      {savedPlaces.length > 0 ? (
         <ScrollArea className="h-[100%] mt-4">
-          {places.map((place) => (
+          {savedPlaces.map((savedPlace) => (
             <div
               className="flex flex-row gap-4 mb-4 min-h-[145px] w-full"
-              key={place.id}
+              key={savedPlace.id}
             >
-              <Link to={`/places/${place.slug}`}>
+              <Link to={`/places/${savedPlace.place.slug}`}>
                 <img
                   className="object-cover rounded-lg w-[198px] h-[145px]"
-                  src={place.imageUrl}
-                  alt={place.title}
+                  src={savedPlace.place.imageUrl}
+                  alt={savedPlace.place.title}
                 />
               </Link>
 
               <div className="flex flex-col gap-2 flex-1 items-start overflow-hidden">
-                <Link to={`/places/${place.slug}`}>
+                <Link to={`/places/${savedPlace.place.slug}`}>
                   <span className="text-xl font-bold hover:underline">
-                    {place.title}
+                    {savedPlace.place.title}
                   </span>
                 </Link>
 
                 <div className="flex flex-row gap-4 ">
-                  {place.categories.map((category, index) => (
+                  {savedPlace.place.categories.map((category, index) => (
                     <Link
                       to={`/places?q=${category.name}`}
                       key={index}
@@ -119,13 +116,13 @@ function PlaceDetailPlaceholder({ places }: { places: Place[] }) {
                 </div>
 
                 <p className="text-sm font-medium text-gray-500 truncate text-ellipsis max-w-[390px]">
-                  {place.description}
+                  {savedPlace.place.description}
                 </p>
                 <p className="text-sm font-medium text-gray-500 truncate text-ellipsis max-w-[390px]">
-                  {place.address}
+                  {savedPlace.place.address}
                 </p>
                 <Form method="delete">
-                  <input type="hidden" name="placeId" value={place.id} />
+                  <input type="hidden" name="id" value={savedPlace.id} />
                   <Button
                     size="sm"
                     className="bg-yellow-300 hover:bg-yellow-400"

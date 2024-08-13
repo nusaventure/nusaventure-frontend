@@ -8,7 +8,7 @@ export type Place = {
   longitude: number;
   zoom: number;
   address: string;
-  isSaved?: boolean;
+  savedPlaceId?: string;
   country: {
     id: string | number;
     name: string;
