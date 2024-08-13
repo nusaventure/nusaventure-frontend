@@ -3,6 +3,8 @@ import {
   ActionFunctionArgs,
   Form,
   Link,
+  LoaderFunctionArgs,
+  redirect,
   useLoaderData,
 } from "react-router-dom";
 import NusaVentureLogo from "/images/places/nusa-venture-black.svg";
@@ -15,8 +17,16 @@ import { toast } from "react-toastify";
 import { Star } from "lucide-react";
 import { HeaderNavigationMenu } from "@/components/header-navigation";
 import { SavedPlace } from "@/types/saved-places";
+import { authGuard } from "@/libs/middleware";
 
-export async function loader() {
+export async function loader({ request }: LoaderFunctionArgs) {
+  const url = new URL(request.url);
+  const redirectTo = await authGuard(url.pathname);
+
+  if (redirectTo) {
+    return redirect(redirectTo);
+  }
+
   const savedPlaces = await api<{
     data: Array<SavedPlace>;
   }>("/saved-places");
@@ -38,8 +48,8 @@ export async function action({ request }: ActionFunctionArgs) {
   return null;
 }
 
-export function SavedPlacesRoute() {
-  const { savedPlaces } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+export function DashboardRoute() {
+  const { savedPlaces } = useLoaderData() as { savedPlaces: SavedPlace[] };
   const places = savedPlaces.map(item => item.place)
 
   return (

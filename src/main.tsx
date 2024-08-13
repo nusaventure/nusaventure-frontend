@@ -28,13 +28,9 @@ import {
 } from "./routes/places/detail";
 import { PlaceSlugRoute } from "./routes/places/place-slug";
 import {
-  SavedPlacesRoute,
-  loader as savedPlacesLoader,
-  action as savedPlacesAction,
-} from "./routes/dashboard/saved-places";
-import {
-  DashboardLayoutRoute,
-  loader as dashboardLayoutLoader,
+  DashboardRoute,
+  loader as dashboardLoader,
+  action as dashboardAction,
 } from "./routes/dashboard";
 
 const router = createBrowserRouter([
@@ -97,16 +93,9 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashboardLayoutRoute />,
-    loader: dashboardLayoutLoader,
-    children: [
-      {
-        path: "/dashboard/saved-places",
-        element: <SavedPlacesRoute />,
-        loader: savedPlacesLoader,
-        action: savedPlacesAction,
-      },
-    ],
+    element: <DashboardRoute />,
+    loader: dashboardLoader,
+    action: dashboardAction,
   },
 ]);
 
