@@ -151,7 +151,9 @@ export function HomeRoute() {
         className="flex flex-col items-center justify-center bg-[url('/images/section/bg-sea.svg')] bg-cover bg-no-repeat bg-center px-5 py-16 w-auto h-[850px]"
       >
         <header>
-          <h1 className="text-lg font-semibold text-white mb-2 text-center">Our Places</h1>
+          <h1 className="text-lg font-semibold text-white mb-2 text-center">
+            Our Places
+          </h1>
           <h2 className="text-4xl font-bold text-white mb-8">
             Favorite Places Curated for You
           </h2>
@@ -256,31 +258,28 @@ export function HomeRoute() {
                   Explore Destination via Maps
                 </h2>
                 <p className="text-gray-600">
-                  Offers a seamless way to navigate, discover, and plan your
-                  travels. Our interactive maps highlight key attractions, local
+                  Offers a seamless way to navigate and discover your travels.
+                  Our interactive maps highlight key attractions, local
                   amenities, and hidden gems, ensuring an enriching travel
                   experience.
                 </p>
               </div>
               <div className="mb-6">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                  Trip Planner
+                  Saved Places
                 </h2>
                 <p className="text-gray-600">
-                  Simplifies organizing your travels with easy itinerary
-                  creation, accommodation bookings, and discovery of top
-                  attractions. Plan confidently and enjoy every aspect of your
-                  journey with our comprehensive tool.
+                  Simplifies organizing your favorites destination with easy
+                  action. See them in the dashboard.
                 </p>
               </div>
               <div className="mb-6">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                  Share Your Plan Trip
+                  Share Place
                 </h2>
                 <p className="text-gray-600">
-                  Makes it easy to share your travel itineraries with friends
-                  and family. Stay connected and make group travel planning
-                  simple and fun.
+                  Makes it easy to share your destination with friends and
+                  family.
                 </p>
               </div>
             </div>
