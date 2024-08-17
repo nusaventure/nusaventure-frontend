@@ -27,6 +27,18 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+} from "react-share";
+import {
+  SiFacebook,
+  SiGmail,
+  SiWhatsapp,
+  SiX,
+} from "@icons-pack/react-simple-icons";
 
 type responsePlace = { data: Place };
 type responsePlaces = { data: Array<Place> };
@@ -197,6 +209,41 @@ export const PlaceDetailIndexRoute = () => {
                           <span className="sr-only">Copy</span>
                           <Copy className="h-4 w-4" />
                         </Button>
+                      </div>
+                      <div className="flex gap-5 justify-center mt-4">
+                        <FacebookShareButton
+                          url={window.location.href}
+                          hashtag="#nusaventure"
+                        >
+                          <SiFacebook
+                            color="default"
+                            title="Facebook"
+                            size={42}
+                          />
+                        </FacebookShareButton>
+                        <TwitterShareButton
+                          url={window.location.href}
+                          title={place.title}
+                          hashtags={["nusaventure"]}
+                        >
+                          <SiX color="default" title="X" size={42} />
+                        </TwitterShareButton>
+                        <WhatsappShareButton
+                          url={window.location.href}
+                          title={place.title}
+                        >
+                          <SiWhatsapp
+                            color="default"
+                            title="Whatsapp"
+                            size={42}
+                          />
+                        </WhatsappShareButton>
+                        <EmailShareButton
+                          url={window.location.href}
+                          title={place.title}
+                        >
+                          <SiGmail color="default" title="Email" size={42} />
+                        </EmailShareButton>
                       </div>
                     </DialogContent>
                   </Dialog>
