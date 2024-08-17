@@ -214,6 +214,7 @@ export const PlaceDetailIndexRoute = () => {
                         <FacebookShareButton
                           url={window.location.href}
                           hashtag="#nusaventure"
+                          className="block"
                         >
                           <SiFacebook
                             color="default"
@@ -225,12 +226,14 @@ export const PlaceDetailIndexRoute = () => {
                           url={window.location.href}
                           title={place.title}
                           hashtags={["nusaventure"]}
+                          className="block"
                         >
                           <SiX color="default" title="X" size={42} />
                         </TwitterShareButton>
                         <WhatsappShareButton
                           url={window.location.href}
                           title={place.title}
+                          className="block"
                         >
                           <SiWhatsapp
                             color="default"
@@ -241,6 +244,7 @@ export const PlaceDetailIndexRoute = () => {
                         <EmailShareButton
                           url={window.location.href}
                           title={place.title}
+                          className="block"
                         >
                           <SiGmail color="default" title="Email" size={42} />
                         </EmailShareButton>
