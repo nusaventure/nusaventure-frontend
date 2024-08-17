@@ -173,7 +173,7 @@ function PlaceDetailPlaceholder({
   };
 
   return (
-    <div className="h-[100%] ">
+    <div className="h-[90%] ">
       <div className="px-4">
         <Select
           onValueChange={handleSelectChange}
